@@ -52,11 +52,12 @@
   "thinking": {
     "initial_plan": [
       "Classify the query as simple, standard, or complex.",
-      "Choose likely source types and the expected number of tool calls.",
+      "Choose likely source types and a tool-call budget.",
       "Define what evidence would be enough to stop."
     ],
     "after_tool_result": [
-      "Assess whether each result is reliable, current, and directly relevant.",
+      "Assess the quality of each result by reliability, recency, and direct relevance.",
+      "Decide what verification is still needed before continuing or stopping.",
       "Decide whether to verify, search again, calculate, or stop.",
       "Track claims that are inferred rather than directly sourced."
     ],

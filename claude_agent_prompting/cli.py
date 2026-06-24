@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import sys
 
-from .adapters import claude_messages_to_trace, load_json
+from .adapters import claude_messages_to_trace, load_json, runtime_events_to_trace
 from .agent_audit import (
     render_agent_audit_markdown,
     review_agent_bundle,
@@ -77,6 +77,12 @@ def main(argv: list[str] | None = None) -> int:
         help="normalize Claude Messages API blocks into an agent trace",
     )
     normalize_parser.add_argument("messages", type=Path)
+
+    normalize_runtime_parser = subparsers.add_parser(
+        "normalize-runtime",
+        help="normalize generic Agent SDK or IDE-agent events into an agent trace",
+    )
+    normalize_runtime_parser.add_argument("events", type=Path)
 
     suite_parser = subparsers.add_parser("trace-suite", help="run a trace regression suite")
     suite_parser.add_argument("suite", type=Path)
@@ -220,6 +226,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "normalize-claude":
         trace = claude_messages_to_trace(load_json(args.messages))
+        print(json.dumps(trace, indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "normalize-runtime":
+        trace = runtime_events_to_trace(load_json(args.events))
         print(json.dumps(trace, indent=2, sort_keys=True))
         return 0
 

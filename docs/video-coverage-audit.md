@@ -12,13 +12,13 @@ code, tests, docs, or CI.
 | Talk point | Repo coverage |
 | --- | --- |
 | Agents are models using tools in a loop. | Trace schema records ordered `reasoning`, `tool_call`, `tool_result`, and `final` events. |
-| Agents update decisions from tool-call results. | `trace_review.py` requires reasoning after tool results and quality or evidence assessment before the next action. |
+| Agents update decisions from tool-call results. | `trace_review.py` requires reasoning after tool results that names result quality, verification, and the continue or stop decision. |
 | Use agents when task path is ambiguous but valuable and recoverable. | `suitability.py` scores complexity, ambiguity, value, viability, error cost, and recoverability. |
 | Think like the agent by inspecting tool names, schemas, and outputs. | `lint-tools` checks tool names and descriptions. `optimize-tools` checks schemas, result quality checks, calibration cases, and trace-derived selection failures. |
 | Give explicit tool-selection principles. | Recipes require `purpose`, `use_when`, and `avoid_when`. Audit bundles add `input_schema`, `quality_checks`, and `tool_selection_cases`. |
 | Prompt and tool guidance should be tuned for model behavior. | `model-matrix` compares provider profiles, native and JSON harnesses, tool-description variants, and instruction variants. |
 | Iterate from observed failures. | `grind-harness` creates candidate tool-description variants from failed matrix cases, reruns live cells, and promotes only when the candidate beats the baseline. |
-| Guide the thinking process, including reflection after web results. | Prompts include thinking guidance. Traces capture visible reasoning summaries or provider-returned reasoning blocks. |
+| Guide the thinking process, including reflection after web results. | Prompts include directed thinking guidance. Traces require initial complexity, tool budget, evidence or stop criteria, result quality, verification, and continue or stop decisions. |
 | Use parallel tool calls when independent. | Traces support `parallel_group`, and `agent_trace_parallel_good.json` tests a parallel search batch. |
 | Stop when the answer is found and avoid runaway search. | Prompt budgets and stop criteria are rendered from recipes and checked through trace rubrics. |
 | Manage context in long tasks. | Recipes include context strategy, progress file, compaction trigger, and subagent policy fields. |
@@ -45,12 +45,20 @@ and value over baseline.
 The repo does not claim access to hidden chain-of-thought. If a runtime does not expose reasoning,
 the audit contract requires short visible decision notes before and after tool calls.
 
+Before the first tool, those notes must mention complexity, tool budget, and evidence or stop
+criteria. After tool results, those notes must mention quality, verification, and the continue or
+stop decision.
+
 ## Harness And SDK Evaluation
 
 Harnesses are evaluated as part of the runtime. A provider native tool interface, prompt JSON
 wrapper, Agent SDK loop, IDE agent, or Cursor-like environment should export the same trace contract.
 The matrix then compares tool choice and arguments across harnesses. The trace reviewer and Claude
 judge compare the visible reasoning summaries, tool outputs, recovery behavior, and final grounding.
+
+`normalize-runtime` converts exported Agent SDK and IDE-agent event streams into the trace contract.
+`evals/model_matrix/harness_trace_adapters.json` adds those exports as named harnesses with the
+keyless `trace_fixture` provider so adapter behavior is tested in CI.
 
 This keeps the test focused on the actual agent system: model, tool descriptions, schemas,
 instructions, harness behavior, and trace capture together.

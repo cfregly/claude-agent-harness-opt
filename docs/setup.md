@@ -1,6 +1,6 @@
 # Setup
 
-This repo has two audit layers:
+This repo has three audit layers:
 
 1. Deterministic checks that run without a network call.
 2. Live Claude judge checks that require `ANTHROPIC_API_KEY`.
@@ -58,13 +58,21 @@ Export each agent run as JSON with ordered steps:
     "required_tools": ["web_search", "web_fetch"],
     "forbidden_tools": ["send_email"],
     "required_final_contains": ["evidence", "uncertain"],
+    "require_directed_initial_reasoning": true,
+    "require_directed_after_tool_reasoning": true,
     "pass_score": 1.0
   },
   "steps": [
-    {"type": "reasoning", "summary": "Short visible decision note before acting."},
+    {
+      "type": "reasoning",
+      "summary": "This is a standard research task. Budget two tool calls and stop when enough source evidence is found."
+    },
     {"type": "tool_call", "id": "call_1", "name": "web_search", "args": {"query": "source query"}},
     {"type": "tool_result", "tool_call_id": "call_1", "ok": true, "output": "Tool output text."},
-    {"type": "reasoning", "summary": "Visible note that evaluates source quality and next action."},
+    {
+      "type": "reasoning",
+      "summary": "The source output is relevant evidence. Verification is needed through fetch before continuing."
+    },
     {"type": "final", "text": "Final answer grounded in observed tool outputs."}
   ]
 }
@@ -72,6 +80,13 @@ Export each agent run as JSON with ordered steps:
 
 For parallel calls, add the same `parallel_group` value to the related calls and results. The
 reviewer then expects one reasoning step after the batch before the next action.
+
+For Agent SDK loops or IDE agents, normalize the raw runtime export first:
+
+```bash
+python -m claude_agent_prompting normalize-runtime evals/examples/cursor_trace_review_events.json
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture
+```
 
 ## Audit Bundle Contract
 
@@ -138,6 +153,7 @@ python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundl
 - `evals/suites/agent_trace_suite.json` runs trace regression cases.
 - `evals/examples/agent_audit_bundle.json` ties tools, traces, selection cases, and value proof together.
 - `evals/model_matrix/coding_tool_selection.json` runs provider, harness, instruction, and tool-description sweeps.
+- `evals/model_matrix/harness_trace_adapters.json` checks exported Agent SDK and IDE-agent runs as named harnesses.
 
 Use `docs/harness-optimization.md` when adding a new Agent SDK, IDE agent, or Cursor-like harness.
 The new harness should export the trace contract first, then enter the matrix as a named harness.

@@ -22,6 +22,58 @@ QUALITY_TERMS = {
     "uncertain",
     "verify",
 }
+COMPLEXITY_TERMS = {
+    "complex",
+    "complexity",
+    "simple",
+    "standard",
+    "task",
+}
+BUDGET_TERMS = {
+    "budget",
+    "call",
+    "calls",
+    "few",
+    "limit",
+    "parallel",
+    "tool",
+}
+EVIDENCE_STOP_TERMS = {
+    "done",
+    "enough",
+    "evidence",
+    "criteria",
+    "source",
+    "stop",
+    "success",
+    "successful",
+}
+VERIFICATION_TERMS = {
+    "check",
+    "confirm",
+    "consistent",
+    "cross-check",
+    "direct",
+    "fetch",
+    "manufacturer",
+    "validate",
+    "verify",
+    "verified",
+    "verification",
+}
+NEXT_DECISION_TERMS = {
+    "answer",
+    "ask",
+    "calculate",
+    "continue",
+    "disclose",
+    "fetch",
+    "final",
+    "search",
+    "stop",
+    "switch",
+    "verify",
+}
 ERROR_TERMS = {
     "fallback",
     "fix",
@@ -283,6 +335,43 @@ def _reasoning_findings(steps: list[dict[str, Any]], rubric: dict[str, Any]) -> 
             )
         )
 
+    if rubric.get("require_directed_initial_reasoning", True):
+        initial_reasoning = _reasoning_before_first_tool_text(steps)
+        findings.extend(
+            [
+                TraceFinding(
+                    "reasoning.initial_complexity",
+                    _contains_any(initial_reasoning, COMPLEXITY_TERMS),
+                    (
+                        "initial reasoning classifies task complexity"
+                        if _contains_any(initial_reasoning, COMPLEXITY_TERMS)
+                        else "initial reasoning does not classify task complexity"
+                    ),
+                    "medium",
+                ),
+                TraceFinding(
+                    "reasoning.initial_tool_budget",
+                    _contains_any(initial_reasoning, BUDGET_TERMS),
+                    (
+                        "initial reasoning names a tool-call budget or strategy"
+                        if _contains_any(initial_reasoning, BUDGET_TERMS)
+                        else "initial reasoning does not name a tool-call budget or strategy"
+                    ),
+                    "medium",
+                ),
+                TraceFinding(
+                    "reasoning.initial_evidence_stop",
+                    _contains_any(initial_reasoning, EVIDENCE_STOP_TERMS),
+                    (
+                        "initial reasoning defines evidence or stop criteria"
+                        if _contains_any(initial_reasoning, EVIDENCE_STOP_TERMS)
+                        else "initial reasoning does not define evidence or stop criteria"
+                    ),
+                    "medium",
+                ),
+            ]
+        )
+
     if rubric.get("require_reasoning_after_tool_results", True):
         for label, result_index in _tool_result_review_targets(steps):
             has_reasoning = _has_reasoning_before_next_action(steps, result_index)
@@ -297,6 +386,47 @@ def _reasoning_findings(steps: list[dict[str, Any]], rubric: dict[str, Any]) -> 
                     ),
                     "high",
                 )
+            )
+
+    if rubric.get("require_directed_after_tool_reasoning", True):
+        for label, result_index in _tool_result_review_targets(steps):
+            reasoning = _reasoning_between_result_and_next_action(steps, result_index)
+            has_quality = _contains_any(reasoning, QUALITY_TERMS)
+            has_verification = _contains_any(reasoning, VERIFICATION_TERMS)
+            has_next_decision = _contains_any(reasoning, NEXT_DECISION_TERMS)
+            findings.extend(
+                [
+                    TraceFinding(
+                        "reasoning.after_tool_quality",
+                        has_quality,
+                        (
+                            f"reasoning after {label} assesses quality"
+                            if has_quality
+                            else f"reasoning after {label} does not assess quality"
+                        ),
+                        "medium",
+                    ),
+                    TraceFinding(
+                        "reasoning.after_tool_verification",
+                        has_verification,
+                        (
+                            f"reasoning after {label} addresses verification"
+                            if has_verification
+                            else f"reasoning after {label} does not address verification"
+                        ),
+                        "medium",
+                    ),
+                    TraceFinding(
+                        "reasoning.after_tool_next_decision",
+                        has_next_decision,
+                        (
+                            f"reasoning after {label} names a continue, stop, or next-action decision"
+                            if has_next_decision
+                            else f"reasoning after {label} lacks a continue, stop, or next-action decision"
+                        ),
+                        "medium",
+                    ),
+                ]
             )
 
     if rubric.get("require_result_quality_assessment", True):
@@ -402,6 +532,16 @@ def _has_reasoning_before_first_tool(steps: list[dict[str, Any]]) -> bool:
         if step.get("type") == "reasoning" and str(step.get("summary", "")).strip():
             return True
     return False
+
+
+def _reasoning_before_first_tool_text(steps: list[dict[str, Any]]) -> str:
+    parts: list[str] = []
+    for step in steps:
+        if step.get("type") == "tool_call":
+            break
+        if step.get("type") == "reasoning":
+            parts.append(str(step.get("summary", "")))
+    return "\n".join(parts)
 
 
 def _tool_result_indexes(steps: list[dict[str, Any]]) -> list[int]:

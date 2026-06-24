@@ -31,7 +31,7 @@
   "steps": [
     {
       "source": "thinking_summary",
-      "summary": "This research task needs vehicle cargo volume and banana dimensions. The two searches are independent, so I should run them in parallel before deciding what to fetch or calculate.",
+      "summary": "This is a standard research and calculation task. Budget up to 6 tool calls. Enough evidence to stop is vehicle cargo volume, banana dimensions, and a calculation. The two searches are independent, so I should run them in parallel before deciding what to fetch or calculate.",
       "type": "reasoning"
     },
     {
@@ -68,7 +68,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The cargo search has a direct manufacturer source, which is higher quality than snippets. The banana result is enough for dimensions, but I need the direct cargo figure before calculating.",
+      "summary": "The cargo search has a direct manufacturer source, which is higher quality than snippets. The banana result is relevant enough for dimensions. I should verify by fetching the direct cargo source, then continue to calculation.",
       "type": "reasoning"
     },
     {
@@ -87,7 +87,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The fetched source is direct and reliable. I can calculate an estimate using banana volume and a packing-efficiency assumption, then disclose uncertainty.",
+      "summary": "The fetched source is direct and reliable, so cargo volume is verified enough. I can continue by calculating an estimate using banana volume and a packing-efficiency assumption, then disclose uncertainty.",
       "type": "reasoning"
     },
     {
@@ -106,7 +106,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The calculation follows from the direct cargo source and estimated banana size. The packing factor is uncertain, so the final answer should be approximate.",
+      "summary": "The calculation follows from the direct cargo source and estimated banana size, so verification is complete enough to stop. The next action is the final answer, approximate because the packing factor is uncertain.",
       "type": "reasoning"
     },
     {

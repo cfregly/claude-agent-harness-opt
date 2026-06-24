@@ -1,0 +1,32 @@
+{
+  "harness": "cursor_trace",
+  "name": "cursor_trace_review_events",
+  "task": "Investigate how trace review scoring works across this repository and summarize the key files and control flow.",
+  "events": [
+    {
+      "event": "assistant_thinking",
+      "text": "This is a complex repository investigation. The tool budget is one delegated Task call because evidence must cover multiple files, and stop criteria are enough evidence to explain trace review scoring."
+    },
+    {
+      "event": "tool_call",
+      "id": "call_1",
+      "name": "Task",
+      "args": {
+        "description": "Investigate trace review scoring across this repository and summarize the key files and control flow."
+      }
+    },
+    {
+      "event": "observation",
+      "tool_call_id": "call_1",
+      "content": "trace_review.py scores structure, tool use, reasoning, and final answer checks."
+    },
+    {
+      "event": "decision",
+      "message": "The observation is high-quality relevant evidence. Verification is enough for this matrix case, so I should stop and produce the final answer."
+    },
+    {
+      "event": "final",
+      "message": "Trace review scoring is implemented in trace_review.py and called by trace suites and agent audits."
+    }
+  ]
+}

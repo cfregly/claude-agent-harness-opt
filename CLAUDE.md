@@ -24,6 +24,9 @@ harnesses, `CLAUDE.md` style instructions, and skills across model generations.
 - Keep it generic. Do not add interview framing, employer-specific context, or individual names.
 - Track reasoning and tool use explicitly. Real audits must include visible reasoning summaries or
   decision notes, ordered tool calls, tool outputs, and final answers.
+- Enforce directed thinking in traces and prompts. Before the first tool, visible reasoning must
+  mention complexity, tool budget, and evidence or stop criteria. After tool results, visible
+  reasoning must mention quality, verification, and the continue or stop decision.
 - Apply the value bar everywhere. An audit, prompt change, tool change, or eval change passes only
   when it is adversarially-confirmed to add value: it must name the value claim, compare against a
   baseline, meet a minimum improvement threshold, and survive an adversarial check with no open

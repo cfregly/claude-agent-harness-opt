@@ -1,0 +1,100 @@
+{
+  "name": "trace-adapter harness matrix",
+  "description": "Evaluate exported Agent SDK and IDE-agent runs after normalizing them into the trace contract.",
+  "profiles": [
+    {
+      "adapter": "runtime_events",
+      "harnesses": ["agent_sdk_trace"],
+      "model": "exported-run",
+      "name": "agent-sdk-export",
+      "provider": "trace_fixture",
+      "trace_cases": {
+        "agent_sdk_trace": {
+          "investigate trace review flow": "../examples/agent_sdk_trace_review_events.json",
+          "map model matrix implementation": "../examples/agent_sdk_model_matrix_events.json"
+        }
+      }
+    },
+    {
+      "adapter": "runtime_events",
+      "harnesses": ["cursor_trace"],
+      "model": "exported-run",
+      "name": "cursor-export",
+      "provider": "trace_fixture",
+      "trace_cases": {
+        "cursor_trace": {
+          "investigate trace review flow": "../examples/cursor_trace_review_events.json",
+          "map model matrix implementation": "../examples/cursor_model_matrix_events.json"
+        }
+      }
+    }
+  ],
+  "instruction_variants": [
+    {
+      "instructions": "Evaluate the first selected tool from an exported trace after adapter normalization.",
+      "name": "exported_trace"
+    }
+  ],
+  "tool_variants": [
+    {
+      "name": "exported_trace_tools",
+      "tools": [
+        {
+          "avoid_when": "Avoid for a single known file read, a single exact text search, or a simple filename glob.",
+          "input_schema": {
+            "properties": {
+              "description": {
+                "description": "Delegated investigation task.",
+                "type": "string"
+              }
+            },
+            "required": ["description"],
+            "type": "object"
+          },
+          "name": "Task",
+          "purpose": "Delegate broad multi-step repository investigation.",
+          "quality_checks": ["Use when the exported run needs multi-file synthesis."],
+          "use_when": "Use for broad investigation, mapping, summarization, or synthesis across unknown files."
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "expected_args_contains": {
+        "description": "trace review"
+      },
+      "expected_tools": ["Task"],
+      "forbidden_tools": ["Glob", "Grep", "Read"],
+      "name": "investigate trace review flow",
+      "task": "Investigate how trace review scoring works across this repository and summarize the key files and control flow."
+    },
+    {
+      "expected_args_contains": {
+        "description": "model matrix"
+      },
+      "expected_tools": ["Task"],
+      "forbidden_tools": ["Glob", "Grep", "Read"],
+      "name": "map model matrix implementation",
+      "task": "Map how the model matrix runner is implemented across the repository and summarize the main extension points."
+    }
+  ],
+  "value_bar": {
+    "claim": "Trace-adapter harnesses add value when exported runs can be normalized and evaluated with the same matrix checks as provider tool calls.",
+    "metric": "model_matrix.score",
+    "baseline": {
+      "score": 0.0,
+      "source": "raw event exports before adapter normalization"
+    },
+    "candidate": {
+      "score": 1.0,
+      "source": "harness_trace_adapters matrix with agent_sdk_trace and cursor_trace"
+    },
+    "minimum_delta": 0.1,
+    "adversarial_review": {
+      "challenge": "Both named harnesses must pass both realistic cases through the trace_fixture provider.",
+      "failed_to_disprove": true,
+      "open_objections": []
+    }
+  }
+}

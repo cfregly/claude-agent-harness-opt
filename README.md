@@ -27,12 +27,14 @@ python -m claude_agent_prompting eval evals/examples/search_answer.json
 python -m claude_agent_prompting review-trace evals/examples/agent_trace_good.json
 python -m claude_agent_prompting review-trace evals/examples/agent_trace_parallel_good.json
 python -m claude_agent_prompting normalize-claude evals/examples/claude_messages.json
+python -m claude_agent_prompting normalize-runtime evals/examples/cursor_trace_review_events.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --markdown
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --markdown
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
 python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
 python -m claude_agent_prompting judge-prompt evals/examples/search_answer.json
@@ -48,6 +50,8 @@ Claude prompt engineering docs:
 - explicit tool-selection guidance instead of relying on short tool descriptions
 - distinct tool names and descriptions, with linting for overlap
 - initial planning, reflection after tool results, source verification, and self-checks
+- directed thinking checks for initial complexity, tool budget, evidence or stop criteria, result
+  quality, verification, and continue or stop decisions
 - tool-call budgets for simple, standard, and complex work
 - stop criteria, fallback behavior, and rollback of harmful prompt changes
 - reversibility rules for destructive, shared, or hard to undo actions
@@ -62,6 +66,7 @@ Claude prompt engineering docs:
 - Claude-backed semantic judging of visible reasoning summaries, tool outputs, and final grounding
 - tool-selection optimization from tool descriptions, schemas, calibration cases, and trace failures
 - model matrix sweeps across providers, model ids, harnesses, instruction variants, and tool-description variants
+- trace adapters that normalize exported Agent SDK and IDE-agent runs into the same matrix contract
 - harness grinding that turns matrix failures into candidate tool-description variants and promotes
   only live improvements
 - value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
@@ -81,7 +86,7 @@ claude_agent_prompting/
   harness_optimizer.py # hill-climb candidate tool descriptions from matrix failures
   tool_selection.py  # tool description and selection optimizer
   value_bar.py       # adversarially-confirmed value-bar checks
-  adapters.py        # transcript normalizers for provider content blocks
+  adapters.py        # transcript normalizers for provider and runtime event exports
   cli.py             # render, score, lint-tools, eval, judge-prompt
 recipes/             # ready-to-edit agent recipes
 evals/examples/      # small local eval cases
@@ -97,8 +102,9 @@ scripts/             # prose gate for public artifacts
 
 The repo includes a project-local `/agent-audit` skill at
 `.claude/skills/agent-audit/SKILL.md`. Use it when reviewing another agent's tools, traces, Claude
-Messages API blocks, or trace suites. It chooses the right CLI path, runs deterministic checks, and
-reports concrete prompt or tool changes. The skill treats missing value-bar proof as a failed audit.
+Messages API blocks, Agent SDK event exports, IDE-agent event exports, or trace suites. It chooses
+the right CLI path, runs deterministic checks, and reports concrete prompt or tool changes. The skill
+treats missing value-bar proof as a failed audit.
 
 ## Claude Judge
 
@@ -172,6 +178,21 @@ the trace suite, Claude judge, model matrix, and harness grind can compare it ag
 harnesses. See [docs/harness-optimization.md](docs/harness-optimization.md) for the adapter and
 upgrade loop.
 
+To test an exported harness without an API key, normalize a runtime event file and run the fixture
+matrix:
+
+```bash
+python -m claude_agent_prompting normalize-runtime evals/examples/agent_sdk_trace_review_events.json
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json \
+  --live \
+  --require-live \
+  --providers trace_fixture \
+  --harnesses agent_sdk_trace,cursor_trace \
+  --variants exported_trace_tools \
+  --instruction-variants exported_trace \
+  --markdown
+```
+
 ## Verify it
 
 ```bash
@@ -181,11 +202,13 @@ python -m unittest discover -s tests -q
 python -m claude_agent_prompting eval evals/examples/search_answer.json
 python -m claude_agent_prompting review-trace evals/examples/agent_trace_good.json
 python -m claude_agent_prompting normalize-claude evals/examples/claude_messages.json
+python -m claude_agent_prompting normalize-runtime evals/examples/cursor_trace_review_events.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture
 python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json
 python scripts/check_value_bar.py
 ```

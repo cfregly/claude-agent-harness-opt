@@ -29,6 +29,30 @@ class TraceReviewTests(unittest.TestCase):
         details = "\n".join(finding.detail for finding in result.findings)
         self.assertIn("parallel group 'initial_research'", details)
 
+    def test_directed_thinking_requires_specific_content(self):
+        trace = {
+            "rubric": {
+                "pass_score": 1.0,
+                "require_directed_after_tool_reasoning": True,
+                "require_directed_initial_reasoning": True,
+            },
+            "steps": [
+                {"type": "reasoning", "summary": "I should look something up."},
+                {"type": "tool_call", "id": "call_1", "name": "web_search", "args": {}},
+                {"type": "tool_result", "tool_call_id": "call_1", "ok": True, "output": "result"},
+                {"type": "reasoning", "summary": "Looks fine."},
+                {"type": "final", "text": "Done."},
+            ],
+        }
+
+        result = review_trace(trace)
+        failed = {finding.check for finding in result.findings if not finding.passed}
+        self.assertIn("reasoning.initial_complexity", failed)
+        self.assertIn("reasoning.initial_tool_budget", failed)
+        self.assertIn("reasoning.initial_evidence_stop", failed)
+        self.assertIn("reasoning.after_tool_verification", failed)
+        self.assertIn("reasoning.after_tool_next_decision", failed)
+
     def test_cli_review_trace(self):
         result = subprocess.run(
             [

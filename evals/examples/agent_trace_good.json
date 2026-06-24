@@ -25,7 +25,7 @@
   "steps": [
     {
       "source": "thinking_summary",
-      "summary": "This is a standard research and calculation task. I need cargo volume, banana volume, and a packing assumption before stopping.",
+      "summary": "This is a standard research and calculation task. Budget up to 6 tool calls. Enough evidence to stop is cargo volume, banana volume, and a packing assumption from reliable sources.",
       "type": "reasoning"
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The manufacturer source is the most reliable evidence for cargo volume, so I should fetch that instead of relying on snippets.",
+      "summary": "The manufacturer source is the highest-quality evidence for cargo volume. I should verify by fetching the direct source, then continue with the next tool call instead of relying on snippets.",
       "type": "reasoning"
     },
     {
@@ -63,7 +63,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The source is direct and relevant. I need a rough banana volume and then calculate an estimate with uncertainty.",
+      "summary": "The source is direct, relevant, and verified enough for cargo volume. I should continue by searching for banana volume, then calculate an estimate with uncertainty.",
       "type": "reasoning"
     },
     {
@@ -82,7 +82,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The banana number is an estimate, but it is good enough for an order-of-magnitude answer. I should compute and disclose uncertainty.",
+      "summary": "The banana number is an estimated but relevant source value. I should treat it as verified only for order-of-magnitude use, continue to calculation, and disclose uncertainty.",
       "type": "reasoning"
     },
     {
@@ -101,7 +101,7 @@
     },
     {
       "source": "thinking_summary",
-      "summary": "The calculation is consistent with the evidence. The packing assumption is uncertain, so the answer should be framed as a rough estimate.",
+      "summary": "The calculation is consistent with the evidence, so verification is complete enough to stop. The next action is the final answer, framed as a rough estimate because packing is uncertain.",
       "type": "reasoning"
     },
     {

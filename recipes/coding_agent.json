@@ -58,11 +58,15 @@
   ],
   "thinking": {
     "initial_plan": [
+      "Classify the task as simple, standard, or complex.",
+      "Choose a tool-call budget for file search, file reads, edits, and tests.",
+      "Define enough evidence and stop criteria for the code change.",
       "Map the requested behavior to files, tests, and public surfaces.",
-      "Decide the smallest verification loop that can catch a regression.",
       "Identify any destructive or shared action that needs confirmation."
     ],
     "after_tool_result": [
+      "Assess the quality and relevance of each file read, diff, or test result.",
+      "Decide what verification is still needed before continuing or stopping.",
       "Update the plan when file reads or tests contradict assumptions.",
       "Prefer local patterns over new abstractions.",
       "Keep a short list of remaining edits and checks."

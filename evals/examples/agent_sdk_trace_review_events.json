@@ -1,0 +1,39 @@
+{
+  "harness": "agent_sdk_trace",
+  "name": "agent_sdk_trace_review_events",
+  "task": "Investigate how trace review scoring works across this repository and summarize the key files and control flow.",
+  "rubric": {
+    "max_tool_calls": 1,
+    "pass_score": 1.0,
+    "require_directed_after_tool_reasoning": true,
+    "require_directed_initial_reasoning": true,
+    "required_tools": ["Task"]
+  },
+  "events": [
+    {
+      "type": "thinking",
+      "summary": "This is a complex repository investigation. Budget one delegated Task call because evidence must come from multiple files, and enough evidence to stop is a summary of trace review control flow."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "call_1",
+      "tool_name": "Task",
+      "arguments": {
+        "description": "Investigate trace review scoring across this repository and summarize the key files and control flow."
+      }
+    },
+    {
+      "type": "tool_result",
+      "tool_call_id": "call_1",
+      "output": "Trace review scoring is implemented in trace_review.py and exercised by trace suite tests."
+    },
+    {
+      "type": "reflection",
+      "summary": "The Task result is relevant evidence from the expected files. Verification is sufficient for this matrix case, so the next decision is to stop and give the final summary."
+    },
+    {
+      "type": "final",
+      "text": "Trace review scoring centers on trace_review.py, with suites in trace_suite.py and fixtures under evals/examples."
+    }
+  ]
+}

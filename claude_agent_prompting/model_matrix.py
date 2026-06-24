@@ -11,8 +11,11 @@ import time
 from typing import Any
 from urllib import error, parse, request
 
+from .adapters import claude_messages_to_trace, load_json, runtime_events_to_trace
+
 
 DEFAULT_TIMEOUT = 90
+KEYLESS_PROVIDERS = {"trace_fixture"}
 
 
 class ModelMatrixError(RuntimeError):
@@ -80,6 +83,7 @@ def run_model_matrix(
     concurrency: int = 1,
 ) -> dict[str, Any]:
     matrix = load_matrix(matrix_path)
+    matrix["_base_dir"] = str(Path(matrix_path).parent)
     return run_model_matrix_data(
         matrix,
         matrix_name=matrix.get("name", str(matrix_path)),
@@ -259,7 +263,7 @@ def _selected_runs(
                                 "harness": harness,
                                 "instruction": instruction,
                                 "labels": labels,
-                                "profile": profile,
+                                "profile": _resolve_trace_profile(profile, matrix),
                                 "tools": variant.get("tools", []),
                             }
                         )
@@ -273,7 +277,7 @@ def _run_live_case(run: dict[str, Any], env: dict[str, str], *, require_live: bo
     api_key = env.get(api_key_env, "")
     model = _model_name(profile, env)
     labels = {**run["labels"], "model": model}
-    if not api_key:
+    if provider not in KEYLESS_PROVIDERS and not api_key:
         return {
             **labels,
             "case": run["case"]["name"],
@@ -325,6 +329,8 @@ def _call_provider(
     env: dict[str, str],
 ) -> dict[str, Any]:
     provider = profile.get("provider")
+    if provider == "trace_fixture":
+        return _call_trace_fixture(profile, harness, case)
     if provider == "anthropic":
         return _call_anthropic(profile, model, api_key, harness, tools, case, instruction, env)
     if provider == "openai":
@@ -332,6 +338,31 @@ def _call_provider(
     if provider == "gemini":
         return _call_gemini(profile, model, api_key, harness, tools, case, instruction, env)
     raise ModelMatrixError(f"unsupported provider: {provider}")
+
+
+def _call_trace_fixture(
+    profile: dict[str, Any],
+    harness: str,
+    case: dict[str, Any],
+) -> dict[str, Any]:
+    path = _trace_fixture_path(profile, harness, case)
+    payload = load_json(path)
+    adapter = str(profile.get("adapter", payload.get("adapter", "runtime_events")))
+    if adapter == "claude_messages":
+        trace = claude_messages_to_trace(payload)
+    elif adapter == "runtime_events":
+        trace = runtime_events_to_trace(payload)
+    else:
+        raise ModelMatrixError(f"unsupported trace fixture adapter: {adapter}")
+    for step in trace.get("steps", []):
+        if step.get("type") == "tool_call":
+            return {
+                "arguments": step.get("args", {}),
+                "rationale": _first_reasoning_summary(trace),
+                "tool_name": step.get("name", ""),
+                "trace": trace.get("name", Path(path).stem),
+            }
+    raise ModelMatrixError(f"trace fixture has no tool call: {path}")
 
 
 def _call_anthropic(
@@ -607,6 +638,54 @@ def _model_name(profile: dict[str, Any], env: dict[str, str]) -> str:
     if model_env and env.get(model_env):
         return env[model_env]
     return str(profile.get("model", ""))
+
+
+def _resolve_trace_profile(profile: dict[str, Any], matrix: dict[str, Any]) -> dict[str, Any]:
+    if profile.get("provider") != "trace_fixture":
+        return profile
+    base_dir = Path(str(matrix.get("_base_dir", ".")))
+    resolved = dict(profile)
+    if "trace_file" in resolved:
+        resolved["trace_file"] = _resolve_fixture_path(base_dir, resolved["trace_file"])
+    if "trace_cases" in resolved:
+        resolved["trace_cases"] = _resolve_trace_cases(base_dir, resolved["trace_cases"])
+    return resolved
+
+
+def _resolve_trace_cases(base_dir: Path, value: Any) -> Any:
+    if isinstance(value, str):
+        return _resolve_fixture_path(base_dir, value)
+    if isinstance(value, dict):
+        return {key: _resolve_trace_cases(base_dir, item) for key, item in value.items()}
+    return value
+
+
+def _resolve_fixture_path(base_dir: Path, value: Any) -> str:
+    path = Path(str(value))
+    if path.is_absolute():
+        return str(path)
+    return str((base_dir / path).resolve())
+
+
+def _trace_fixture_path(profile: dict[str, Any], harness: str, case: dict[str, Any]) -> Path:
+    trace_cases = profile.get("trace_cases", {})
+    case_name = case.get("name")
+    if isinstance(trace_cases, dict):
+        harness_cases = trace_cases.get(harness)
+        if isinstance(harness_cases, dict) and harness_cases.get(case_name):
+            return Path(str(harness_cases[case_name]))
+        if trace_cases.get(case_name):
+            return Path(str(trace_cases[case_name]))
+    if profile.get("trace_file"):
+        return Path(str(profile["trace_file"]))
+    raise ModelMatrixError(f"no trace fixture for harness {harness!r} case {case_name!r}")
+
+
+def _first_reasoning_summary(trace: dict[str, Any]) -> str:
+    for step in trace.get("steps", []):
+        if step.get("type") == "reasoning":
+            return str(step.get("summary", ""))
+    return "trace fixture"
 
 
 def _matches(allowed: set[str] | None, value: Any) -> bool:

@@ -27,10 +27,12 @@ to add value against a baseline.
 
 Every harness should export the same trace shape:
 
-- a short visible decision note before the first tool call
+- a short visible decision note before the first tool call that names complexity, tool budget, and
+  evidence or stop criteria
 - ordered tool calls with ids, names, arguments, and optional parallel groups
 - tool outputs linked to tool-call ids
-- a visible decision note after tool results
+- a visible decision note after tool results that names result quality, verification, and the
+  continue or stop decision
 - the final answer or final state
 
 Some providers return thinking blocks or reasoning summaries. Some runtimes do not. When the
@@ -84,12 +86,32 @@ For a new Agent SDK, IDE agent, or Cursor-like harness, add an adapter that does
 - maps the harness into matrix profiles and harness names
 
 The first adapter should be thin. Capture actual tool calls and outputs before writing opinions
-about the harness. Once a real trace exists, run:
+about the harness. Normalize the event export first:
+
+```bash
+python -m claude_agent_prompting normalize-runtime path/to/events.json > path/to/trace.json
+```
+
+Once a real trace exists, run:
 
 ```bash
 python -m claude_agent_prompting review-trace path/to/trace.json --claude-judge
 python -m claude_agent_prompting trace-suite path/to/suite.json --markdown
 python -m claude_agent_prompting audit-agent path/to/bundle.json --claude-judge --markdown
+```
+
+Then add the exported run as a named harness in a model matrix. The fixture provider is useful for
+testing adapters without spending live provider calls:
+
+```bash
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json \
+  --live \
+  --require-live \
+  --providers trace_fixture \
+  --harnesses agent_sdk_trace,cursor_trace \
+  --variants exported_trace_tools \
+  --instruction-variants exported_trace \
+  --markdown
 ```
 
 ## Reliable Upgrade Loop
@@ -107,6 +129,7 @@ Use this loop for every new model generation or harness version:
 The pain points are predictable:
 
 - traces often lack visible reasoning between tool calls
+- reasoning notes often omit complexity, budget, evidence thresholds, verification, or stop decisions
 - tool descriptions are too short for similar tools
 - native provider schemas and prompt JSON wrappers fail differently
 - a change that helps one model can hurt another

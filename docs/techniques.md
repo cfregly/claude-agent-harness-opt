@@ -77,6 +77,15 @@ candidate beats the baseline.
 The recipes ask the agent to plan before acting, reflect after tool results, and self-check before
 finishing. The guidance focuses on what to consider instead of prescribing a fixed chain of steps.
 
+The directed thinking rubric is intentionally concrete:
+
+- before the first tool, name task complexity, tool budget, and evidence or stop criteria
+- after tool results, name output quality, verification, and the continue or stop decision
+
+The trace reviewer enforces those fields, and the Claude judge scores the same behavior
+semantically. This captures the useful part of inter-tool thinking without claiming access to hidden
+chain-of-thought.
+
 ## 8. Manage Side Effects
 
 Agents run loops, so a small prompt change can have a large behavior change. Each recipe has stop

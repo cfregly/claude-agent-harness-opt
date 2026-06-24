@@ -1,0 +1,39 @@
+{
+  "harness": "agent_sdk_trace",
+  "name": "agent_sdk_model_matrix_events",
+  "task": "Map how the model matrix runner is implemented across the repository and summarize the main extension points.",
+  "rubric": {
+    "max_tool_calls": 1,
+    "pass_score": 1.0,
+    "require_directed_after_tool_reasoning": true,
+    "require_directed_initial_reasoning": true,
+    "required_tools": ["Task"]
+  },
+  "events": [
+    {
+      "type": "thinking",
+      "summary": "This is a complex codebase mapping task. Budget one delegated Task call because the evidence spans matrix loading, provider calls, and CLI entry points, and enough evidence to stop is a summary of extension points."
+    },
+    {
+      "type": "tool_call",
+      "call_id": "call_1",
+      "tool_name": "Task",
+      "arguments": {
+        "description": "Map the model matrix implementation across the repository and summarize the main extension points."
+      }
+    },
+    {
+      "type": "tool_result",
+      "tool_call_id": "call_1",
+      "output": "The model matrix runner loads JSON cases, selects providers, calls harnesses, evaluates chosen tools, and renders summaries."
+    },
+    {
+      "type": "reflection",
+      "summary": "The result is relevant evidence for the matrix control flow. Verification is sufficient for this exported harness case, so the next decision is to stop and write the final summary."
+    },
+    {
+      "type": "final",
+      "text": "The matrix extension points are profiles, harnesses, tool variants, instruction variants, cases, and provider adapters."
+    }
+  ]
+}

@@ -30,6 +30,7 @@ python -m claude_agent_prompting review-trace evals/examples/agent_trace_paralle
 python -m claude_agent_prompting review-trace evals/examples/agent_trace_bad.json
 python -m claude_agent_prompting trace-judge-prompt evals/examples/agent_trace_good.json
 python -m claude_agent_prompting normalize-claude evals/examples/claude_messages.json
+python -m claude_agent_prompting normalize-runtime evals/examples/cursor_trace_review_events.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json --markdown
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --markdown
@@ -46,8 +47,9 @@ The deterministic reviewer checks:
 - arguments contain expected values
 - duplicate tool calls stay below the configured limit
 - reasoning appears before the first tool call when required
+- initial reasoning names task complexity, a tool-call budget, and evidence or stop criteria
 - each tool result is followed by reasoning before the next action
-- reasoning after tool results assesses evidence, relevance, or reliability
+- reasoning after tool results names result quality, verification, and the continue or stop decision
 - tool errors are followed by recovery reasoning
 - final answers contain required evidence or uncertainty language
 
@@ -84,6 +86,34 @@ If a provider does not expose reasoning, do not try to extract hidden reasoning.
 your agent to write short decision notes before and after tool calls. Those notes are often enough to
 review whether the agent understood tool outputs and made sane next-step decisions.
 
+## Capturing Runtime Exports
+
+For Agent SDK loops, IDE agents, or Cursor-like runtimes, export the raw event stream and normalize
+it before review:
+
+```bash
+python -m claude_agent_prompting normalize-runtime path/to/events.json > path/to/trace.json
+python -m claude_agent_prompting review-trace path/to/trace.json --claude-judge
+```
+
+The runtime adapter accepts common event names such as `thinking`, `assistant_thinking`,
+`tool_call`, `tool_result`, `observation`, `decision`, and `final`. It also accepts common camelCase
+variants. Add a named harness to a model matrix once the exported run can produce the same trace
+contract as provider-native tool calls.
+
+The included adapter matrix is a keyless smoke test for two exported harnesses:
+
+```bash
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json \
+  --live \
+  --require-live \
+  --providers trace_fixture \
+  --harnesses agent_sdk_trace,cursor_trace \
+  --variants exported_trace_tools \
+  --instruction-variants exported_trace \
+  --markdown
+```
+
 ## Minimal Harness Contract
 
 Ask an agent owner to export one JSON file per run:
@@ -94,10 +124,15 @@ Ask an agent owner to export one JSON file per run:
   "rubric": {
     "required_tools": ["web_search"],
     "max_tool_calls": 6,
+    "require_directed_initial_reasoning": true,
+    "require_directed_after_tool_reasoning": true,
     "require_reasoning_after_tool_results": true
   },
   "steps": [
-    {"type": "reasoning", "summary": "Why the first tool is needed"},
+    {
+      "type": "reasoning",
+      "summary": "This is a standard research task. Budget two parallel search calls and stop when enough direct source evidence is found."
+    },
     {
       "type": "tool_call",
       "id": "call_1",
@@ -126,7 +161,10 @@ Ask an agent owner to export one JSON file per run:
       "ok": true,
       "output": "..."
     },
-    {"type": "reasoning", "summary": "Whether the evidence batch was reliable enough"},
+    {
+      "type": "reasoning",
+      "summary": "The batch has relevant source evidence. Verification is enough for this task, so stop and write the final answer."
+    },
     {"type": "final", "text": "Final answer"}
   ]
 }

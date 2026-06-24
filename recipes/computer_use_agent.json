@@ -58,11 +58,15 @@
   ],
   "thinking": {
     "initial_plan": [
+      "Classify the UI task as simple, standard, or complex.",
+      "Choose a tool-call budget for screenshots and reversible actions.",
       "Identify the UI goal and the safest likely path.",
       "Decide which steps are reversible and which need confirmation.",
-      "Set a stop point before any irreversible action."
+      "Set evidence and stop criteria before any irreversible action."
     ],
     "after_tool_result": [
+      "Assess the quality and relevance of the observed screen state.",
+      "Decide what verification is still needed before continuing or stopping.",
       "Compare the new screen with the expected state.",
       "Recover from navigation or selection mistakes with reversible actions.",
       "Ask for help if the UI blocks progress or asks for credentials."

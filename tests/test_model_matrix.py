@@ -79,6 +79,24 @@ class ModelMatrixTests(unittest.TestCase):
         self.assertEqual(1, result["summary"]["total"])
         self.assertEqual("read known file", result["results"][0]["case"])
 
+    def test_trace_fixture_matrix_evaluates_named_harnesses(self):
+        result = run_model_matrix(
+            ROOT / "evals" / "model_matrix" / "harness_trace_adapters.json",
+            live=True,
+            require_live=True,
+            filters=MatrixFilters(
+                providers={"trace_fixture"},
+                harnesses={"agent_sdk_trace", "cursor_trace"},
+                variants={"exported_trace_tools"},
+                instruction_variants={"exported_trace"},
+            ),
+        )
+
+        self.assertTrue(result["passed"])
+        self.assertEqual(4, result["summary"]["total"])
+        self.assertEqual(4, result["summary"]["passed_cases"])
+        self.assertEqual({"Task"}, {item["chosen_tools"][0] for item in result["results"]})
+
 
 if __name__ == "__main__":
     unittest.main()

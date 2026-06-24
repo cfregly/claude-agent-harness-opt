@@ -31,8 +31,9 @@ You are a [role] working in [environment].
 </tool_call_budgets>
 
 <thinking_guidance>
-- Initial plan: classify complexity, choose tools, define enough evidence.
-- After tool results: check quality, decide whether to verify, continue, or stop.
+- Initial plan: classify complexity, choose a tool-call budget, and define evidence or stop criteria.
+- After tool results: check output quality, address verification, and decide whether to continue,
+  switch tools, ask, stop, or final answer.
 - Self-check: compare the final answer or state against the success criteria.
 - Value check: name the value claim, baseline, improvement threshold, and adversarial challenge.
 </thinking_guidance>

@@ -43,6 +43,15 @@ The hard cases distinguish `Task` from `Grep`. Short descriptions often make mod
 broad investigation. Tuned descriptions state when to delegate to `Task` and when to stay with direct
 file tools.
 
+`evals/model_matrix/harness_trace_adapters.json` tests exported runtime traces as named harnesses:
+
+- `agent_sdk_trace`: normalized Agent SDK style event exports
+- `cursor_trace`: normalized IDE-agent style event exports
+- `trace_fixture`: keyless provider that reads saved event files through an adapter
+
+This matrix proves that exported harness runs can enter the same tool-selection contract as live
+provider calls. It is also the smoke test for adapter changes.
+
 ## Commands
 
 Dry run:
@@ -74,6 +83,19 @@ python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_sel
   --live \
   --require-live \
   --concurrency 8 \
+  --markdown
+```
+
+Adapter smoke test:
+
+```bash
+python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json \
+  --live \
+  --require-live \
+  --providers trace_fixture \
+  --harnesses agent_sdk_trace,cursor_trace \
+  --variants exported_trace_tools \
+  --instruction-variants exported_trace \
   --markdown
 ```
 
@@ -113,6 +135,7 @@ Use the cell summary to isolate the cause:
 - If baseline fails and tuned passes, promote the tuned tool descriptions after heldout checks.
 - If both variants fail, add harder schema guidance or split the tool.
 - If instruction variants change the score, tune `CLAUDE.md`, skill instructions, or system prompt text.
+- If trace fixture harnesses fail, fix the adapter or trace instrumentation before tuning prompts.
 
 Use the same loop for `CLAUDE.md` and skill updates:
 

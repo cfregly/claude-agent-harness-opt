@@ -1,0 +1,32 @@
+{
+  "harness": "cursor_trace",
+  "name": "cursor_model_matrix_events",
+  "task": "Map how the model matrix runner is implemented across the repository and summarize the main extension points.",
+  "events": [
+    {
+      "event": "assistant_thinking",
+      "text": "This is a complex codebase mapping task. The tool budget is one delegated Task call because evidence spans providers, harnesses, cases, and CLI paths, and stop criteria are enough evidence to identify extension points."
+    },
+    {
+      "event": "tool_call",
+      "id": "call_1",
+      "name": "Task",
+      "args": {
+        "description": "Map the model matrix implementation across the repository and summarize the main extension points."
+      }
+    },
+    {
+      "event": "observation",
+      "tool_call_id": "call_1",
+      "content": "model_matrix.py selects matrix cells and calls provider or trace-fixture harnesses before evaluating tool choices."
+    },
+    {
+      "event": "decision",
+      "message": "The observation is relevant evidence and verification is sufficient for the exported harness case. I should stop and give the final summary."
+    },
+    {
+      "event": "final",
+      "message": "The main extension points are provider profiles, harness names, tool variants, instruction variants, cases, and adapter implementations."
+    }
+  ]
+}

@@ -51,11 +51,15 @@
   ],
   "thinking": {
     "initial_plan": [
+      "Classify the analysis task as simple, standard, or complex.",
+      "Choose a tool-call budget for profiling, SQL, Python, and validation.",
       "Identify the analysis question and likely data grain.",
       "Choose profiling checks before transformations.",
-      "Decide what result would be enough to answer the question."
+      "Decide what evidence and stop criteria are enough to answer the question."
     ],
     "after_tool_result": [
+      "Assess the quality and relevance of the data output.",
+      "Decide what verification is still needed before continuing or stopping.",
       "Check whether data quality changes the plan.",
       "Reconcile totals after filters or joins.",
       "Decide whether another validation query is needed."
