@@ -32,6 +32,9 @@ Checked on 2026-06-24.
     preserving thinking blocks during tool use, and redacted thinking blocks.
 - [Tool use with Claude](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview)
   - Used for `tool_use` and `tool_result` content block terminology.
+- [Using the Messages API](https://platform.claude.com/docs/en/build-with-claude/working-with-messages)
+  - Used for the optional Claude judge path, which sends a full user message to Claude and reads the
+    returned text block.
 
 ## Local Screenshots
 

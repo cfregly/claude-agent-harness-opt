@@ -1,7 +1,8 @@
-"""Prompt recipes, task-fit scoring, and local evals for Claude-style agents."""
+"""Prompt recipes, task-fit scoring, and evals for Claude-style agents."""
 
 from .adapters import claude_messages_to_trace
 from .agent_audit import review_agent_bundle
+from .claude_judge import judge_trace_with_claude
 from .evals import evaluate_case
 from .prompt_builder import lint_tools, load_recipe, render_prompt, validate_recipe
 from .suitability import score_use_case
@@ -13,6 +14,7 @@ __all__ = [
     "evaluate_case",
     "evaluate_value_bar",
     "claude_messages_to_trace",
+    "judge_trace_with_claude",
     "lint_tools",
     "load_recipe",
     "render_prompt",

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "claude-agent-prompting"
 version = "0.1.0"
-description = "Offline prompt kit for Claude-style agent prompts and evals"
+description = "Prompt kit and Claude-backed audit harness for Claude-style agents"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

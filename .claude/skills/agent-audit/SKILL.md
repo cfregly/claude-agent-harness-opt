@@ -5,9 +5,10 @@ description: Review an agent's tool inventory, tool calls, reasoning summaries, 
 
 # Agent Audit
 
-Use the repo's CLI to produce deterministic trace reviews before giving judgment. Prefer existing
-JSON artifacts over reconstructing a trace from prose. Treat "adversarially-confirmed to add value"
-as the pass bar.
+Use the repo's CLI to produce deterministic trace reviews before giving judgment, then use the
+Claude judge for real semantic audits when an API key is available. Prefer existing JSON artifacts
+over reconstructing a trace from prose. Treat "adversarially-confirmed to add value" as the pass
+bar.
 
 ## Decision Tree
 
@@ -25,8 +26,10 @@ Run from the repo root.
 
 ```bash
 python -m claude_agent_prompting audit-agent <bundle.json> --markdown
+python -m claude_agent_prompting audit-agent <bundle.json> --claude-judge --markdown
 python -m claude_agent_prompting trace-suite <suite.json> --markdown
 python -m claude_agent_prompting review-trace <trace.json>
+python -m claude_agent_prompting review-trace <trace.json> --claude-judge
 python -m claude_agent_prompting normalize-claude <messages.json>
 python -m claude_agent_prompting trace-judge-prompt <trace.json>
 ```
@@ -40,8 +43,12 @@ human.
 2. Read the failed checks, grouped by `structure`, `tool_use`, `reasoning`, and `final`.
 3. Inspect the trace around any failed check before proposing a fix.
 4. Check the value bar. Do not pass an audit without baseline improvement and adversarial confirmation.
-5. Recommend prompt or tool changes only when they map directly to a failed check.
-6. Use `trace-judge-prompt` for semantic questions the deterministic checks cannot decide.
+5. For real audits, run `--claude-judge` so Claude reviews visible reasoning
+   summaries, tool outputs, final grounding, and value over baseline.
+6. Recommend prompt or tool changes only when they map directly to a failed check or Claude judge
+   finding.
+7. Use `trace-judge-prompt` only when you need a portable judge prompt instead of a live Claude API
+   call.
 
 ## What To Look For
 

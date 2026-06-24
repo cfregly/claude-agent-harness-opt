@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .claude_judge import JudgeRequestFn, judge_trace_with_claude
 from .prompt_builder import lint_tools
 from .trace_review import load_trace, review_trace
 from .value_bar import evaluate_value_bar
@@ -16,16 +17,26 @@ def load_agent_bundle(path: str | Path) -> dict[str, Any]:
         return json.load(handle)
 
 
-def review_agent_bundle(path: str | Path) -> dict[str, Any]:
+def review_agent_bundle(
+    path: str | Path,
+    *,
+    claude_judge: bool = False,
+    require_claude_judge: bool = False,
+    judge_model: str | None = None,
+    judge_api_key: str | None = None,
+    judge_request_fn: JudgeRequestFn | None = None,
+) -> dict[str, Any]:
     bundle_path = Path(path)
     bundle = load_agent_bundle(bundle_path)
     base_dir = bundle_path.parent
 
     tool_issues = lint_tools(bundle.get("tools", []))
     traces = []
+    claude_judges = []
     for item in bundle.get("traces", []):
         trace_path = _resolve(base_dir, item["trace"])
-        review = review_trace(load_trace(trace_path))
+        trace = load_trace(trace_path)
+        review = review_trace(trace)
         traces.append(
             {
                 "name": item.get("name", trace_path.stem),
@@ -35,6 +46,21 @@ def review_agent_bundle(path: str | Path) -> dict[str, Any]:
                 "trace": str(trace_path),
             }
         )
+        if claude_judge:
+            semantic = judge_trace_with_claude(
+                trace,
+                review,
+                api_key=judge_api_key,
+                model=judge_model,
+                request_fn=judge_request_fn,
+            )
+            claude_judges.append(
+                {
+                    "name": item.get("name", trace_path.stem),
+                    "trace": str(trace_path),
+                    **semantic.to_dict(),
+                }
+            )
 
     trace_score = _average([trace["score"] for trace in traces])
     tool_score = 1.0 if not tool_issues else 0.0
@@ -42,7 +68,10 @@ def review_agent_bundle(path: str | Path) -> dict[str, Any]:
     component_scores = [tool_score, value_bar.score]
     if traces:
         component_scores.append(trace_score)
+    if claude_judges:
+        component_scores.append(_average([judge["score"] for judge in claude_judges]))
     overall = round(sum(component_scores) / len(component_scores), 3)
+    claude_judge_passed = not claude_judges or all(judge["passed"] for judge in claude_judges)
 
     return {
         "name": bundle.get("name", bundle_path.stem),
@@ -51,7 +80,14 @@ def review_agent_bundle(path: str | Path) -> dict[str, Any]:
             not tool_issues
             and value_bar.passed
             and all(trace["passed"] for trace in traces)
+            and (claude_judge_passed or not claude_judge)
         ),
+        "claude_judge": {
+            "enabled": claude_judge,
+            "passed": claude_judge_passed,
+            "required": require_claude_judge,
+            "traces": claude_judges,
+        },
         "tool_inventory": {
             "issues": tool_issues,
             "passed": not tool_issues,
@@ -95,6 +131,26 @@ def render_agent_audit_markdown(result: dict[str, Any]) -> str:
         ]
     )
     lines.extend(f"- {detail}" for detail in result["value_bar"]["details"])
+
+    claude = result.get("claude_judge", {})
+    if claude.get("enabled"):
+        lines.extend(
+            [
+                "",
+                "## Claude Judge",
+                "",
+                f"Claude judge passed: {'yes' if claude['passed'] else 'no'}",
+                f"Claude judge required: {'yes' if claude['required'] else 'no'}",
+                "",
+                "| Trace | Model | Score | Passed |",
+                "|---|---|---:|---:|",
+            ]
+        )
+        for trace in claude["traces"]:
+            lines.append(
+                f"| {trace['name']} | {trace['model']} | {trace['score']:.3f} | "
+                f"{'yes' if trace['passed'] else 'no'} |"
+            )
 
     lines.extend(["", "## Trace Scores", "", "| Trace | Score | Passed |", "|---|---:|---:|"])
     for trace in result["traces"]:

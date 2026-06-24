@@ -1,6 +1,7 @@
 # Agent Prompting Techniques
 
-This repo implements these techniques as recipes, rendered prompts, linters, and local evals.
+This repo implements these techniques as recipes, rendered prompts, linters, local evals, and an
+optional Claude judge for semantic trace review.
 
 ## 1. Fit The Task Before Prompting
 
@@ -97,6 +98,6 @@ criteria, and quality checks before adding a long demonstration.
 
 ## 13. Keep Human Review In The Loop
 
-LLM judge rubrics are useful because agent outputs vary in structure. They do not replace looking at
-real transcripts, checking rough edges, and testing with real users. The `judge-prompt` command
-creates a rubric prompt, but the repo keeps the local deterministic checks visible beside it.
+Claude judge rubrics are useful because agent outputs vary in structure. They do not replace looking
+at real transcripts, checking rough edges, and testing with real users. Use `--claude-judge` for
+real agent audits, and keep the local deterministic checks visible beside it.

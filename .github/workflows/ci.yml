@@ -23,3 +23,4 @@ jobs:
       - run: python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
       - run: python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json
       - run: if python -m claude_agent_prompting audit-agent evals/examples/agent_audit_missing_value_bar.json; then exit 1; fi
+      - run: if env -u ANTHROPIC_API_KEY python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge; then exit 1; fi

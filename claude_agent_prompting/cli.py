@@ -12,6 +12,7 @@ from .agent_audit import (
     render_agent_audit_markdown,
     review_agent_bundle,
 )
+from .claude_judge import ClaudeJudgeError, judge_trace_with_claude
 from .evals import build_judge_prompt, evaluate_case, load_eval_case
 from .prompt_builder import lint_tools, load_recipe, render_prompt
 from .suitability import score_use_case
@@ -40,6 +41,15 @@ def main(argv: list[str] | None = None) -> int:
 
     trace_parser = subparsers.add_parser("review-trace", help="review an ordered agent trace")
     trace_parser.add_argument("trace", type=Path)
+    trace_parser.add_argument(
+        "--claude-judge",
+        action="store_true",
+        help="call Claude to semantically judge reasoning, tool outputs, and final grounding",
+    )
+    trace_parser.add_argument(
+        "--model",
+        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
+    )
 
     trace_judge_parser = subparsers.add_parser(
         "trace-judge-prompt",
@@ -63,6 +73,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     audit_parser.add_argument("bundle", type=Path)
     audit_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
+    audit_parser.add_argument(
+        "--claude-judge",
+        action="store_true",
+        help="call Claude to semantically judge each representative trace",
+    )
+    audit_parser.add_argument(
+        "--model",
+        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
+    )
 
     args = parser.parse_args(argv)
 
@@ -92,9 +111,23 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "review-trace":
-        result = review_trace(load_trace(args.trace))
-        print(result.to_json())
-        return 0 if result.passed else 1
+        trace = load_trace(args.trace)
+        result = review_trace(trace)
+        if not args.claude_judge:
+            print(result.to_json())
+            return 0 if result.passed else 1
+        try:
+            semantic = judge_trace_with_claude(trace, result, model=args.model)
+        except ClaudeJudgeError as exc:
+            print(json.dumps({"error": str(exc), "passed": False}, indent=2, sort_keys=True))
+            return 1
+        combined = {
+            "claude_judge": semantic.to_dict(),
+            "deterministic_review": result.to_dict(),
+            "passed": result.passed and semantic.passed,
+        }
+        print(json.dumps(combined, indent=2, sort_keys=True))
+        return 0 if combined["passed"] else 1
 
     if args.command == "trace-judge-prompt":
         sys.stdout.write(build_trace_judge_prompt(load_trace(args.trace)))
@@ -114,7 +147,16 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if result["passed"] else 1
 
     if args.command == "audit-agent":
-        result = review_agent_bundle(args.bundle)
+        try:
+            result = review_agent_bundle(
+                args.bundle,
+                claude_judge=args.claude_judge,
+                require_claude_judge=args.claude_judge,
+                judge_model=args.model,
+            )
+        except ClaudeJudgeError as exc:
+            print(json.dumps({"error": str(exc), "passed": False}, indent=2, sort_keys=True))
+            return 1
         if args.markdown:
             sys.stdout.write(render_agent_audit_markdown(result))
         else:

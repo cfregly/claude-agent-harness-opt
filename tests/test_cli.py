@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -32,6 +33,27 @@ class CliTests(unittest.TestCase):
         result = self.run_cli("eval", "evals/examples/search_answer.json")
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn('"passed": true', result.stdout)
+
+    def test_claude_judge_requires_api_key(self):
+        env = os.environ.copy()
+        env.pop("ANTHROPIC_API_KEY", None)
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "claude_agent_prompting",
+                "review-trace",
+                "evals/examples/agent_trace_good.json",
+                "--claude-judge",
+            ],
+            cwd=ROOT,
+            check=False,
+            text=True,
+            capture_output=True,
+            env=env,
+        )
+        self.assertEqual(1, result.returncode)
+        self.assertIn("ANTHROPIC_API_KEY is required", result.stdout)
 
 
 if __name__ == "__main__":

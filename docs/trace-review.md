@@ -27,6 +27,7 @@ python -m claude_agent_prompting normalize-claude evals/examples/claude_messages
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json --markdown
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 ```
 
 ## What To Score
@@ -43,8 +44,19 @@ The deterministic reviewer checks:
 - tool errors are followed by recovery reasoning
 - final answers contain required evidence or uncertainty language
 
-Use the LLM judge prompt for judgment that cannot be checked by string or structure alone, such as
-whether the agent's reflection was good enough for the domain.
+Use the Claude judge for judgment that cannot be checked by string or structure alone, such as
+whether the agent's reflection was good enough for the domain and whether the final answer really
+uses the tool outputs.
+
+```bash
+export ANTHROPIC_API_KEY=...
+python -m claude_agent_prompting review-trace evals/examples/agent_trace_good.json --claude-judge
+```
+
+The Claude judge receives the deterministic review plus the visible trace. It returns scores for
+tool effectiveness, reasoning quality, tool-output use, final-answer grounding, and value over
+baseline. Keep the deterministic review beside the Claude result because each catches different
+failures.
 
 ## Capturing Claude Traces
 
@@ -138,4 +150,11 @@ the value bar.
     }
   }
 }
+```
+
+For real audits, require the Claude judge:
+
+```bash
+export ANTHROPIC_API_KEY=...
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
 ```

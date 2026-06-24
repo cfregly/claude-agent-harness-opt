@@ -4,15 +4,16 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A runnable prompt kit for Claude-style agents: decide whether a task deserves an agent, render a
-structured system prompt, check tool design, and run local evals over agent transcripts.
+structured system prompt, check tool design, run local evals over agent transcripts, and optionally
+ask Claude to semantically judge trace quality.
 
 The bar is always "adversarially-confirmed to add value." An audit passes only when it names the
 value claim, compares against a baseline, meets a minimum improvement threshold, and survives an
 adversarial check with no open objections.
 
 The repo turns the main ideas from Anthropic's "Prompting for Agents" talk into code and templates.
-It is intentionally offline. No API key is required, and the examples run with the Python standard
-library.
+The deterministic checks run offline with the Python standard library. Real semantic audits can call
+Claude through the Messages API with `ANTHROPIC_API_KEY`.
 
 ```bash
 python3.11 -m venv .venv
@@ -27,6 +28,7 @@ python -m claude_agent_prompting review-trace evals/examples/agent_trace_good.js
 python -m claude_agent_prompting normalize-claude evals/examples/claude_messages.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting judge-prompt evals/examples/search_answer.json
 ```
 
@@ -51,6 +53,7 @@ Claude prompt engineering docs:
 - ordered trace review for reasoning, tool calls, tool outputs, and final answers
 - trace regression suites for keeping known-good and known-bad cases stable
 - agent audit bundles that review a tool inventory plus representative traces
+- Claude-backed semantic judging of visible reasoning summaries, tool outputs, and final grounding
 - value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
 
 ## Layout
@@ -63,6 +66,7 @@ claude_agent_prompting/
   trace_review.py    # ordered trace review for tools and reasoning
   trace_suite.py     # regression suites for repeated trace review
   agent_audit.py     # review tools and traces in one bundle
+  claude_judge.py    # optional Claude Messages API judge for semantic trace review
   value_bar.py       # adversarially-confirmed value-bar checks
   adapters.py        # transcript normalizers for provider content blocks
   cli.py             # render, score, lint-tools, eval, judge-prompt
@@ -82,6 +86,21 @@ The repo includes a project-local `/agent-audit` skill at
 Messages API blocks, or trace suites. It chooses the right CLI path, runs deterministic checks, and
 reports concrete prompt or tool changes. The skill treats missing value-bar proof as a failed audit.
 
+## Claude Judge
+
+Use the Claude judge when the audit depends on semantic judgment rather than JSON structure alone:
+
+```bash
+export ANTHROPIC_API_KEY=...
+python -m claude_agent_prompting review-trace evals/examples/agent_trace_good.json --claude-judge
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
+```
+
+The judge reviews only visible artifacts: reasoning summaries, provider-returned reasoning blocks
+when available, tool calls, tool outputs, and final answers. It does not claim access to hidden
+chain-of-thought. If an agent runtime does not expose reasoning, instrument the agent to emit short
+decision notes before and after tool calls.
+
 ## Verify it
 
 ```bash
@@ -93,6 +112,7 @@ python -m claude_agent_prompting review-trace evals/examples/agent_trace_good.js
 python -m claude_agent_prompting normalize-claude evals/examples/claude_messages.json
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json
+python scripts/check_value_bar.py
 ```
 
 ## Sources
