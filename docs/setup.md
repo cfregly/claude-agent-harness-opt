@@ -4,6 +4,7 @@ This repo has two audit layers:
 
 1. Deterministic checks that run without a network call.
 2. Live Claude judge checks that require `ANTHROPIC_API_KEY`.
+3. Live model and harness sweeps that use provider keys from `.env`.
 
 Use both for real audits. The deterministic layer catches structure and regression failures. Claude
 judges semantic quality, tool-output use, tool-description quality, and whether the trace adds value
@@ -22,13 +23,16 @@ pip install -e .
 ## Local Claude Judge
 
 ```bash
-export ANTHROPIC_API_KEY=...
+cp .env.example .env
+$EDITOR .env
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
 ```
 
-Do not commit `.env` files or API keys. The repo ignores local environment files.
+Do not commit `.env` files or API keys. The repo ignores local environment files. Commit only
+`.env.example`.
 
 ## GitHub Actions
 
@@ -39,8 +43,8 @@ gh secret set ANTHROPIC_API_KEY --repo cfregly/claude-agent-prompting
 ```
 
 CI runs deterministic tests, the value-bar gate, the trace suite, the agent audit, and live Claude
-judge checks. The live audit includes trace quality, tool-selection optimization, and an Anthropic
-model-matrix smoke test.
+judge checks. The live audit includes trace quality, tool-selection optimization, an Anthropic
+model-matrix smoke test, and a live harness grind that must beat the short-description baseline.
 
 ## Trace Capture Contract
 
@@ -134,3 +138,6 @@ python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundl
 - `evals/suites/agent_trace_suite.json` runs trace regression cases.
 - `evals/examples/agent_audit_bundle.json` ties tools, traces, selection cases, and value proof together.
 - `evals/model_matrix/coding_tool_selection.json` runs provider, harness, instruction, and tool-description sweeps.
+
+Use `docs/harness-optimization.md` when adding a new Agent SDK, IDE agent, or Cursor-like harness.
+The new harness should export the trace contract first, then enter the matrix as a named harness.

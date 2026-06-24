@@ -52,6 +52,23 @@ class CliTests(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn('"matrix": "coding file-tool selection matrix"', result.stdout)
 
+    def test_grind_harness_command(self):
+        result = self.run_cli(
+            "grind-harness",
+            "evals/model_matrix/coding_tool_selection.json",
+            "--providers",
+            "anthropic",
+            "--harnesses",
+            "native_tools",
+            "--instruction-variants",
+            "boundary_rules",
+            "--cases",
+            "investigate trace review flow",
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn('"baseline_variant": "baseline_short"', result.stdout)
+        self.assertIn('"projected_live_calls": 2', result.stdout)
+
     def test_claude_judge_requires_api_key(self):
         env = os.environ.copy()
         env.pop("ANTHROPIC_API_KEY", None)

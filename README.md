@@ -34,6 +34,7 @@ python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundl
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --markdown
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
 python -m claude_agent_prompting judge-prompt evals/examples/search_answer.json
 ```
 
@@ -61,6 +62,8 @@ Claude prompt engineering docs:
 - Claude-backed semantic judging of visible reasoning summaries, tool outputs, and final grounding
 - tool-selection optimization from tool descriptions, schemas, calibration cases, and trace failures
 - model matrix sweeps across providers, model ids, harnesses, instruction variants, and tool-description variants
+- harness grinding that turns matrix failures into candidate tool-description variants and promotes
+  only live improvements
 - value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
 
 ## Layout
@@ -75,6 +78,7 @@ claude_agent_prompting/
   agent_audit.py     # review tools and traces in one bundle
   claude_judge.py    # optional Claude Messages API judge for semantic trace review
   model_matrix.py    # live provider matrix for tool and instruction tuning
+  harness_optimizer.py # hill-climb candidate tool descriptions from matrix failures
   tool_selection.py  # tool description and selection optimizer
   value_bar.py       # adversarially-confirmed value-bar checks
   adapters.py        # transcript normalizers for provider content blocks
@@ -144,6 +148,30 @@ The included matrix tests Claude Code style `Task`, `Glob`, `Grep`, and `Read` t
 Anthropic, OpenAI, and Gemini. It compares short descriptions against tuned boundary descriptions,
 and it compares native provider tool calling against a standardized JSON-choice harness.
 
+Use `grind-harness` when the goal is to tune the harness itself. It runs a baseline matrix cell,
+creates a candidate tool-description variant from the failed cases, reruns the selected cells, and
+marks the value bar as passed only when the live candidate beats the baseline:
+
+```bash
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json \
+  --env-file .env \
+  --live \
+  --require-live \
+  --providers anthropic,openai,gemini \
+  --harnesses native_tools,prompt_json \
+  --instruction-variants boundary_rules \
+  --cases "investigate trace review flow,map model matrix implementation" \
+  --concurrency 8 \
+  --markdown
+```
+
+Treat each runtime as a harness target. Provider native tools, prompt JSON wrappers, Agent SDK
+loops, IDE agents, and Cursor-like environments should export the same visible trace contract:
+decision notes, tool calls, tool results, and final answers. Once the adapter emits that contract,
+the trace suite, Claude judge, model matrix, and harness grind can compare it against other
+harnesses. See [docs/harness-optimization.md](docs/harness-optimization.md) for the adapter and
+upgrade loop.
+
 ## Verify it
 
 ```bash
@@ -158,6 +186,7 @@ python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.j
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json
 python scripts/check_value_bar.py
 ```
 

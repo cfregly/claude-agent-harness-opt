@@ -23,6 +23,11 @@ from .model_matrix import (
     render_model_matrix_markdown,
     run_model_matrix,
 )
+from .harness_optimizer import (
+    HarnessGrindOptions,
+    render_harness_grind_markdown,
+    run_harness_grind,
+)
 from .prompt_builder import lint_tools, load_recipe, render_prompt
 from .suitability import score_use_case
 from .tool_selection import render_tool_selection_markdown, review_tool_selection_bundle
@@ -128,6 +133,7 @@ def main(argv: list[str] | None = None) -> int:
         "--instruction-variants",
         help="comma-separated instruction variant names",
     )
+    matrix_parser.add_argument("--cases", help="comma-separated case names")
     matrix_parser.add_argument("--max-cases", type=int, help="limit cases per selected cell")
     matrix_parser.add_argument(
         "--concurrency",
@@ -137,6 +143,30 @@ def main(argv: list[str] | None = None) -> int:
     )
     matrix_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
     matrix_parser.add_argument("--out", type=Path, help="write the JSON or Markdown report to a file")
+
+    grind_parser = subparsers.add_parser(
+        "grind-harness",
+        help="hill-climb tool and harness descriptions from model-matrix failures",
+    )
+    grind_parser.add_argument("matrix", type=Path)
+    grind_parser.add_argument("--env-file", type=Path, help="dotenv file with provider API keys")
+    grind_parser.add_argument("--live", action="store_true", help="call provider APIs")
+    grind_parser.add_argument(
+        "--require-live",
+        action="store_true",
+        help="fail if a selected provider is missing a key or returns an error",
+    )
+    grind_parser.add_argument("--baseline-variant", default="baseline_short")
+    grind_parser.add_argument("--providers", help="comma-separated provider or profile names")
+    grind_parser.add_argument("--harnesses", help="comma-separated harness names")
+    grind_parser.add_argument("--instruction-variants", help="comma-separated instruction variant names")
+    grind_parser.add_argument("--cases", help="comma-separated case names")
+    grind_parser.add_argument("--max-cases", type=int, help="limit cases per selected cell")
+    grind_parser.add_argument("--max-iterations", type=int, default=1)
+    grind_parser.add_argument("--max-live-calls", type=int, default=60)
+    grind_parser.add_argument("--concurrency", type=int, default=1)
+    grind_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
+    grind_parser.add_argument("--out", type=Path, help="write the JSON or Markdown report to a file")
 
     args = parser.parse_args(argv)
 
@@ -254,12 +284,46 @@ def main(argv: list[str] | None = None) -> int:
                 harnesses=_csv_set(args.harnesses),
                 variants=_csv_set(args.variants),
                 instruction_variants=_csv_set(args.instruction_variants),
+                cases=_csv_set(args.cases),
             ),
             max_cases=args.max_cases,
             concurrency=max(1, args.concurrency),
         )
         output = (
             render_model_matrix_markdown(result)
+            if args.markdown
+            else json.dumps(result, indent=2, sort_keys=True)
+        )
+        if args.out:
+            args.out.write_text(output, encoding="utf-8")
+        else:
+            sys.stdout.write(output)
+            if not output.endswith("\n"):
+                sys.stdout.write("\n")
+        return 0 if result["passed"] else 1
+
+    if args.command == "grind-harness":
+        result = run_harness_grind(
+            args.matrix,
+            HarnessGrindOptions(
+                baseline_variant=args.baseline_variant,
+                concurrency=max(1, args.concurrency),
+                env_file=args.env_file,
+                filters=MatrixFilters(
+                    providers=_csv_set(args.providers),
+                    harnesses=_csv_set(args.harnesses),
+                    instruction_variants=_csv_set(args.instruction_variants),
+                    cases=_csv_set(args.cases),
+                ),
+                live=args.live,
+                max_cases=args.max_cases,
+                max_iterations=max(1, args.max_iterations),
+                max_live_calls=max(1, args.max_live_calls),
+                require_live=args.require_live,
+            ),
+        )
+        output = (
+            render_harness_grind_markdown(result)
             if args.markdown
             else json.dumps(result, indent=2, sort_keys=True)
         )

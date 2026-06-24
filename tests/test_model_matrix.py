@@ -64,6 +64,21 @@ class ModelMatrixTests(unittest.TestCase):
         self.assertEqual(2, result["summary"]["total"])
         self.assertEqual("planned", result["results"][0]["status"])
 
+    def test_dry_run_model_matrix_filters_cases(self):
+        result = run_model_matrix(
+            ROOT / "evals" / "model_matrix" / "coding_tool_selection.json",
+            filters=MatrixFilters(
+                providers={"anthropic"},
+                harnesses={"prompt_json"},
+                variants={"tuned_boundaries"},
+                instruction_variants={"boundary_rules"},
+                cases={"read known file"},
+            ),
+        )
+
+        self.assertEqual(1, result["summary"]["total"])
+        self.assertEqual("read known file", result["results"][0]["case"])
+
 
 if __name__ == "__main__":
     unittest.main()

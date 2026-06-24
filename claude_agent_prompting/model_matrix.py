@@ -25,6 +25,7 @@ class MatrixFilters:
     harnesses: set[str] | None = None
     variants: set[str] | None = None
     instruction_variants: set[str] | None = None
+    cases: set[str] | None = None
 
 
 def load_matrix(path: str | Path) -> dict[str, Any]:
@@ -79,6 +80,30 @@ def run_model_matrix(
     concurrency: int = 1,
 ) -> dict[str, Any]:
     matrix = load_matrix(matrix_path)
+    return run_model_matrix_data(
+        matrix,
+        matrix_name=matrix.get("name", str(matrix_path)),
+        live=live,
+        env_file=env_file,
+        require_live=require_live,
+        filters=filters,
+        max_cases=max_cases,
+        concurrency=concurrency,
+    )
+
+
+def run_model_matrix_data(
+    matrix: dict[str, Any],
+    *,
+    matrix_name: str,
+    live: bool = False,
+    env_file: str | Path | None = None,
+    require_live: bool = False,
+    filters: MatrixFilters | None = None,
+    max_cases: int | None = None,
+    concurrency: int = 1,
+) -> dict[str, Any]:
+    validate_matrix(matrix)
     env = os.environ.copy()
     env.update(load_env_file(env_file))
     selected = _selected_runs(matrix, filters or MatrixFilters(), max_cases)
@@ -111,7 +136,7 @@ def run_model_matrix(
         "cells": _cell_summary(results),
         "filters": _filters_to_dict(filters or MatrixFilters()),
         "live": live,
-        "matrix": matrix.get("name", str(matrix_path)),
+        "matrix": matrix_name,
         "passed": _matrix_passed(results, live=live, require_live=require_live),
         "results": results,
         "summary": _summary(results, live=live),
@@ -209,7 +234,8 @@ def _selected_runs(
     instructions = [
         item for item in instructions if _matches(filters.instruction_variants, item.get("name"))
     ]
-    cases = matrix["cases"][: max_cases or None]
+    cases = [case for case in matrix["cases"] if _matches(filters.cases, case.get("name"))]
+    cases = cases[: max_cases or None]
 
     selected: list[dict[str, Any]] = []
     for profile in profiles:
@@ -666,6 +692,7 @@ def _filters_to_dict(filters: MatrixFilters) -> dict[str, Any]:
         "instruction_variants": (
             sorted(filters.instruction_variants) if filters.instruction_variants else None
         ),
+        "cases": sorted(filters.cases) if filters.cases else None,
         "providers": sorted(filters.providers) if filters.providers else None,
         "variants": sorted(filters.variants) if filters.variants else None,
     }

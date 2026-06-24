@@ -24,6 +24,12 @@ visible before a prompt or tool change is promoted.
 The pass bar is still adversarially-confirmed to add value. A tuned description should beat the
 baseline on realistic cases, survive heldout cases, and avoid regressions on direct easy cases.
 
+This repo treats the harness as a variable, not background plumbing. A harness can be provider
+native tool calling, a prompt JSON wrapper, an Agent SDK loop, an IDE agent, or any runtime that can
+export the same trace contract. The useful question is whether a model plus harness chooses the
+right tool, passes the right arguments, reasons visibly between tool calls, and uses tool outputs
+before the final answer.
+
 ## Included Matrix
 
 `evals/model_matrix/coding_tool_selection.json` tests Claude Code style tools:
@@ -71,6 +77,26 @@ python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_sel
   --markdown
 ```
 
+Hill-climb one hard boundary from a baseline:
+
+```bash
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json \
+  --env-file .env \
+  --live \
+  --require-live \
+  --providers anthropic,openai,gemini \
+  --harnesses native_tools,prompt_json \
+  --instruction-variants boundary_rules \
+  --cases "investigate trace review flow,map model matrix implementation" \
+  --concurrency 8 \
+  --max-live-calls 60 \
+  --markdown
+```
+
+`grind-harness` runs the baseline, creates a candidate tool-description variant from the failed
+cases, reruns the selected cells, and promotes only if the live score improves. Dry runs are useful
+for checking scope and call counts, but they do not satisfy the value bar.
+
 ## Reading Results
 
 The report has one row per case and a cell summary grouped by:
@@ -87,6 +113,15 @@ Use the cell summary to isolate the cause:
 - If baseline fails and tuned passes, promote the tuned tool descriptions after heldout checks.
 - If both variants fail, add harder schema guidance or split the tool.
 - If instruction variants change the score, tune `CLAUDE.md`, skill instructions, or system prompt text.
+
+Use the same loop for `CLAUDE.md` and skill updates:
+
+1. Add a narrow instruction variant that represents the proposed `CLAUDE.md` or skill wording.
+2. Run a dry matrix to confirm the selected cells.
+3. Run a live matrix or harness grind with `.env`.
+4. Promote only when the candidate beats the baseline on target cells and does not regress heldout
+   cells.
+5. Add the failure as a named case so the next model generation can be retested.
 
 ## Live Result From June 24, 2026
 
@@ -112,3 +147,27 @@ all three providers and both harnesses.
 
 Gemini `prompt_json` initially failed because `maxOutputTokens` was too small for `gemini-2.5-pro`.
 Increasing the profile output budget to 4096 removed those harness errors.
+
+## Harness Grind Result From June 24, 2026
+
+Using local Anthropic, OpenAI, and Gemini keys, `grind-harness` was run on the two broad
+investigation cases that distinguish `Task` from `Grep`.
+
+Selected cells:
+
+- providers: Anthropic, OpenAI, Gemini
+- harnesses: native tools and prompt JSON
+- instruction variant: `boundary_rules`
+- baseline variant: `baseline_short`
+
+Result:
+
+- baseline: 1 of 12 passed
+- candidate: 12 of 12 passed
+- improvement: 0.917
+- promoted: yes
+- value bar passed: yes
+
+The repeated failure was that short descriptions made models choose `Grep` for broad repository
+investigation. The generated candidate sharpened the `Task` boundary and passed all selected live
+provider and harness cells.

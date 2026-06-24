@@ -68,6 +68,10 @@ instructions. The matrix compares tool-description variants and instruction vari
 cases, so a change is promoted only when it improves the target cell without regressing heldout
 cases.
 
+Run `grind-harness` when the matrix exposes a repeated failure. It uses the failed cases to draft a
+candidate tool-description variant, reruns the selected live cells, and promotes only when the
+candidate beats the baseline.
+
 ## 7. Guide The Reasoning Process
 
 The recipes ask the agent to plan before acting, reflect after tool results, and self-check before
