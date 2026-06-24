@@ -65,6 +65,8 @@ python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_se
   --harnesses native_tools,prompt_json \
   --instruction-variants boundary_rules \
   --cases "investigate trace review flow,map model matrix implementation" \
+  --heldout-cases "find python files,read known file" \
+  --min-improvement 0.05 \
   --concurrency 8 \
   --max-live-calls 60 \
   --markdown
@@ -76,7 +78,14 @@ The grind loop is intentionally bounded:
 - cap live calls with `--max-live-calls`
 - generate a candidate from observed failures
 - rerun the same cells live
-- promote only when the candidate beats the baseline
+- confirm against held-out cells when a candidate beats the baseline
+- promote only when the candidate clears the minimum improvement threshold without held-out regression
+- log every keep or reject decision
+
+This is the autoresearch pattern applied to agent harnesses. The editable surface is not model
+training code. It is the harness surface that changes tool choice: tool descriptions, schemas,
+provider wrappers, prompt wrappers, `CLAUDE.md`, skills, and trace adapters. The metric is the model
+matrix and trace review score. The keep or reject rule is the value bar.
 
 ## Adapter Contract
 
@@ -123,7 +132,7 @@ Use this loop for every new model generation or harness version:
 3. Run deterministic checks.
 4. Run a paid live matrix with `.env`.
 5. Run `grind-harness` on repeated failures.
-6. Add heldout cases for any boundary that improved.
+6. Add held-out cases for any boundary that improved.
 7. Promote only if the candidate clears the value bar.
 
 The pain points are predictable:

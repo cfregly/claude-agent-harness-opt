@@ -22,7 +22,7 @@ on another model, or fail when moved from prompt JSON to native tool calling. Th
 visible before a prompt or tool change is promoted.
 
 The pass bar is still adversarially-confirmed to add value. A tuned description should beat the
-baseline on realistic cases, survive heldout cases, and avoid regressions on direct easy cases.
+baseline on realistic cases, survive held-out cases, and avoid regressions on direct easy cases.
 
 This repo treats the harness as a variable, not background plumbing. A harness can be provider
 native tool calling, a prompt JSON wrapper, an Agent SDK loop, an IDE agent, or any runtime that can
@@ -110,14 +110,21 @@ python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_se
   --harnesses native_tools,prompt_json \
   --instruction-variants boundary_rules \
   --cases "investigate trace review flow,map model matrix implementation" \
+  --heldout-cases "find python files,read known file" \
+  --min-improvement 0.05 \
   --concurrency 8 \
   --max-live-calls 60 \
   --markdown
 ```
 
 `grind-harness` runs the baseline, creates a candidate tool-description variant from the failed
-cases, reruns the selected cells, and promotes only if the live score improves. Dry runs are useful
-for checking scope and call counts, but they do not satisfy the value bar.
+cases, reruns the selected cells, confirms held-out cells, and promotes only if the live score
+improves by the configured threshold without held-out regression. Dry runs are useful for checking
+scope and call counts, but they do not satisfy the value bar.
+
+This is the repo's autoresearch-style loop. It uses evals as the optimization surface and the
+experiment log as the research record. Each iteration says which candidate was kept or rejected and
+why.
 
 ## Reading Results
 
@@ -132,7 +139,7 @@ Use the cell summary to isolate the cause:
 
 - If only one provider fails, tune the provider profile or model-specific instructions.
 - If native tools fail but prompt JSON passes, tune provider tool schemas.
-- If baseline fails and tuned passes, promote the tuned tool descriptions after heldout checks.
+- If baseline fails and tuned passes, promote the tuned tool descriptions after held-out checks.
 - If both variants fail, add harder schema guidance or split the tool.
 - If instruction variants change the score, tune `CLAUDE.md`, skill instructions, or system prompt text.
 - If trace fixture harnesses fail, fix the adapter or trace instrumentation before tuning prompts.
@@ -142,7 +149,7 @@ Use the same loop for `CLAUDE.md` and skill updates:
 1. Add a narrow instruction variant that represents the proposed `CLAUDE.md` or skill wording.
 2. Run a dry matrix to confirm the selected cells.
 3. Run a live matrix or harness grind with `.env`.
-4. Promote only when the candidate beats the baseline on target cells and does not regress heldout
+4. Promote only when the candidate beats the baseline on target cells and does not regress held-out
    cells.
 5. Add the failure as a named case so the next model generation can be retested.
 

@@ -51,6 +51,13 @@ Checked on 2026-06-24.
     selective tool design, namespacing, meaningful output context, response formats, token
     efficiency, actionable errors, and prompt-engineered tool descriptions.
 
+## Autoresearch Pattern
+
+- [Autoresearch repository](https://github.com/karpathy/autoresearch)
+  - Used for the fixed-budget experiment loop: choose one editable surface, run a bounded
+    experiment, measure a clear score, keep or discard the candidate, and preserve an experiment
+    log. In this repo the editable surface is the agent harness rather than model training code.
+
 ## Local Screenshots
 
 The initial implementation also used user-provided screenshots of these slides:

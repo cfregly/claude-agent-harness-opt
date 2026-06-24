@@ -17,7 +17,7 @@ code, tests, docs, or CI.
 | Think like the agent by inspecting tool names, schemas, and outputs. | `lint-tools` checks tool names and descriptions. `optimize-tools` checks schemas, result quality checks, calibration cases, and trace-derived selection failures. |
 | Give explicit tool-selection principles. | Recipes require `purpose`, `use_when`, and `avoid_when`. Audit bundles add `input_schema`, `quality_checks`, and `tool_selection_cases`. |
 | Prompt and tool guidance should be tuned for model behavior. | `model-matrix` compares provider profiles, native and JSON harnesses, tool-description variants, and instruction variants. |
-| Iterate from observed failures. | `grind-harness` creates candidate tool-description variants from failed matrix cases, reruns live cells, and promotes only when the candidate beats the baseline. |
+| Iterate from observed failures. | `grind-harness` creates candidate tool-description variants from failed matrix cases, reruns live cells, checks held-out cases, and promotes only when the candidate beats the baseline by the configured threshold without regression. |
 | Guide the thinking process, including reflection after web results. | Prompts include directed thinking guidance. Traces require initial complexity, tool budget, evidence or stop criteria, result quality, verification, and continue or stop decisions. |
 | Use parallel tool calls when independent. | Traces support `parallel_group`, and `agent_trace_parallel_good.json` tests a parallel search batch. |
 | Stop when the answer is found and avoid runaway search. | Prompt budgets and stop criteria are rendered from recipes and checked through trace rubrics. |

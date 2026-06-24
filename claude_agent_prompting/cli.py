@@ -165,11 +165,21 @@ def main(argv: list[str] | None = None) -> int:
     grind_parser.add_argument("--baseline-variant", default="baseline_short")
     grind_parser.add_argument("--providers", help="comma-separated provider or profile names")
     grind_parser.add_argument("--harnesses", help="comma-separated harness names")
+    grind_parser.add_argument(
+        "--heldout-cases",
+        help="comma-separated cases used only to confirm the promoted candidate does not regress",
+    )
     grind_parser.add_argument("--instruction-variants", help="comma-separated instruction variant names")
     grind_parser.add_argument("--cases", help="comma-separated case names")
     grind_parser.add_argument("--max-cases", type=int, help="limit cases per selected cell")
     grind_parser.add_argument("--max-iterations", type=int, default=1)
     grind_parser.add_argument("--max-live-calls", type=int, default=60)
+    grind_parser.add_argument(
+        "--min-improvement",
+        type=float,
+        default=0.01,
+        help="minimum live score improvement required for promotion",
+    )
     grind_parser.add_argument("--concurrency", type=int, default=1)
     grind_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
     grind_parser.add_argument("--out", type=Path, help="write the JSON or Markdown report to a file")
@@ -326,10 +336,12 @@ def main(argv: list[str] | None = None) -> int:
                     instruction_variants=_csv_set(args.instruction_variants),
                     cases=_csv_set(args.cases),
                 ),
+                heldout_cases=_csv_set(args.heldout_cases),
                 live=args.live,
                 max_cases=args.max_cases,
                 max_iterations=max(1, args.max_iterations),
                 max_live_calls=max(1, args.max_live_calls),
+                min_improvement=max(0.0, args.min_improvement),
                 require_live=args.require_live,
             ),
         )

@@ -112,8 +112,9 @@ Describe tools as if onboarding a capable new teammate. Make implicit context ex
 - recovery guidance for common errors
 
 Use the model matrix and harness grind to measure description changes across providers, model
-versions, reasoning settings, harnesses, `CLAUDE.md`, and skills. Promote only when the candidate
-clears the value bar.
+versions, reasoning settings, harnesses, `CLAUDE.md`, and skills. The grind loop should include
+target cases, held-out cases, a minimum improvement threshold, and an experiment log. Promote only
+when the candidate clears the value bar.
 
 ## Repo Commands
 
@@ -122,5 +123,5 @@ python -m claude_agent_prompting eval evals/examples/search_answer.json
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --markdown
-python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --markdown
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --heldout-cases "find python files,read known file" --min-improvement 0.05 --markdown
 ```

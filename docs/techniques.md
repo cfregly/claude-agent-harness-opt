@@ -73,12 +73,17 @@ trace-derived selection failures. The command returns concrete changes for names
 
 Run `model-matrix` when changing models, providers, harnesses, `CLAUDE.md`, skills, or system
 instructions. The matrix compares tool-description variants and instruction variants across the same
-cases, so a change is promoted only when it improves the target cell without regressing heldout
+cases, so a change is promoted only when it improves the target cell without regressing held-out
 cases.
 
 Run `grind-harness` when the matrix exposes a repeated failure. It uses the failed cases to draft a
-candidate tool-description variant, reruns the selected live cells, and promotes only when the
-candidate beats the baseline.
+candidate tool-description variant, reruns the selected live cells, checks held-out cells, logs the
+keep or reject decision, and promotes only when the candidate beats the baseline by the configured
+threshold without regression.
+
+This is the autoresearch pattern applied to tool and harness tuning. The loop edits the harness
+surface, runs a fixed eval budget, measures matrix and trace quality, and keeps only changes that
+clear the value bar.
 
 ## 7. Guide The Reasoning Process
 

@@ -5,6 +5,7 @@ import unittest
 from claude_agent_prompting.harness_optimizer import (
     HarnessGrindOptions,
     _generate_candidate_variant,
+    _heldout_non_regression,
     run_harness_grind,
 )
 from claude_agent_prompting.model_matrix import MatrixFilters, load_matrix
@@ -77,6 +78,47 @@ class HarnessOptimizerTests(unittest.TestCase):
         self.assertEqual("baseline_short", result["baseline_variant"])
         self.assertEqual(2, result["projected_live_calls"])
         self.assertEqual(1, len(result["candidates"]))
+        self.assertEqual("baseline", result["experiment_log"][0]["decision"])
+        self.assertEqual("no held-out cases selected", result["heldout"]["reason"])
+
+    def test_grind_call_projection_includes_heldout_confirmation(self):
+        result = run_harness_grind(
+            MATRIX,
+            HarnessGrindOptions(
+                baseline_variant="baseline_short",
+                filters=MatrixFilters(
+                    providers={"anthropic"},
+                    harnesses={"native_tools"},
+                    instruction_variants={"boundary_rules"},
+                    cases={"investigate trace review flow"},
+                ),
+                heldout_cases={"read known file"},
+                live=True,
+                max_live_calls=3,
+            ),
+        )
+
+        self.assertFalse(result["passed"])
+        self.assertEqual(4, result["projected_live_calls"])
+        self.assertIn("live call cap blocked run", result["error"])
+
+    def test_heldout_non_regression_blocks_score_drop(self):
+        baseline = {"summary": {"errors": 0, "failed_cases": 1, "score": 0.75}}
+        candidate = {"summary": {"errors": 0, "failed_cases": 1, "score": 0.50}}
+
+        passed, reason = _heldout_non_regression(baseline, candidate)
+
+        self.assertFalse(passed)
+        self.assertIn("score regressed", reason)
+
+    def test_heldout_non_regression_allows_no_regression(self):
+        baseline = {"summary": {"errors": 1, "failed_cases": 1, "score": 0.50}}
+        candidate = {"summary": {"errors": 0, "failed_cases": 1, "score": 0.50}}
+
+        passed, reason = _heldout_non_regression(baseline, candidate)
+
+        self.assertTrue(passed)
+        self.assertIn("did not regress", reason)
 
 
 if __name__ == "__main__":

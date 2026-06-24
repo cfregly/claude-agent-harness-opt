@@ -15,7 +15,8 @@ from prose. Treat "adversarially-confirmed to add value" as the pass bar.
 2. If the user provides a tool inventory plus traces, use `audit-agent`.
 3. If the user provides Agent SDK or IDE-agent event exports, use `normalize-runtime`, then review the normalized trace.
 4. If the user asks about a new model, provider, reasoning mode, `CLAUDE.md`, or skill tuning, use `model-matrix`.
-5. If matrix failures repeat across a harness or provider, use `grind-harness` with a live run and call cap.
+5. If matrix failures repeat across a harness or provider, use `grind-harness` with target cases,
+   held-out cases, a live run, a minimum improvement threshold, and a call cap.
 6. If the user provides a regression suite, use `trace-suite`.
 7. If the user provides one normalized trace, use `review-trace`.
 8. If the user provides Claude Messages API content blocks, use `normalize-claude`, then review the normalized trace.
@@ -35,7 +36,7 @@ python -m claude_agent_prompting optimize-tools <bundle.json> --claude-judge
 python -m claude_agent_prompting model-matrix <matrix.json> --markdown
 python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --harnesses agent_sdk_trace,cursor_trace --variants exported_trace_tools --instruction-variants exported_trace --markdown
 python -m claude_agent_prompting model-matrix <matrix.json> --env-file .env --live --concurrency 8 --markdown
-python -m claude_agent_prompting grind-harness <matrix.json> --env-file .env --live --require-live --concurrency 8 --markdown
+python -m claude_agent_prompting grind-harness <matrix.json> --env-file .env --live --require-live --heldout-cases "<case 1>,<case 2>" --min-improvement 0.05 --concurrency 8 --markdown
 python -m claude_agent_prompting trace-suite <suite.json> --markdown
 python -m claude_agent_prompting review-trace <trace.json>
 python -m claude_agent_prompting review-trace <trace.json> --claude-judge
@@ -55,6 +56,8 @@ human.
 4. Run `optimize-tools` when the failure involves wrong tools, missing arguments, duplicate calls, or vague tool boundaries.
 5. Run `model-matrix` when the fix may vary by model, provider, harness, `CLAUDE.md`, skill, or system instruction.
 6. Run `grind-harness` when a repeated matrix failure needs a candidate tool-description or harness instruction change.
+   Treat it as a bounded hill-climb: target failed cases, generate a candidate, rerun live cells,
+   check held-out cases, and promote only when the value bar passes.
 7. Check the value bar. Do not pass an audit without baseline improvement and adversarial confirmation.
 8. For real audits, run `--claude-judge` so Claude reviews visible reasoning
    summaries, tool outputs, tool descriptions, selection cases, final grounding, and value over baseline.
@@ -74,7 +77,8 @@ human.
   missing forbidden tools, missing contrast between similar tools, missing rationale, exact tool
   order that overfits one valid strategy.
 - Model matrix: provider-specific failures, native-tool failures, JSON-choice failures, baseline versus tuned description gaps, instruction variant regressions.
-- Harness grind: repeated failures that can be turned into a candidate variant and retested live against the baseline.
+- Harness grind: repeated failures that can be turned into a candidate variant, retested live
+  against the baseline, confirmed against held-out cases, and logged as kept or rejected.
 - Tool outputs: missing result, result linked to no call, errors without recovery.
 - Reasoning: no plan before the first tool, missing complexity, missing tool budget, missing
   evidence or stop criteria, no reflection after results, missing quality, missing verification, or

@@ -28,7 +28,7 @@ $EDITOR .env
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8
-python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --heldout-cases "find python files,read known file" --min-improvement 0.05 --markdown
 ```
 
 Do not commit `.env` files or API keys. The repo ignores local environment files. Commit only

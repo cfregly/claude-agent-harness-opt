@@ -36,7 +36,7 @@ python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundl
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --markdown
 python -m claude_agent_prompting model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --markdown
 python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
-python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --heldout-cases "find python files,read known file" --markdown
 python -m claude_agent_prompting judge-prompt evals/examples/search_answer.json
 ```
 
@@ -70,8 +70,8 @@ Claude prompt engineering docs:
 - tool-selection optimization from tool descriptions, schemas, calibration cases, and trace failures
 - model matrix sweeps across providers, model ids, harnesses, instruction variants, and tool-description variants
 - trace adapters that normalize exported Agent SDK and IDE-agent runs into the same matrix contract
-- harness grinding that turns matrix failures into candidate tool-description variants and promotes
-  only live improvements
+- autoresearch-style harness grinding that turns matrix failures into candidate variants, checks
+  held-out cases, logs keep or reject decisions, and promotes only live improvements
 - value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
 
 ## Layout
@@ -103,6 +103,8 @@ scripts/             # prose gate for public artifacts
 
 Start with [docs/tool-writing-best-practices.md](docs/tool-writing-best-practices.md) when designing
 or reviewing a new tool catalog.
+Use [docs/autoresearch-hill-climbing.md](docs/autoresearch-hill-climbing.md) when the goal is to
+run an eval-driven optimization loop over harness, tool, `CLAUDE.md`, or skill changes.
 
 ## Claude Code Skill
 
@@ -161,8 +163,9 @@ Anthropic, OpenAI, and Gemini. It compares short descriptions against tuned boun
 and it compares native provider tool calling against a standardized JSON-choice harness.
 
 Use `grind-harness` when the goal is to tune the harness itself. It runs a baseline matrix cell,
-creates a candidate tool-description variant from the failed cases, reruns the selected cells, and
-marks the value bar as passed only when the live candidate beats the baseline:
+creates a candidate tool-description variant from the failed cases, reruns the selected cells,
+checks held-out cells, and marks the value bar as passed only when the live candidate beats the
+baseline by the configured threshold without regressions:
 
 ```bash
 python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_selection.json \
@@ -173,6 +176,8 @@ python -m claude_agent_prompting grind-harness evals/model_matrix/coding_tool_se
   --harnesses native_tools,prompt_json \
   --instruction-variants boundary_rules \
   --cases "investigate trace review flow,map model matrix implementation" \
+  --heldout-cases "find python files,read known file" \
+  --min-improvement 0.05 \
   --concurrency 8 \
   --markdown
 ```
