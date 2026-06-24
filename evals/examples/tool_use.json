@@ -1,0 +1,51 @@
+{
+  "type": "tool_use_accuracy",
+  "name": "research_tool_loop",
+  "transcript": {
+    "tool_calls": [
+      {
+        "name": "web_search",
+        "args": {
+          "query": "Rivian R1S cargo volume"
+        }
+      },
+      {
+        "name": "web_search",
+        "args": {
+          "query": "average banana volume"
+        }
+      },
+      {
+        "name": "web_fetch",
+        "args": {
+          "url": "https://example.com/source"
+        }
+      },
+      {
+        "name": "calculator",
+        "args": {
+          "expression": "120.8 * 1728"
+        }
+      }
+    ]
+  },
+  "requirements": {
+    "at_least": {
+      "web_search": 2,
+      "calculator": 1
+    },
+    "at_most": {
+      "web_search": 5
+    },
+    "required_sequence": ["web_search", "web_fetch", "calculator"],
+    "forbidden": ["send_email"],
+    "required_args": [
+      {
+        "name": "web_search",
+        "args": {
+          "query": "Rivian R1S cargo volume"
+        }
+      }
+    ]
+  }
+}

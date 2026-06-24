@@ -1,0 +1,17 @@
+{
+  "type": "answer_accuracy",
+  "name": "range_and_evidence_answer",
+  "rubric": "Pass if the output gives a plausible numeric estimate, explains the evidence used, and states uncertainty.",
+  "output": "A reasonable estimate is about 32,000 bananas. I used the cargo volume, an approximate banana volume, and a packing-efficiency assumption, so the result should be treated as an order-of-magnitude estimate.",
+  "checks": {
+    "expected_contains": ["estimate", "cargo volume", "assumption"],
+    "forbidden_contains": ["guaranteed"],
+    "numeric_ranges": [
+      {
+        "label": "banana estimate",
+        "min": 10000,
+        "max": 50000
+      }
+    ]
+  }
+}

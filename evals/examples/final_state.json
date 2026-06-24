@@ -1,0 +1,30 @@
+{
+  "type": "final_state_accuracy",
+  "name": "flight_change_state",
+  "final_state": {
+    "reservation": {
+      "id": "rsv_123",
+      "status": "changed",
+      "flight": {
+        "destination": "Paris",
+        "departure_date": "2026-07-14",
+        "seat_class": "economy"
+      }
+    },
+    "messages": [
+      {
+        "channel": "email",
+        "kind": "confirmation"
+      }
+    ]
+  },
+  "expected_subset": {
+    "reservation": {
+      "status": "changed",
+      "flight": {
+        "destination": "Paris",
+        "departure_date": "2026-07-14"
+      }
+    }
+  }
+}

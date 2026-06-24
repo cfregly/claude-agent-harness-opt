@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python scripts/deslop_check.py
+      - run: python -m compileall claude_agent_prompting scripts
+      - run: python -m unittest discover -s tests -q
+      - run: python -m claude_agent_prompting render recipes/agentic_search.json
+      - run: python -m claude_agent_prompting eval evals/examples/search_answer.json

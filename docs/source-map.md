@@ -1,0 +1,38 @@
+# Source Map
+
+Checked on 2026-06-24.
+
+## Public Video
+
+- [Prompting for Agents | Code w/ Claude](https://www.youtube.com/watch?v=XSZP9GhhuAc)
+  - [Agents as models using tools in a loop](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=85s)
+  - [Task-fit checklist: complexity, value, viability, and error cost](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=160s)
+  - [Use cases: coding, search, computer use, and data analysis](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=270s)
+  - [Think like the agent and simulate its tool environment](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=448s)
+  - [Reasonable heuristics and tool-call budgets](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=587s)
+  - [Tool selection guidance](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=644s)
+  - [Plan, reflect after tool calls, and verify source quality](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=702s)
+  - [Unintended side effects and stop criteria](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=776s)
+  - [Context management with compaction, external files, and subagents](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=821s)
+  - [Start simple and iterate from test cases](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=1597s)
+  - [Agent evals: answer accuracy, tool use accuracy, and final state](https://www.youtube.com/watch?v=XSZP9GhhuAc&t=1428s)
+
+## Claude Docs
+
+- [Prompt engineering overview](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview)
+  - Used for the rule that prompt work should start with success criteria and empirical tests.
+- [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
+  - Used for clear instructions, XML structure, tool-use guidance, thinking guidance, context
+    workflows, safety, research, subagents, and coding-agent caveats.
+- [Define success criteria and build evaluations](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests)
+  - Used for task-specific evals, automated grading, LLM-based grading rubrics, and multidimensional
+    success criteria.
+
+## Local Screenshots
+
+The initial implementation also used user-provided screenshots of these slides:
+
+- examples of good agent use cases
+- tips for evaluating agentic systems
+- examples of evals for agents
+- the agentic search demo prompt
