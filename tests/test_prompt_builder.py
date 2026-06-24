@@ -15,8 +15,10 @@ class PromptBuilderTests(unittest.TestCase):
         self.assertIn("<agent_task>", prompt)
         self.assertIn("<tool_selection>", prompt)
         self.assertIn("<tool_call_budgets>", prompt)
+        self.assertIn("<value_bar>", prompt)
         self.assertIn("web_search", prompt)
         self.assertIn("stop searching", prompt)
+        self.assertIn("adversarially-confirmed to add value", prompt)
 
     def test_tool_lint_passes_for_search_recipe(self):
         recipe = load_recipe(ROOT / "recipes" / "agentic_search.json")

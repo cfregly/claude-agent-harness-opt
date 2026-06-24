@@ -1,0 +1,17 @@
+{
+  "name": "missing value bar audit",
+  "tools": [
+    {
+      "avoid_when": "Avoid when a known source URL should be fetched directly.",
+      "name": "web_search",
+      "purpose": "Find candidate sources and fresh facts from the public web.",
+      "use_when": "Use for unknown, current, or broad questions where source discovery is required."
+    }
+  ],
+  "traces": [
+    {
+      "name": "banana estimate trace",
+      "trace": "agent_trace_good.json"
+    }
+  ]
+}

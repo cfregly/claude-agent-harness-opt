@@ -7,9 +7,11 @@ from .prompt_builder import lint_tools, load_recipe, render_prompt, validate_rec
 from .suitability import score_use_case
 from .trace_suite import run_trace_suite
 from .trace_review import review_trace
+from .value_bar import evaluate_value_bar
 
 __all__ = [
     "evaluate_case",
+    "evaluate_value_bar",
     "claude_messages_to_trace",
     "lint_tools",
     "load_recipe",

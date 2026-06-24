@@ -25,5 +25,24 @@
       "name": "banana estimate trace",
       "trace": "agent_trace_good.json"
     }
-  ]
+  ],
+  "value_bar": {
+    "adversarial_review": {
+      "challenge": "The known-bad trace must fail for missing tools, duplicate search, missing inter-tool reasoning, and unsupported final output.",
+      "failed_to_disprove": true,
+      "open_objections": [],
+      "reviewer": "agent trace regression suite"
+    },
+    "baseline": {
+      "score": 0.42,
+      "source": "agent_trace_bad.json"
+    },
+    "candidate": {
+      "score": 1.0,
+      "source": "agent_trace_good.json"
+    },
+    "claim": "The audit harness adds value by separating a supported agent trace from a superficially structured but weak trace.",
+    "metric": "trace_review.score",
+    "minimum_delta": 0.5
+  }
 }

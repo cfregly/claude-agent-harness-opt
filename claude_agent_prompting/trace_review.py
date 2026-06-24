@@ -111,6 +111,7 @@ def build_trace_judge_prompt(trace: dict[str, Any]) -> str:
         "- Did the agent inspect tool outputs before the next action?\n"
         "- Did inter-tool reasoning explain verification, recovery, or stopping decisions?\n"
         "- Did the final answer use the evidence gathered by the tools?\n"
+        "- Is the trace adversarially-confirmed to add value over a baseline?\n"
         "</review_focus>\n\n"
         "<rubric>\n"
         f"{json.dumps(rubric, indent=2, sort_keys=True)}\n"

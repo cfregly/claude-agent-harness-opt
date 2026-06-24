@@ -13,7 +13,8 @@
     "Observe the current UI state before each action.",
     "Prefer reversible actions until the target state is confirmed.",
     "Check that each click or typed value had the intended effect.",
-    "Stop before irreversible submission unless the user has approved it."
+    "Stop before irreversible submission unless the user has approved it.",
+    "Show how the UI result is adversarially-confirmed to add value over a baseline."
   ],
   "done_when": [
     "The target UI state is visible and verified.",

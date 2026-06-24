@@ -21,6 +21,7 @@ class CliTests(unittest.TestCase):
         result = self.run_cli("render", "recipes/agentic_search.json")
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("<operating_loop>", result.stdout)
+        self.assertIn("<value_bar>", result.stdout)
 
     def test_score_command(self):
         result = self.run_cli("score", "recipes/agentic_search.json")

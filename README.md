@@ -6,6 +6,10 @@
 A runnable prompt kit for Claude-style agents: decide whether a task deserves an agent, render a
 structured system prompt, check tool design, and run local evals over agent transcripts.
 
+The bar is always "adversarially-confirmed to add value." An audit passes only when it names the
+value claim, compares against a baseline, meets a minimum improvement threshold, and survives an
+adversarial check with no open objections.
+
 The repo turns the main ideas from Anthropic's "Prompting for Agents" talk into code and templates.
 It is intentionally offline. No API key is required, and the examples run with the Python standard
 library.
@@ -47,6 +51,7 @@ Claude prompt engineering docs:
 - ordered trace review for reasoning, tool calls, tool outputs, and final answers
 - trace regression suites for keeping known-good and known-bad cases stable
 - agent audit bundles that review a tool inventory plus representative traces
+- value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
 
 ## Layout
 
@@ -58,6 +63,7 @@ claude_agent_prompting/
   trace_review.py    # ordered trace review for tools and reasoning
   trace_suite.py     # regression suites for repeated trace review
   agent_audit.py     # review tools and traces in one bundle
+  value_bar.py       # adversarially-confirmed value-bar checks
   adapters.py        # transcript normalizers for provider content blocks
   cli.py             # render, score, lint-tools, eval, judge-prompt
 recipes/             # ready-to-edit agent recipes
@@ -74,7 +80,7 @@ scripts/             # prose gate for public artifacts
 The repo includes a project-local `/agent-audit` skill at
 `.claude/skills/agent-audit/SKILL.md`. Use it when reviewing another agent's tools, traces, Claude
 Messages API blocks, or trace suites. It chooses the right CLI path, runs deterministic checks, and
-reports concrete prompt or tool changes.
+reports concrete prompt or tool changes. The skill treats missing value-bar proof as a failed audit.
 
 ## Verify it
 

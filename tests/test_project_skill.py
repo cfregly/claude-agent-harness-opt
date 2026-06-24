@@ -14,6 +14,7 @@ class ProjectSkillTests(unittest.TestCase):
         self.assertIn("description:", text)
         self.assertIn("audit-agent", text)
         self.assertIn("trace-suite", text)
+        self.assertIn("adversarially-confirmed to add value", text)
         self.assertNotIn("TODO", text)
 
     def test_agent_audit_openai_metadata_exists(self):
@@ -22,6 +23,7 @@ class ProjectSkillTests(unittest.TestCase):
 
         self.assertIn("display_name", text)
         self.assertIn("Agent Audit", text)
+        self.assertIn("value-bar", text)
         self.assertNotIn("TODO", text)
 
 

@@ -13,7 +13,8 @@
     "Profile schema, missingness, ranges, and grain before analysis.",
     "Write down assumptions before transforming data.",
     "Use deterministic calculations for reported numbers.",
-    "Separate observed facts from modeled or inferred findings."
+    "Separate observed facts from modeled or inferred findings.",
+    "Show how the analysis is adversarially-confirmed to add value over a baseline."
   ],
   "done_when": [
     "The analysis answers the question with traceable calculations.",

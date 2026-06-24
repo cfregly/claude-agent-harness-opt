@@ -19,6 +19,10 @@ offline evals over agent transcripts and final state.
 
 - Keep it standalone. Do not reference parent workspaces, private notes, or local-only files.
 - Keep it generic. Do not add interview framing, employer-specific context, or individual names.
+- Apply the value bar everywhere. An audit, prompt change, tool change, or eval change passes only
+  when it is adversarially-confirmed to add value: it must name the value claim, compare against a
+  baseline, meet a minimum improvement threshold, and survive an adversarial check with no open
+  objections.
 - Source Claude and agent-prompting claims. If a factual claim changes, update
   `docs/source-map.md` with the public source used.
 - Keep examples offline. No API key should be required for tests or examples.

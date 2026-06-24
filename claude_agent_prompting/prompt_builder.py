@@ -106,6 +106,7 @@ def render_prompt(recipe: dict[str, Any]) -> str:
         _budget_section(recipe["budgets"]),
         _tool_section(recipe["tools"]),
         _thinking_section(recipe["thinking"]),
+        _value_bar_section(),
         _guardrail_section(recipe["guardrails"]),
         _context_section(recipe["context"]),
         _operating_loop(recipe),
@@ -173,6 +174,16 @@ def _guardrail_section(guardrails: dict[str, list[str]]) -> str:
         lines.extend(f"  - {item}" for item in never)
     lines.append("</safety_and_reversibility>\n")
     return "\n".join(lines)
+
+
+def _value_bar_section() -> str:
+    return (
+        "<value_bar>\n"
+        "- Treat work as complete only when it is adversarially-confirmed to add value.\n"
+        "- Name the value claim, baseline, minimum improvement threshold, and adversarial challenge.\n"
+        "- If the value claim has open adversarial objections, state them instead of calling the work done.\n"
+        "</value_bar>\n"
+    )
 
 
 def _context_section(context: dict[str, Any]) -> str:

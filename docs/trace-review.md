@@ -3,6 +3,10 @@
 Use this repo to review someone else's agent by asking their harness to export an ordered trace.
 The trace should capture what the agent saw and did, not private application state.
 
+Every audit must clear the value bar: adversarially-confirmed to add value. Trace quality alone is
+not enough. The audit bundle must show a value claim, a baseline, a candidate, a minimum improvement,
+and an adversarial review with no open objections.
+
 ## Event Schema
 
 Each trace has a `steps` array. The supported event types are:
@@ -104,7 +108,8 @@ useful after prompt edits because it checks both sides of the gate.
 ## Agent Audit Bundles
 
 Use an audit bundle when someone gives you a tool inventory and representative traces. The bundle
-first lints tool names and descriptions, then reviews each trace against its rubric.
+first lints tool names and descriptions, then reviews each trace against its rubric, then enforces
+the value bar.
 
 ```json
 {
@@ -119,6 +124,18 @@ first lints tool names and descriptions, then reviews each trace against its rub
   ],
   "traces": [
     {"name": "representative run", "trace": "agent_trace_good.json"}
-  ]
+  ],
+  "value_bar": {
+    "claim": "The new agent separates supported traces from weak traces.",
+    "metric": "trace_review.score",
+    "baseline": {"score": 0.42, "source": "agent_trace_bad.json"},
+    "candidate": {"score": 1.0, "source": "agent_trace_good.json"},
+    "minimum_delta": 0.5,
+    "adversarial_review": {
+      "challenge": "Known-bad traces must fail for missing tools and missing reasoning.",
+      "failed_to_disprove": true,
+      "open_objections": []
+    }
+  }
 }
 ```

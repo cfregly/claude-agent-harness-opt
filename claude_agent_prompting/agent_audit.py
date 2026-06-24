@@ -8,6 +8,7 @@ from typing import Any
 
 from .prompt_builder import lint_tools
 from .trace_review import load_trace, review_trace
+from .value_bar import evaluate_value_bar
 
 
 def load_agent_bundle(path: str | Path) -> dict[str, Any]:
@@ -37,12 +38,20 @@ def review_agent_bundle(path: str | Path) -> dict[str, Any]:
 
     trace_score = _average([trace["score"] for trace in traces])
     tool_score = 1.0 if not tool_issues else 0.0
-    overall = round((tool_score + trace_score) / 2, 3) if traces else tool_score
+    value_bar = evaluate_value_bar(bundle.get("value_bar"))
+    component_scores = [tool_score, value_bar.score]
+    if traces:
+        component_scores.append(trace_score)
+    overall = round(sum(component_scores) / len(component_scores), 3)
 
     return {
         "name": bundle.get("name", bundle_path.stem),
         "overall_score": overall,
-        "passed": not tool_issues and all(trace["passed"] for trace in traces),
+        "passed": (
+            not tool_issues
+            and value_bar.passed
+            and all(trace["passed"] for trace in traces)
+        ),
         "tool_inventory": {
             "issues": tool_issues,
             "passed": not tool_issues,
@@ -50,6 +59,7 @@ def review_agent_bundle(path: str | Path) -> dict[str, Any]:
             "tools": len(bundle.get("tools", [])),
         },
         "traces": traces,
+        "value_bar": value_bar.to_dict(),
     }
 
 
@@ -72,6 +82,19 @@ def render_agent_audit_markdown(result: dict[str, Any]) -> str:
         lines.extend(f"- {issue}" for issue in issues)
     else:
         lines.extend(["", "No tool inventory issues."])
+
+    lines.extend(
+        [
+            "",
+            "## Value Bar",
+            "",
+            f"Value bar score: {result['value_bar']['score']:.3f}",
+            f"Value bar passed: {'yes' if result['value_bar']['passed'] else 'no'}",
+            "",
+            "Value bar details:",
+        ]
+    )
+    lines.extend(f"- {detail}" for detail in result["value_bar"]["details"])
 
     lines.extend(["", "## Trace Scores", "", "| Trace | Score | Passed |", "|---|---:|---:|"])
     for trace in result["traces"]:

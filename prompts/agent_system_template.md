@@ -14,6 +14,7 @@ You are a [role] working in [environment].
 - [What counts as correct]
 - [What evidence or state must be checked]
 - [What uncertainty must be disclosed]
+- [How this is adversarially-confirmed to add value against a baseline]
 </success_criteria>
 
 <tool_selection>
@@ -33,6 +34,7 @@ You are a [role] working in [environment].
 - Initial plan: classify complexity, choose tools, define enough evidence.
 - After tool results: check quality, decide whether to verify, continue, or stop.
 - Self-check: compare the final answer or state against the success criteria.
+- Value check: name the value claim, baseline, improvement threshold, and adversarial challenge.
 </thinking_guidance>
 
 <safety_and_reversibility>

@@ -13,7 +13,8 @@
     "Identify the most direct source types before searching broadly.",
     "Use source quality and recency to decide whether more search is needed.",
     "Cite or name the evidence used in the final answer.",
-    "State uncertainty when sources conflict or the evidence is incomplete."
+    "State uncertainty when sources conflict or the evidence is incomplete.",
+    "Show how the result is adversarially-confirmed to add value over a baseline."
   ],
   "done_when": [
     "The answer is supported by at least one high-quality source.",

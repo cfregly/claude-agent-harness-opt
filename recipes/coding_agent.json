@@ -13,7 +13,8 @@
     "Read the relevant files before making claims about the code.",
     "Keep edits scoped to the requested behavior.",
     "Run focused tests or explain exactly why they could not run.",
-    "Leave the working tree ready for review."
+    "Leave the working tree ready for review.",
+    "Show how the change is adversarially-confirmed to add value over a baseline."
   ],
   "done_when": [
     "The requested behavior is implemented.",

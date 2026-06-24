@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
 
     audit_parser = subparsers.add_parser(
         "audit-agent",
-        help="review a tool inventory and related agent traces",
+        help="review tools, traces, and adversarial value-bar proof",
     )
     audit_parser.add_argument("bundle", type=Path)
     audit_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
