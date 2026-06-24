@@ -34,6 +34,24 @@ class CliTests(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn('"passed": true', result.stdout)
 
+    def test_model_matrix_command(self):
+        result = self.run_cli(
+            "model-matrix",
+            "evals/model_matrix/coding_tool_selection.json",
+            "--providers",
+            "anthropic",
+            "--harnesses",
+            "native_tools",
+            "--variants",
+            "tuned_boundaries",
+            "--instruction-variants",
+            "boundary_rules",
+            "--max-cases",
+            "1",
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn('"matrix": "coding file-tool selection matrix"', result.stdout)
+
     def test_claude_judge_requires_api_key(self):
         env = os.environ.copy()
         env.pop("ANTHROPIC_API_KEY", None)

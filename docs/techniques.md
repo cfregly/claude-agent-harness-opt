@@ -63,6 +63,11 @@ Run `optimize-tools` on an audit bundle to review tool descriptions, schemas, ca
 trace-derived selection failures. The command returns concrete changes for names, `use_when`,
 `avoid_when`, `input_schema`, result checks, calibration cases, and stop criteria.
 
+Run `model-matrix` when changing models, providers, harnesses, `CLAUDE.md`, skills, or system
+instructions. The matrix compares tool-description variants and instruction variants across the same
+cases, so a change is promoted only when it improves the target cell without regressing heldout
+cases.
+
 ## 7. Guide The Reasoning Process
 
 The recipes ask the agent to plan before acting, reflect after tool results, and self-check before

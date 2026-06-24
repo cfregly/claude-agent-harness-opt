@@ -25,6 +25,7 @@ pip install -e .
 export ANTHROPIC_API_KEY=...
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8
 ```
 
 Do not commit `.env` files or API keys. The repo ignores local environment files.
@@ -38,7 +39,8 @@ gh secret set ANTHROPIC_API_KEY --repo cfregly/claude-agent-prompting
 ```
 
 CI runs deterministic tests, the value-bar gate, the trace suite, the agent audit, and live Claude
-judge checks. The live audit includes trace quality and tool-selection optimization.
+judge checks. The live audit includes trace quality, tool-selection optimization, and an Anthropic
+model-matrix smoke test.
 
 ## Trace Capture Contract
 
@@ -131,3 +133,4 @@ python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundl
 - `evals/examples/agent_trace_bad.json` is the known-bad negative control.
 - `evals/suites/agent_trace_suite.json` runs trace regression cases.
 - `evals/examples/agent_audit_bundle.json` ties tools, traces, selection cases, and value proof together.
+- `evals/model_matrix/coding_tool_selection.json` runs provider, harness, instruction, and tool-description sweeps.

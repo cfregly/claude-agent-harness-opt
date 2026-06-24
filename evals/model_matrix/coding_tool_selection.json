@@ -1,0 +1,279 @@
+{
+  "name": "coding file-tool selection matrix",
+  "description": "Compare model behavior on Claude Code style tools: Task, Glob, Grep, and Read.",
+  "profiles": [
+    {
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "harnesses": ["native_tools", "prompt_json"],
+      "model": "claude-sonnet-4-5",
+      "model_env": "ANTHROPIC_MATRIX_MODEL",
+      "name": "anthropic-sonnet",
+      "provider": "anthropic"
+    },
+    {
+      "api_key_env": "OPENAI_API_KEY",
+      "harnesses": ["native_tools", "prompt_json"],
+      "model": "gpt-4.1",
+      "model_env": "OPENAI_MATRIX_MODEL",
+      "name": "openai-default",
+      "provider": "openai"
+    },
+    {
+      "api_key_env": "GEMINI_API_KEY",
+      "harnesses": ["native_tools", "prompt_json"],
+      "max_tokens": 4096,
+      "model": "gemini-2.5-pro",
+      "model_env": "GEMINI_MATRIX_MODEL",
+      "name": "gemini-default",
+      "provider": "gemini"
+    }
+  ],
+  "instruction_variants": [
+    {
+      "instructions": "Choose the smallest direct tool call. Do not use a broader discovery tool when the path is already known. Do not read files just to find whether files exist.",
+      "name": "minimal_direct"
+    },
+    {
+      "instructions": "Use Glob when the task is about filenames or paths. Use Grep when the task is about text inside unknown files. Use Read when the exact file path is known and the task requires file contents. Prefer the narrowest tool that can answer the next question.",
+      "name": "boundary_rules"
+    }
+  ],
+  "tool_variants": [
+    {
+      "name": "baseline_short",
+      "tools": [
+        {
+          "avoid_when": "Avoid when another file tool seems better.",
+          "input_schema": {
+            "properties": {
+              "pattern": {
+                "description": "Pattern to use.",
+                "type": "string"
+              }
+            },
+            "required": ["pattern"],
+            "type": "object"
+          },
+          "name": "Glob",
+          "purpose": "Find files.",
+          "quality_checks": ["Check matching paths."],
+          "use_when": "Use for files."
+        },
+        {
+          "avoid_when": "Avoid when another file tool seems better.",
+          "input_schema": {
+            "properties": {
+              "pattern": {
+                "description": "Text or regex to find.",
+                "type": "string"
+              },
+              "path": {
+                "description": "Optional path to search.",
+                "type": "string"
+              }
+            },
+            "required": ["pattern"],
+            "type": "object"
+          },
+          "name": "Grep",
+          "purpose": "Search files.",
+          "quality_checks": ["Check matching lines."],
+          "use_when": "Use for search."
+        },
+        {
+          "avoid_when": "Avoid when another file tool seems better.",
+          "input_schema": {
+            "properties": {
+              "path": {
+                "description": "File path.",
+                "type": "string"
+              }
+            },
+            "required": ["path"],
+            "type": "object"
+          },
+          "name": "Read",
+          "purpose": "Read files.",
+          "quality_checks": ["Check file contents."],
+          "use_when": "Use for reading."
+        },
+        {
+          "avoid_when": "Avoid when another file tool seems better.",
+          "input_schema": {
+            "properties": {
+              "description": {
+                "description": "Task to run.",
+                "type": "string"
+              }
+            },
+            "required": ["description"],
+            "type": "object"
+          },
+          "name": "Task",
+          "purpose": "Do a task.",
+          "quality_checks": ["Check task result."],
+          "use_when": "Use for tasks."
+        }
+      ]
+    },
+    {
+      "name": "tuned_boundaries",
+      "tools": [
+        {
+          "avoid_when": "Avoid when the task asks for text inside files or when the exact file path is already known.",
+          "input_schema": {
+            "properties": {
+              "pattern": {
+                "description": "A filename or path glob such as '**/*.py' or 'docs/**/*.md'.",
+                "type": "string"
+              }
+            },
+            "required": ["pattern"],
+            "type": "object"
+          },
+          "name": "Glob",
+          "purpose": "Find file paths by filename or path pattern without reading file contents.",
+          "quality_checks": [
+            "Use when the answer depends on which files exist.",
+            "Do not use for searching text inside files."
+          ],
+          "use_when": "Use when the user asks to list, locate, or enumerate files by path, extension, or filename pattern."
+        },
+        {
+          "avoid_when": "Avoid when the task only needs filenames by path pattern or when the exact file should simply be read.",
+          "input_schema": {
+            "properties": {
+              "pattern": {
+                "description": "Literal text or regex to search for inside files.",
+                "type": "string"
+              },
+              "path": {
+                "description": "Optional directory or file scope for the search.",
+                "type": "string"
+              }
+            },
+            "required": ["pattern"],
+            "type": "object"
+          },
+          "name": "Grep",
+          "purpose": "Search for text or regex matches inside files and return matching locations.",
+          "quality_checks": [
+            "Use when the answer depends on content inside unknown files.",
+            "Constrain path when the task gives a likely directory."
+          ],
+          "use_when": "Use when the user asks where a symbol, string, function, setting, TODO, or error message appears."
+        },
+        {
+          "avoid_when": "Avoid for discovering unknown file paths or searching text across many files.",
+          "input_schema": {
+            "properties": {
+              "path": {
+                "description": "Exact file path to read.",
+                "type": "string"
+              }
+            },
+            "required": ["path"],
+            "type": "object"
+          },
+          "name": "Read",
+          "purpose": "Read the contents of a known file path.",
+          "quality_checks": [
+            "Use only when the path is already known.",
+            "Read before editing or summarizing a specific file."
+          ],
+          "use_when": "Use when the user provides an exact file path or a prior tool result has identified the file to inspect."
+        },
+        {
+          "avoid_when": "Avoid for a single known file read, a single exact text search, or a simple filename glob that one direct file tool can answer.",
+          "input_schema": {
+            "properties": {
+              "description": {
+                "description": "A concise delegated investigation task with scope, goal, and expected summary.",
+                "type": "string"
+              }
+            },
+            "required": ["description"],
+            "type": "object"
+          },
+          "name": "Task",
+          "purpose": "Delegate a broad multi-step codebase investigation to a subagent when the work needs several searches, reads, and synthesis.",
+          "quality_checks": [
+            "Use when the task spans multiple files or unknown paths.",
+            "Do not use when one direct file tool can answer the next step."
+          ],
+          "use_when": "Use when the user asks to investigate, map, or summarize behavior across an unknown part of the repository."
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "expected_args_contains": {
+        "pattern": "*.py"
+      },
+      "expected_tools": ["Glob"],
+      "forbidden_tools": ["Grep", "Read", "Task"],
+      "name": "find python files",
+      "task": "Find all Python files under the repository."
+    },
+    {
+      "expected_args_contains": {
+        "pattern": "def review_tool_selection"
+      },
+      "expected_tools": ["Grep"],
+      "forbidden_tools": ["Glob", "Read", "Task"],
+      "name": "find function definition",
+      "task": "Find where the function named def review_tool_selection is defined."
+    },
+    {
+      "expected_args_contains": {
+        "path": "README.md"
+      },
+      "expected_tools": ["Read"],
+      "forbidden_tools": ["Glob", "Grep", "Task"],
+      "name": "read known file",
+      "task": "Open README.md and inspect its setup instructions."
+    },
+    {
+      "expected_args_contains": {
+        "pattern": "TODO"
+      },
+      "expected_tools": ["Grep"],
+      "forbidden_tools": ["Glob", "Read", "Task"],
+      "name": "find todos",
+      "task": "Find all TODO comments in this codebase."
+    },
+    {
+      "expected_args_contains": {
+        "pattern": "docs/*.md"
+      },
+      "expected_tools": ["Glob"],
+      "forbidden_tools": ["Grep", "Read", "Task"],
+      "name": "list markdown docs",
+      "task": "List the Markdown files directly under the docs directory."
+    },
+    {
+      "expected_args_contains": {
+        "description": "trace review"
+      },
+      "expected_tools": ["Task"],
+      "forbidden_tools": ["Glob", "Grep", "Read"],
+      "name": "investigate trace review flow",
+      "task": "Investigate how trace review scoring works across this repository and summarize the key files and control flow."
+    },
+    {
+      "expected_args_contains": {
+        "description": "model matrix"
+      },
+      "expected_tools": ["Task"],
+      "forbidden_tools": ["Glob", "Grep", "Read"],
+      "name": "map model matrix implementation",
+      "task": "Map how the model matrix runner is implemented across the repository and summarize the main extension points."
+    }
+  ],
+  "value_bar": {
+    "claim": "The model matrix adds value when tuned descriptions beat short descriptions across provider harnesses without regressing heldout tool-selection cases.",
+    "metric": "model_matrix.score",
+    "minimum_delta": 0.1
+  }
+}

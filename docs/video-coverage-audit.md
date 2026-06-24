@@ -16,6 +16,7 @@ code, tests, docs, or CI.
 | Use agents when task path is ambiguous but valuable and recoverable. | `suitability.py` scores complexity, ambiguity, value, viability, error cost, and recoverability. |
 | Think like the agent by inspecting tool names, schemas, and outputs. | `lint-tools` checks tool names and descriptions. `optimize-tools` checks schemas, result quality checks, calibration cases, and trace-derived selection failures. |
 | Give explicit tool-selection principles. | Recipes require `purpose`, `use_when`, and `avoid_when`. Audit bundles add `input_schema`, `quality_checks`, and `tool_selection_cases`. |
+| Prompt and tool guidance should be tuned for model behavior. | `model-matrix` compares provider profiles, native and JSON harnesses, tool-description variants, and instruction variants. |
 | Guide the thinking process, including reflection after web results. | Prompts include thinking guidance. Traces capture visible reasoning summaries or provider-returned reasoning blocks. |
 | Use parallel tool calls when independent. | Traces support `parallel_group`, and `agent_trace_parallel_good.json` tests a parallel search batch. |
 | Stop when the answer is found and avoid runaway search. | Prompt budgets and stop criteria are rendered from recipes and checked through trace rubrics. |

@@ -32,6 +32,8 @@ python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.j
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --markdown
+python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
 python -m claude_agent_prompting judge-prompt evals/examples/search_answer.json
 ```
 
@@ -58,6 +60,7 @@ Claude prompt engineering docs:
 - agent audit bundles that review a tool inventory plus representative traces
 - Claude-backed semantic judging of visible reasoning summaries, tool outputs, and final grounding
 - tool-selection optimization from tool descriptions, schemas, calibration cases, and trace failures
+- model matrix sweeps across providers, model ids, harnesses, instruction variants, and tool-description variants
 - value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
 
 ## Layout
@@ -71,12 +74,14 @@ claude_agent_prompting/
   trace_suite.py     # regression suites for repeated trace review
   agent_audit.py     # review tools and traces in one bundle
   claude_judge.py    # optional Claude Messages API judge for semantic trace review
+  model_matrix.py    # live provider matrix for tool and instruction tuning
   tool_selection.py  # tool description and selection optimizer
   value_bar.py       # adversarially-confirmed value-bar checks
   adapters.py        # transcript normalizers for provider content blocks
   cli.py             # render, score, lint-tools, eval, judge-prompt
 recipes/             # ready-to-edit agent recipes
 evals/examples/      # small local eval cases
+evals/model_matrix/  # cross-provider model matrix configs
 prompts/             # reusable prompt snippets
 docs/                # technique map and source map
 tests/               # standard-library unit tests
@@ -125,6 +130,20 @@ The optimizer checks that every tool has a distinct purpose, `use_when`, `avoid_
 failures back to concrete changes like stronger avoid rules, argument schemas, examples, or stop
 criteria. `audit-agent --claude-judge` includes this optimizer automatically.
 
+## Model Matrix
+
+Use `model-matrix` when tuning tool descriptions or `CLAUDE.md` style instructions for a new model,
+provider, reasoning mode, or harness:
+
+```bash
+python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --markdown
+python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+```
+
+The included matrix tests Claude Code style `Task`, `Glob`, `Grep`, and `Read` tool selection across
+Anthropic, OpenAI, and Gemini. It compares short descriptions against tuned boundary descriptions,
+and it compares native provider tool calling against a standardized JSON-choice harness.
+
 ## Verify it
 
 ```bash
@@ -138,6 +157,7 @@ python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json
 python scripts/check_value_bar.py
 ```
 

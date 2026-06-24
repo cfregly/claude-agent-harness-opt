@@ -18,6 +18,11 @@ from .claude_judge import (
     judge_trace_with_claude,
 )
 from .evals import build_judge_prompt, evaluate_case, load_eval_case
+from .model_matrix import (
+    MatrixFilters,
+    render_model_matrix_markdown,
+    run_model_matrix,
+)
 from .prompt_builder import lint_tools, load_recipe, render_prompt
 from .suitability import score_use_case
 from .tool_selection import render_tool_selection_markdown, review_tool_selection_bundle
@@ -103,6 +108,35 @@ def main(argv: list[str] | None = None) -> int:
         "--model",
         help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
     )
+
+    matrix_parser = subparsers.add_parser(
+        "model-matrix",
+        help="run tool-selection evals across model, harness, prompt, and tool variants",
+    )
+    matrix_parser.add_argument("matrix", type=Path)
+    matrix_parser.add_argument("--env-file", type=Path, help="dotenv file with provider API keys")
+    matrix_parser.add_argument("--live", action="store_true", help="call provider APIs")
+    matrix_parser.add_argument(
+        "--require-live",
+        action="store_true",
+        help="fail if any selected provider is missing a key or returns an error",
+    )
+    matrix_parser.add_argument("--providers", help="comma-separated provider or profile names")
+    matrix_parser.add_argument("--harnesses", help="comma-separated harness names")
+    matrix_parser.add_argument("--variants", help="comma-separated tool variant names")
+    matrix_parser.add_argument(
+        "--instruction-variants",
+        help="comma-separated instruction variant names",
+    )
+    matrix_parser.add_argument("--max-cases", type=int, help="limit cases per selected cell")
+    matrix_parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=1,
+        help="parallel provider calls for live runs",
+    )
+    matrix_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
+    matrix_parser.add_argument("--out", type=Path, help="write the JSON or Markdown report to a file")
 
     args = parser.parse_args(argv)
 
@@ -209,5 +243,39 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["passed"] else 1
 
+    if args.command == "model-matrix":
+        result = run_model_matrix(
+            args.matrix,
+            live=args.live,
+            env_file=args.env_file,
+            require_live=args.require_live,
+            filters=MatrixFilters(
+                providers=_csv_set(args.providers),
+                harnesses=_csv_set(args.harnesses),
+                variants=_csv_set(args.variants),
+                instruction_variants=_csv_set(args.instruction_variants),
+            ),
+            max_cases=args.max_cases,
+            concurrency=max(1, args.concurrency),
+        )
+        output = (
+            render_model_matrix_markdown(result)
+            if args.markdown
+            else json.dumps(result, indent=2, sort_keys=True)
+        )
+        if args.out:
+            args.out.write_text(output, encoding="utf-8")
+        else:
+            sys.stdout.write(output)
+            if not output.endswith("\n"):
+                sys.stdout.write("\n")
+        return 0 if result["passed"] else 1
+
     parser.error(f"unknown command: {args.command}")
     return 2
+
+
+def _csv_set(value: str | None) -> set[str] | None:
+    if not value:
+        return None
+    return {item.strip() for item in value.split(",") if item.strip()}

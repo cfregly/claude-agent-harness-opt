@@ -7,7 +7,8 @@ Conventions for any agent working on `claude-agent-prompting`. Read this first.
 This repo is a public, standalone prompt kit for Claude-style agents. It renders agent system
 prompts from recipes, scores whether a task deserves an agent, lints tool descriptions, runs
 deterministic evals over agent transcripts and final state, and uses a live Claude judge for
-semantic trace audits.
+semantic trace audits. It also runs model matrix sweeps to tune tool descriptions, provider
+harnesses, `CLAUDE.md` style instructions, and skills across model generations.
 
 ## Run it
 
@@ -15,6 +16,7 @@ semantic trace audits.
     python -m claude_agent_prompting render recipes/agentic_search.json
     python -m claude_agent_prompting score recipes/agentic_search.json
     python -m claude_agent_prompting eval evals/examples/search_answer.json
+    python -m claude_agent_prompting model-matrix evals/model_matrix/coding_tool_selection.json
 
 ## Rules
 
@@ -29,7 +31,7 @@ semantic trace audits.
 - Source Claude and agent-prompting claims. If a factual claim changes, update
   `docs/source-map.md` with the public source used.
 - Deterministic tests stay runnable without an API key. CI and real audits require the live Claude
-  judge through `ANTHROPIC_API_KEY`.
+  judge through `ANTHROPIC_API_KEY`. Cross-provider matrix sweeps use `.env` keys when supplied.
 - Secrets never get committed. `.env` stays git-ignored.
 - Prose is deslop-clean: no em-dashes, no en-dashes, no semicolons, and no buzzwords. Run
   `python scripts/deslop_check.py` before shipping.
