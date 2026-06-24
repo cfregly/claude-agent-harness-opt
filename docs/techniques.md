@@ -59,6 +59,10 @@ tool descriptions.
 Each tool gets a purpose, use rule, avoid rule, and quality checks. Similar tools should be merged or
 renamed so the model does not have to guess which nearly identical tool should be used.
 
+Run `optimize-tools` on an audit bundle to review tool descriptions, schemas, calibration cases, and
+trace-derived selection failures. The command returns concrete changes for names, `use_when`,
+`avoid_when`, `input_schema`, result checks, calibration cases, and stop criteria.
+
 ## 7. Guide The Reasoning Process
 
 The recipes ask the agent to plan before acting, reflect after tool results, and self-check before

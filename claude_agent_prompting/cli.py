@@ -12,10 +12,15 @@ from .agent_audit import (
     render_agent_audit_markdown,
     review_agent_bundle,
 )
-from .claude_judge import ClaudeJudgeError, judge_trace_with_claude
+from .claude_judge import (
+    ClaudeJudgeError,
+    judge_tool_selection_with_claude,
+    judge_trace_with_claude,
+)
 from .evals import build_judge_prompt, evaluate_case, load_eval_case
 from .prompt_builder import lint_tools, load_recipe, render_prompt
 from .suitability import score_use_case
+from .tool_selection import render_tool_selection_markdown, review_tool_selection_bundle
 from .trace_suite import render_suite_markdown, run_trace_suite
 from .trace_review import build_trace_judge_prompt, load_trace, review_trace
 
@@ -79,6 +84,22 @@ def main(argv: list[str] | None = None) -> int:
         help="call Claude to semantically judge each representative trace",
     )
     audit_parser.add_argument(
+        "--model",
+        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
+    )
+
+    optimize_parser = subparsers.add_parser(
+        "optimize-tools",
+        help="review tool descriptions, schemas, selection cases, and trace selection failures",
+    )
+    optimize_parser.add_argument("bundle", type=Path)
+    optimize_parser.add_argument("--markdown", action="store_true", help="print a Markdown report")
+    optimize_parser.add_argument(
+        "--claude-judge",
+        action="store_true",
+        help="call Claude to semantically judge tool descriptions and selection cases",
+    )
+    optimize_parser.add_argument(
         "--model",
         help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
     )
@@ -159,6 +180,31 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         if args.markdown:
             sys.stdout.write(render_agent_audit_markdown(result))
+        else:
+            print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result["passed"] else 1
+
+    if args.command == "optimize-tools":
+        review = review_tool_selection_bundle(args.bundle)
+        result = review.to_dict()
+        if args.claude_judge:
+            try:
+                bundle = load_json(args.bundle)
+                semantic = judge_tool_selection_with_claude(
+                    bundle,
+                    result,
+                    model=args.model,
+                )
+            except ClaudeJudgeError as exc:
+                print(json.dumps({"error": str(exc), "passed": False}, indent=2, sort_keys=True))
+                return 1
+            result = {
+                "claude_judge": semantic.to_dict(),
+                "deterministic_review": review.to_dict(),
+                "passed": review.passed and semantic.passed,
+            }
+        if args.markdown and not args.claude_judge:
+            sys.stdout.write(render_tool_selection_markdown(review))
         else:
             print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["passed"] else 1

@@ -4,10 +4,14 @@ import unittest
 
 from claude_agent_prompting.claude_judge import (
     build_claude_trace_judge_prompt,
+    build_claude_tool_selection_judge_prompt,
     call_claude_messages,
+    judge_tool_selection_with_claude,
     judge_trace_with_claude,
     parse_judge_json,
 )
+from claude_agent_prompting.agent_audit import load_agent_bundle
+from claude_agent_prompting.tool_selection import review_tool_selection
 from claude_agent_prompting.trace_review import load_trace, review_trace
 
 
@@ -77,6 +81,28 @@ class ClaudeJudgeTests(unittest.TestCase):
         result = judge_trace_with_claude(
             trace,
             review,
+            api_key="test-key",
+            model="claude-test",
+            request_fn=fake_request,
+        )
+        self.assertTrue(result.passed)
+        self.assertEqual(0.91, result.score)
+        self.assertEqual("claude-test", result.model)
+
+    def test_build_tool_selection_prompt_includes_cases_and_value_bar(self):
+        bundle = load_agent_bundle(ROOT / "evals" / "examples" / "agent_audit_bundle.json")
+        review = review_tool_selection(bundle, ROOT / "evals" / "examples")
+        prompt = build_claude_tool_selection_judge_prompt(bundle, review.to_dict())
+        self.assertIn("tool-selection cases", prompt)
+        self.assertIn("adversarially-confirmed to add value", prompt)
+        self.assertIn("discover unknown current sources", prompt)
+
+    def test_judge_tool_selection_with_claude_returns_semantic_score(self):
+        bundle = load_agent_bundle(ROOT / "evals" / "examples" / "agent_audit_bundle.json")
+        review = review_tool_selection(bundle, ROOT / "evals" / "examples")
+        result = judge_tool_selection_with_claude(
+            bundle,
+            review.to_dict(),
             api_key="test-key",
             model="claude-test",
             request_fn=fake_request,

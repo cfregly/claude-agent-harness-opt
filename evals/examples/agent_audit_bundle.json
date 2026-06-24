@@ -3,21 +3,74 @@
   "tools": [
     {
       "avoid_when": "Avoid when a known source URL should be fetched directly.",
+      "input_schema": {
+        "properties": {
+          "query": "Specific search query with the entity, metric, and time frame."
+        },
+        "required": ["query"]
+      },
       "name": "web_search",
       "purpose": "Find candidate sources and fresh facts from the public web.",
+      "quality_checks": [
+        "Prefer primary or authoritative sources.",
+        "Compare snippets before choosing a source to fetch."
+      ],
       "use_when": "Use for unknown, current, or broad questions where source discovery is required."
     },
     {
       "avoid_when": "Avoid for broad discovery across many possible sources.",
+      "input_schema": {
+        "properties": {
+          "url": "Known source URL to retrieve."
+        },
+        "required": ["url"]
+      },
       "name": "web_fetch",
       "purpose": "Read a known source URL in enough detail to ground an answer.",
+      "quality_checks": [
+        "Check that the fetched page directly supports the claim.",
+        "Prefer current source text over search snippets."
+      ],
       "use_when": "Use after search identifies a promising source or the user provides a URL."
     },
     {
       "avoid_when": "Avoid when the final answer is purely qualitative.",
+      "input_schema": {
+        "properties": {
+          "expression": "Deterministic arithmetic expression to evaluate."
+        },
+        "required": ["expression"]
+      },
       "name": "calculator",
       "purpose": "Run arithmetic, unit conversion, and deterministic calculations.",
+      "quality_checks": [
+        "Use values already grounded by tool outputs.",
+        "Check units before returning a result."
+      ],
       "use_when": "Use when the answer depends on math that should not be done from memory."
+    }
+  ],
+  "tool_selection_cases": [
+    {
+      "expected_tools": ["web_search"],
+      "forbidden_tools": ["web_fetch", "calculator"],
+      "name": "discover unknown current sources",
+      "rationale": "The task starts without a known URL, so source discovery comes before fetching or calculating.",
+      "task": "Find current cargo specifications for a vehicle model."
+    },
+    {
+      "expected_tools": ["web_fetch"],
+      "forbidden_tools": ["web_search", "calculator"],
+      "name": "read known source",
+      "rationale": "The user already supplied a URL, so direct fetch is more precise than another broad search.",
+      "task": "Read a provided manufacturer URL and extract cargo volume."
+    },
+    {
+      "expected_tools": ["calculator"],
+      "forbidden_tools": ["web_search", "web_fetch"],
+      "name": "compute grounded estimate",
+      "rationale": "The needed facts have already been gathered, so the next action is deterministic math.",
+      "task": "Convert 120.8 cubic feet to cubic inches."
     }
   ],
   "traces": [

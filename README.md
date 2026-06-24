@@ -30,6 +30,8 @@ python -m claude_agent_prompting normalize-claude evals/examples/claude_messages
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_prompting judge-prompt evals/examples/search_answer.json
 ```
 
@@ -55,6 +57,7 @@ Claude prompt engineering docs:
 - trace regression suites for keeping known-good and known-bad cases stable
 - agent audit bundles that review a tool inventory plus representative traces
 - Claude-backed semantic judging of visible reasoning summaries, tool outputs, and final grounding
+- tool-selection optimization from tool descriptions, schemas, calibration cases, and trace failures
 - value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
 
 ## Layout
@@ -68,6 +71,7 @@ claude_agent_prompting/
   trace_suite.py     # regression suites for repeated trace review
   agent_audit.py     # review tools and traces in one bundle
   claude_judge.py    # optional Claude Messages API judge for semantic trace review
+  tool_selection.py  # tool description and selection optimizer
   value_bar.py       # adversarially-confirmed value-bar checks
   adapters.py        # transcript normalizers for provider content blocks
   cli.py             # render, score, lint-tools, eval, judge-prompt
@@ -106,6 +110,21 @@ decision notes before and after tool calls.
 GitHub Actions requires the `ANTHROPIC_API_KEY` repository secret and runs the same live judge
 against the sample audit bundle on every push and pull request.
 
+## Tool Selection Optimization
+
+Use `optimize-tools` when the question is whether the agent has the right tool descriptions, schemas,
+and calibration cases to choose tools correctly:
+
+```bash
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+```
+
+The optimizer checks that every tool has a distinct purpose, `use_when`, `avoid_when`,
+`input_schema`, and result `quality_checks`. It also checks `tool_selection_cases` and maps trace
+failures back to concrete changes like stronger avoid rules, argument schemas, examples, or stop
+criteria. `audit-agent --claude-judge` includes this optimizer automatically.
+
 ## Verify it
 
 ```bash
@@ -118,6 +137,7 @@ python -m claude_agent_prompting normalize-claude evals/examples/claude_messages
 python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json
 python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python scripts/check_value_bar.py
 ```
 

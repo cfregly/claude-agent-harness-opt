@@ -79,6 +79,45 @@ def judge_trace_with_claude(
     )
 
 
+def judge_tool_selection_with_claude(
+    bundle: dict[str, Any],
+    deterministic_review: dict[str, Any],
+    *,
+    model: str | None = None,
+    max_tokens: int = 2048,
+    api_key: str | None = None,
+    base_url: str | None = None,
+    anthropic_version: str = DEFAULT_ANTHROPIC_VERSION,
+    timeout: int = 60,
+    request_fn: JudgeRequestFn | None = None,
+) -> ClaudeJudgeResult:
+    """Ask Claude to judge whether tool descriptions support correct selection."""
+
+    resolved_model = model or os.getenv("CLAUDE_JUDGE_MODEL") or DEFAULT_MODEL
+    prompt = build_claude_tool_selection_judge_prompt(bundle, deterministic_review)
+    response = call_claude_messages(
+        prompt,
+        model=resolved_model,
+        max_tokens=max_tokens,
+        api_key=api_key,
+        base_url=base_url,
+        anthropic_version=anthropic_version,
+        timeout=timeout,
+        request_fn=request_fn,
+    )
+    raw_text = _response_text(response)
+    judge = parse_judge_json(raw_text)
+    passed = bool(judge.get("passed", False))
+    score = float(judge.get("score", 0.0))
+    return ClaudeJudgeResult(
+        judge=judge,
+        model=resolved_model,
+        passed=passed,
+        raw_text=raw_text,
+        score=score,
+    )
+
+
 def call_claude_messages(
     prompt: str,
     *,
@@ -154,6 +193,56 @@ def build_claude_trace_judge_prompt(
         "  },\n"
         '  "findings": ["specific issue or strength"],\n'
         '  "recommended_changes": ["specific prompt, tool, or eval change"]\n'
+        "}\n"
+    )
+
+
+def build_claude_tool_selection_judge_prompt(
+    bundle: dict[str, Any],
+    deterministic_review: dict[str, Any],
+) -> str:
+    """Build the semantic judge prompt for tool description optimization."""
+
+    payload = {
+        "selection_cases": bundle.get("tool_selection_cases", []),
+        "tools": bundle.get("tools", []),
+        "trace_index": bundle.get("traces", []),
+        "value_bar": bundle.get("value_bar", {}),
+    }
+    return (
+        "You are a strict evaluator for an AI agent tool inventory and tool-selection harness.\n\n"
+        "Review only visible artifacts: tool names, descriptions, input schemas, quality checks, "
+        "tool-selection cases, trace-derived deterministic findings, and value-bar proof. Do not "
+        "infer hidden chain-of-thought.\n\n"
+        "<deterministic_tool_selection_review>\n"
+        f"{json.dumps(deterministic_review, indent=2, sort_keys=True)}\n"
+        "</deterministic_tool_selection_review>\n\n"
+        "<bundle_extract>\n"
+        f"{json.dumps(payload, indent=2, sort_keys=True)}\n"
+        "</bundle_extract>\n\n"
+        "<semantic_rubric>\n"
+        "- Are similar tools easy to distinguish from the descriptions alone?\n"
+        "- Do use_when and avoid_when rules give the agent a reliable selection policy?\n"
+        "- Do schemas and argument descriptions make valid calls likely?\n"
+        "- Do quality checks tell the agent how to inspect tool outputs before the next action?\n"
+        "- Do selection cases cover expected tools, forbidden tools, and confusing boundaries?\n"
+        "- Do recommended changes improve value over the baseline instead of adding prompt bulk?\n"
+        "- Is the result adversarially-confirmed to add value?\n"
+        "</semantic_rubric>\n\n"
+        "Return only strict JSON with this shape:\n"
+        "{\n"
+        '  "passed": true,\n'
+        '  "score": 0.0,\n'
+        '  "scores": {\n'
+        '    "description_distinctness": 0.0,\n'
+        '    "schema_quality": 0.0,\n'
+        '    "selection_case_coverage": 0.0,\n'
+        '    "trace_failure_mapping": 0.0,\n'
+        '    "value_over_baseline": 0.0\n'
+        "  },\n"
+        '  "findings": ["specific issue or strength"],\n'
+        '  "recommended_tool_changes": ["specific tool description or schema change"],\n'
+        '  "recommended_eval_changes": ["specific selection case or trace fixture change"]\n'
         "}\n"
     )
 

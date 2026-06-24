@@ -11,12 +11,13 @@ from prose. Treat "adversarially-confirmed to add value" as the pass bar.
 
 ## Decision Tree
 
-1. If the user provides a tool inventory plus traces, use `audit-agent`.
-2. If the user provides a regression suite, use `trace-suite`.
-3. If the user provides one normalized trace, use `review-trace`.
-4. If the user provides Claude Messages API content blocks, use `normalize-claude`, then review the normalized trace.
-5. If the user provides raw prose or screenshots, ask for exported JSON unless a small manual trace can be built without guessing.
-6. If an audit bundle lacks `value_bar`, treat it as failed until the value claim, baseline,
+1. If the user asks whether tool descriptions or schemas cause bad tool choice, use `optimize-tools`.
+2. If the user provides a tool inventory plus traces, use `audit-agent`.
+3. If the user provides a regression suite, use `trace-suite`.
+4. If the user provides one normalized trace, use `review-trace`.
+5. If the user provides Claude Messages API content blocks, use `normalize-claude`, then review the normalized trace.
+6. If the user provides raw prose or screenshots, ask for exported JSON unless a small manual trace can be built without guessing.
+7. If an audit bundle lacks `value_bar`, treat it as failed until the value claim, baseline,
    candidate, threshold, and adversarial review are supplied.
 
 ## Commands
@@ -26,6 +27,8 @@ Run from the repo root.
 ```bash
 python -m claude_agent_prompting audit-agent <bundle.json> --markdown
 python -m claude_agent_prompting audit-agent <bundle.json> --claude-judge --markdown
+python -m claude_agent_prompting optimize-tools <bundle.json> --markdown
+python -m claude_agent_prompting optimize-tools <bundle.json> --claude-judge
 python -m claude_agent_prompting trace-suite <suite.json> --markdown
 python -m claude_agent_prompting review-trace <trace.json>
 python -m claude_agent_prompting review-trace <trace.json> --claude-judge
@@ -41,18 +44,20 @@ human.
 1. Run the deterministic command first.
 2. Read the failed checks, grouped by `structure`, `tool_use`, `reasoning`, and `final`.
 3. Inspect the trace around any failed check before proposing a fix.
-4. Check the value bar. Do not pass an audit without baseline improvement and adversarial confirmation.
-5. For real audits, run `--claude-judge` so Claude reviews visible reasoning
-   summaries, tool outputs, final grounding, and value over baseline.
-6. Recommend prompt or tool changes only when they map directly to a failed check or Claude judge
+4. Run `optimize-tools` when the failure involves wrong tools, missing arguments, duplicate calls, or vague tool boundaries.
+5. Check the value bar. Do not pass an audit without baseline improvement and adversarial confirmation.
+6. For real audits, run `--claude-judge` so Claude reviews visible reasoning
+   summaries, tool outputs, tool descriptions, selection cases, final grounding, and value over baseline.
+7. Recommend prompt or tool changes only when they map directly to a failed check or Claude judge
    finding.
-7. Use `trace-judge-prompt` only when you need a portable judge prompt instead of a live Claude API
+8. Use `trace-judge-prompt` only when you need a portable judge prompt instead of a live Claude API
    call.
 
 ## What To Look For
 
-- Tools: duplicate names, vague purposes, missing `use_when` or `avoid_when`, overlapping search tools.
+- Tools: duplicate names, vague purposes, missing `use_when` or `avoid_when`, missing `input_schema`, missing `quality_checks`, overlapping search tools.
 - Tool calls: wrong tool, missing required tool, forbidden tool, bad arguments, duplicate calls, over-budget calls.
+- Selection cases: missing expected tools, missing forbidden tools, missing contrast between similar tools, missing rationale.
 - Tool outputs: missing result, result linked to no call, errors without recovery.
 - Reasoning: no plan before the first tool, no reflection after results, no quality or evidence assessment.
 - Final answer: unsupported claims, missing uncertainty, failure to use gathered evidence.

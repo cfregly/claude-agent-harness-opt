@@ -22,11 +22,14 @@ jobs:
       - run: python -m claude_agent_prompting normalize-claude evals/examples/claude_messages.json
       - run: python -m claude_agent_prompting trace-suite evals/suites/agent_trace_suite.json
       - run: python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json
+      - run: python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json
       - name: Run live Claude semantic judge
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           test -n "$ANTHROPIC_API_KEY"
           python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+          python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
       - run: if python -m claude_agent_prompting audit-agent evals/examples/agent_audit_missing_value_bar.json; then exit 1; fi
       - run: if env -u ANTHROPIC_API_KEY python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge; then exit 1; fi
+      - run: if env -u ANTHROPIC_API_KEY python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge; then exit 1; fi

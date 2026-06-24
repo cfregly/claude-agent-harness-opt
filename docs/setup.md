@@ -1,0 +1,133 @@
+# Setup
+
+This repo has two audit layers:
+
+1. Deterministic checks that run without a network call.
+2. Live Claude judge checks that require `ANTHROPIC_API_KEY`.
+
+Use both for real audits. The deterministic layer catches structure and regression failures. Claude
+judges semantic quality, tool-output use, tool-description quality, and whether the trace adds value
+over the baseline.
+
+## Install
+
+```bash
+git clone https://github.com/cfregly/claude-agent-prompting.git
+cd claude-agent-prompting
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+## Local Claude Judge
+
+```bash
+export ANTHROPIC_API_KEY=...
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+```
+
+Do not commit `.env` files or API keys. The repo ignores local environment files.
+
+## GitHub Actions
+
+Set a repository secret named `ANTHROPIC_API_KEY`.
+
+```bash
+gh secret set ANTHROPIC_API_KEY --repo cfregly/claude-agent-prompting
+```
+
+CI runs deterministic tests, the value-bar gate, the trace suite, the agent audit, and live Claude
+judge checks. The live audit includes trace quality and tool-selection optimization.
+
+## Trace Capture Contract
+
+Export each agent run as JSON with ordered steps:
+
+```json
+{
+  "name": "example_trace",
+  "task": "Answer a research question with tools.",
+  "rubric": {
+    "required_tools": ["web_search", "web_fetch"],
+    "forbidden_tools": ["send_email"],
+    "required_final_contains": ["evidence", "uncertain"],
+    "pass_score": 1.0
+  },
+  "steps": [
+    {"type": "reasoning", "summary": "Short visible decision note before acting."},
+    {"type": "tool_call", "id": "call_1", "name": "web_search", "args": {"query": "source query"}},
+    {"type": "tool_result", "tool_call_id": "call_1", "ok": true, "output": "Tool output text."},
+    {"type": "reasoning", "summary": "Visible note that evaluates source quality and next action."},
+    {"type": "final", "text": "Final answer grounded in observed tool outputs."}
+  ]
+}
+```
+
+For parallel calls, add the same `parallel_group` value to the related calls and results. The
+reviewer then expects one reasoning step after the batch before the next action.
+
+## Audit Bundle Contract
+
+Use an audit bundle when reviewing a full agent:
+
+```json
+{
+  "name": "sample agent audit",
+  "tools": [
+    {
+      "name": "web_search",
+      "purpose": "Find candidate sources and fresh facts from the public web.",
+      "use_when": "Use for unknown, current, or broad questions where source discovery is required.",
+      "avoid_when": "Avoid when a known source URL should be fetched directly.",
+      "input_schema": {
+        "properties": {"query": "Specific query with entity, metric, and time frame."},
+        "required": ["query"]
+      },
+      "quality_checks": ["Prefer primary sources.", "Compare snippets before fetching."]
+    }
+  ],
+  "tool_selection_cases": [
+    {
+      "name": "discover unknown current sources",
+      "task": "Find current cargo specifications for a vehicle model.",
+      "expected_tools": ["web_search"],
+      "forbidden_tools": ["web_fetch"],
+      "rationale": "The task starts without a known URL, so source discovery comes first."
+    }
+  ],
+  "traces": [{"name": "representative trace", "trace": "agent_trace_good.json"}],
+  "value_bar": {
+    "claim": "The audit harness separates a supported trace from a weak trace.",
+    "metric": "trace_review.score",
+    "baseline": {"score": 0.42, "source": "agent_trace_bad.json"},
+    "candidate": {"score": 1.0, "source": "agent_trace_good.json"},
+    "minimum_delta": 0.5,
+    "adversarial_review": {
+      "reviewer": "agent trace regression suite",
+      "challenge": "Known-bad trace must fail.",
+      "failed_to_disprove": true,
+      "open_objections": []
+    }
+  }
+}
+```
+
+Run:
+
+```bash
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_prompting audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_prompting optimize-tools evals/examples/agent_audit_bundle.json --markdown
+```
+
+## Where The Evals Are
+
+- `evals/examples/search_answer.json` checks answer accuracy.
+- `evals/examples/tool_use.json` checks tool-use accuracy.
+- `evals/examples/final_state.json` checks final-state accuracy.
+- `evals/examples/agent_trace_good.json` is the sequential passing trace.
+- `evals/examples/agent_trace_parallel_good.json` is the parallel passing trace.
+- `evals/examples/agent_trace_bad.json` is the known-bad negative control.
+- `evals/suites/agent_trace_suite.json` runs trace regression cases.
+- `evals/examples/agent_audit_bundle.json` ties tools, traces, selection cases, and value proof together.
