@@ -20,6 +20,8 @@ The current sweep covers:
 - Context7 MCP: library ID resolution and documentation queries.
 - Supabase MCP: database metadata, migrations, SQL execution, extensions, and schema changes.
 - ClickHouse MCP: database listing, table metadata, and read-only SELECT queries.
+- Zymtrace MCP: project discovery, time-window normalization, top functions/entities, hot traces,
+  flamegraphs, metrics discovery/query, recommendations, and raw project event/stat APIs.
 
 ## What Cleared
 
@@ -86,6 +88,20 @@ ClickHouse adds a safety-oriented prompt-JSON matrix:
 - This is not yet a credentialed database execution result. The ClickHouse Cloud API key proves
   control-plane access. End-to-end MCP query traces also need database host/user/password.
 
+Zymtrace adds a profiling-analysis matrix against the locally installed `zymtrace-mcp` 26.6.1
+surface:
+
+- The live MCP endpoint advertises 25 tools at `http://localhost:8080/mcp`.
+- The tuned variant encodes the important next-tool boundaries: `projects_search` before
+  project-id-scoped calls, `get_date_time` before generated REST-style tools with relative time
+  ranges, `topfunctions` versus `topentities`, first-pass `hot_traces` with `meta_only=true`,
+  high-level versus project JSON flamegraphs, metrics discovery before metrics query, and raw event
+  APIs only when explicitly requested.
+- The local profiler is CPU/eBPF-ready. GPU profiling is not treated as available until the
+  Zymtrace license reports GPU support.
+- No tuned Zymtrace wording is promoted as a confirmed live win yet; the matrix is the regression
+  harness for proving one.
+
 ## Commands
 
 Dry contract checks:
@@ -127,6 +143,33 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/clic
   --harnesses prompt_json \
   --variants stock_clickhouse_mcp,tuned_clickhouse_readonly_boundaries \
   --instruction-variants clickhouse_host_rules \
+  --concurrency 3 \
+  --markdown
+```
+
+Dry Zymtrace boundary check:
+
+```bash
+python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+  --providers anthropic \
+  --harnesses prompt_json \
+  --variants tuned_zymtrace_mcp_boundaries \
+  --instruction-variants zymtrace_host_rules \
+  --max-cases 2 \
+  --markdown
+```
+
+Live Zymtrace cross-provider boundary check:
+
+```bash
+python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+  --env-file .env \
+  --live \
+  --require-live \
+  --providers anthropic,openai,gemini \
+  --harnesses prompt_json \
+  --variants stock_zymtrace_mcp,tuned_zymtrace_mcp_boundaries \
+  --instruction-variants zymtrace_host_rules \
   --concurrency 3 \
   --markdown
 ```
@@ -176,3 +219,5 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/fire
 - `https://supabase.com/docs/guides/ai-tools/mcp`
 - `https://github.com/clickhouse/mcp-clickhouse`
 - `https://clickhouse.com/docs/use-cases/AI/MCP`
+- `https://docs.zymtrace.com/getting-started/`
+- `https://docs.zymtrace.com/category/model-context-protocol-mcp/`

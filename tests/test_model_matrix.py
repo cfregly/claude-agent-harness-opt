@@ -173,6 +173,11 @@ class ModelMatrixTests(unittest.TestCase):
                 "tuned_clickhouse_readonly_boundaries",
                 "clickhouse_host_rules",
             ),
+            (
+                "zymtrace_mcp_tool_selection.json",
+                "tuned_zymtrace_mcp_boundaries",
+                "zymtrace_host_rules",
+            ),
         ]
 
         for filename, variant, instruction_variant in cases:
