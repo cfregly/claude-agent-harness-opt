@@ -78,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     trace_parser.add_argument(
         "--model",
-        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
+        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-opus-4-8",
     )
 
     trace_judge_parser = subparsers.add_parser(
@@ -181,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     audit_parser.add_argument(
         "--model",
-        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
+        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-opus-4-8",
     )
 
     optimize_parser = subparsers.add_parser(
@@ -197,7 +197,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     optimize_parser.add_argument(
         "--model",
-        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-sonnet-4-5",
+        help="Claude model for --claude-judge, default from CLAUDE_JUDGE_MODEL or claude-opus-4-8",
     )
 
     matrix_parser = subparsers.add_parser(

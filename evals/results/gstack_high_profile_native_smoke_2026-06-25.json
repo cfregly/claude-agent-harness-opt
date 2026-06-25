@@ -1,0 +1,173 @@
+{
+  "case_definitions": [
+    {
+      "expected_tools": [
+        "gstack_browse"
+      ],
+      "forbidden_tools": [
+        "gstack_gstack",
+        "gstack_connect_chrome",
+        "gstack_qa"
+      ],
+      "name": "browser-headless",
+      "task": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 1,
+      "provider": "anthropic",
+      "score": 1.0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 1,
+      "provider": "gemini",
+      "score": 1.0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 1,
+      "provider": "openai",
+      "score": 1.0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    }
+  ],
+  "description": "Cross-provider skill-routing matrix for the pinned gstack Codex-compatible skill catalog.",
+  "filters": {
+    "cases": [
+      "browser-headless"
+    ],
+    "harnesses": [
+      "native_tools"
+    ],
+    "instruction_variants": [
+      "boundary_routing_rules"
+    ],
+    "providers": [
+      "anthropic-opus-high",
+      "gemini-25-pro-high",
+      "openai-gpt54-high"
+    ],
+    "variants": [
+      "gstack_boundary_tuned_skill_descriptions"
+    ]
+  },
+  "live": true,
+  "matrix": "gstack skill-routing matrix",
+  "matrix_path": "evals/targets/gstack/gstack_skill_selection_matrix.json",
+  "max_cases": null,
+  "passed": true,
+  "results": [
+    {
+      "arg_details": [],
+      "case": "browser-headless",
+      "choice": {
+        "arguments": {
+          "request": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+        },
+        "rationale": "native tool_use",
+        "tool_name": "gstack_browse"
+      },
+      "chosen_tools": [
+        "gstack_browse"
+      ],
+      "elapsed_ms": 1837,
+      "forbidden_used": [],
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "browser-headless",
+      "choice": {
+        "arguments": {
+          "request": "Open http://localhost:3000 in the headless browser, click through the signup flow end-to-end, and capture screenshots of any bug evidence encountered. Verify page state during the flow and document repro steps if issues appear."
+        },
+        "rationale": "responses function_call",
+        "tool_name": "gstack_browse"
+      },
+      "chosen_tools": [
+        "gstack_browse"
+      ],
+      "elapsed_ms": 4044,
+      "forbidden_used": [],
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "gpt-5.4",
+      "passed": true,
+      "profile": "openai-gpt54-high",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "browser-headless",
+      "choice": {
+        "arguments": {
+          "request": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+        },
+        "rationale": "native functionCall",
+        "tool_name": "gstack_browse"
+      },
+      "chosen_tools": [
+        "gstack_browse"
+      ],
+      "elapsed_ms": 12220,
+      "forbidden_used": [],
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "gemini-2.5-pro",
+      "passed": true,
+      "profile": "gemini-25-pro-high",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    }
+  ],
+  "source": {
+    "commit": "cd66fc2f890982351e3178925be563681d0ab2c5",
+    "generated_surface_hash": "68d60eeefdde254818b03ee310bf1c4c9aaf0efee8d6db35141fe9cb7da8ae12",
+    "package_name": "gstack",
+    "package_version": "0.13.3.0",
+    "remote": "git@github.com:garrytan/gstack.git",
+    "source_path": "/Users/admin/dev/gstack",
+    "target_surface": ".agents/skills/*/SKILL.md generated skill files",
+    "target_surface_dirty": false,
+    "worktree_dirty": true
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 0,
+    "passed_cases": 3,
+    "planned": 3,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 3
+  }
+}

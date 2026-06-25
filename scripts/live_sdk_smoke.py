@@ -75,7 +75,7 @@ async def _run_claude_agent_sdk() -> None:
         max_budget_usd=float(os.environ.get("CLAUDE_AGENT_SDK_MAX_BUDGET_USD", "0.50")),
         max_turns=int(os.environ.get("CLAUDE_AGENT_SDK_MAX_TURNS", "4")),
         mcp_servers={"aho": server},
-        model=os.environ.get("CLAUDE_AGENT_MODEL", "claude-sonnet-4-5"),
+        model=os.environ.get("CLAUDE_AGENT_MODEL", "claude-opus-4-8"),
         permission_mode="bypassPermissions",
         setting_sources=[],
         skills=[],
@@ -146,7 +146,7 @@ async def _run_openai_agents() -> None:
             "the tool call when possible, and DECISION_NOTE_AFTER after the result. Do not invent "
             "the directory."
         ),
-        model=os.environ.get("OPENAI_AGENT_MODEL", "gpt-4.1"),
+        model=os.environ.get("OPENAI_AGENT_MODEL", "gpt-5.5"),
         tools=[pwd_tool],
     )
     _emit(
@@ -209,7 +209,7 @@ async def _run_google_adk() -> None:
             "Use pwd_tool for current-directory requests. Emit DECISION_NOTE_BEFORE before the tool "
             "and DECISION_NOTE_AFTER after the result. Final must include HARNESS_OK google_adk."
         ),
-        model=os.environ.get("GOOGLE_ADK_MODEL", "gemini-2.5-flash"),
+        model=os.environ.get("GOOGLE_ADK_MODEL", "gemini-3.1-pro-preview-customtools"),
         tools=[pwd_tool],
     )
     _emit(

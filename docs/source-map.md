@@ -41,6 +41,9 @@ Checked on 2026-06-25.
 - [Using the Messages API](https://platform.claude.com/docs/en/build-with-claude/working-with-messages)
   - Used for the live Claude judge path, which sends a full user message to Claude and reads the
     returned text block.
+- [Claude models overview](https://docs.anthropic.com/en/docs/about-claude/models/overview)
+  - Used for current Claude model profile names and the distinction between frontier, high, and
+    balanced Anthropic matrix profiles.
 - [Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)
   - Used for model-migration coverage: `/claude-api migrate`, model ID swaps, breaking parameter
     changes, prefill replacement, effort calibration, platform-specific model ID formats, thinking
@@ -113,6 +116,11 @@ Checked on 2026-06-25.
     tracing, hosted tools, shell tools, and computer-tool surface inventory.
 - [OpenAI Agents SDK JavaScript docs](https://openai.github.io/openai-agents-js/)
   - Used for TypeScript runner options, tool examples, sandbox agents, and session-state patterns.
+- [OpenAI models docs](https://platform.openai.com/docs/models)
+  - Used for current GPT model profile names.
+- [OpenAI Responses API](https://developers.openai.com/api/docs/api-reference/responses/create)
+  - Used for the frontier OpenAI matrix path because current GPT model profiles are evaluated
+    through the Responses API rather than the legacy chat-only path.
 - [Google Agent Development Kit](https://adk.dev/)
   - Used for Google's equivalent SDK coverage, supported language scope, tools, workflows, sessions,
     memory, planners, code execution, telemetry, and evaluation surface inventory.
@@ -122,6 +130,8 @@ Checked on 2026-06-25.
   - Used for ADK event-loop and event-oriented runtime behavior.
 - [Google ADK Cloud docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/adk)
   - Used for Google ADK positioning as an enterprise-scale agent development framework.
+- [Gemini API model docs](https://ai.google.dev/gemini-api/docs/models)
+  - Used for Gemini model profile names, including custom-tool oriented frontier profiles.
 
 ## Anthropic Engineering
 

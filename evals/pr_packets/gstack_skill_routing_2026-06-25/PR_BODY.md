@@ -73,14 +73,14 @@ python -m claude_agent_harness_optimization model-matrix evals/targets/gstack/gs
 
 ## Examples used
 
-- browser-headless | expected: gstack_browse | forbidden: gstack_gstack,gstack_connect_chrome,gstack_qa
-- qa-fix | expected: gstack_qa | forbidden: gstack_qa_only,gstack_browse
-- qa-report-only | expected: gstack_qa_only | forbidden: gstack_qa,gstack_browse
-- implemented-design-polish | expected: gstack_design_review | forbidden: gstack_plan_design_review,gstack_design_consultation
-- design-plan-review | expected: gstack_plan_design_review | forbidden: gstack_design_review,gstack_plan_eng_review
-- design-system | expected: gstack_design_consultation | forbidden: gstack_design_shotgun,gstack_plan_design_review
-- design-variants | expected: gstack_design_shotgun | forbidden: gstack_design_consultation,gstack_design_review
-- product-brainstorm | expected: gstack_office_hours | forbidden: gstack_spec_qa,gstack_plan_ceo_review
+- browser-headless | expected selection: gstack_browse | confusable alternatives checked: gstack_gstack,gstack_connect_chrome,gstack_qa
+- qa-fix | expected selection: gstack_qa | confusable alternatives checked: gstack_qa_only,gstack_browse
+- qa-report-only | expected selection: gstack_qa_only | confusable alternatives checked: gstack_qa,gstack_browse
+- implemented-design-polish | expected selection: gstack_design_review | confusable alternatives checked: gstack_plan_design_review,gstack_design_consultation
+- design-plan-review | expected selection: gstack_plan_design_review | confusable alternatives checked: gstack_design_review,gstack_plan_eng_review
+- design-system | expected selection: gstack_design_consultation | confusable alternatives checked: gstack_design_shotgun,gstack_plan_design_review
+- design-variants | expected selection: gstack_design_shotgun | confusable alternatives checked: gstack_design_consultation,gstack_design_review
+- product-brainstorm | expected selection: gstack_office_hours | confusable alternatives checked: gstack_spec_qa,gstack_plan_ceo_review
 
 ## Baseline failures
 

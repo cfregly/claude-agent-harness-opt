@@ -312,7 +312,7 @@ client = Anthropic(
 # beta SDK reference before use.
 agent = client.beta.managed_agents.agents.create(
     name="repo-review-agent",
-    model="claude-sonnet-4-5",
+    model="claude-opus-4-8",
     system_prompt="Review source changes and return risks first.",
     tools=["bash", "file_editor", "web_search"],
 )
@@ -621,7 +621,7 @@ from google.adk.agents import LlmAgent
 
 root_agent = LlmAgent(
     name="research_agent",
-    model="gemini-2.5-flash",
+    model="gemini-3.1-pro-preview-customtools",
     instruction="Answer with concise bullets and cite sources when available.",
     tools=[],
 )
@@ -636,7 +636,7 @@ runner, CLI, dev UI, API server, or deployment target.
 import { GOOGLE_SEARCH, LlmAgent } from '@google/adk'
 
 export const rootAgent = new LlmAgent({
-  model: 'gemini-2.5-flash',
+  model: 'gemini-3.1-pro-preview-customtools',
   name: 'search_agent',
   description: 'Searches Google and answers from the results.',
   instruction: 'Use search when the answer depends on current information.',
@@ -667,7 +667,7 @@ const getWeatherTool = new FunctionTool({
 })
 
 export const rootAgent = new LlmAgent({
-  model: 'gemini-2.5-flash',
+  model: 'gemini-3.1-pro-preview-customtools',
   name: 'weather_agent',
   instruction: 'Answer weather questions with the weather tool.',
   tools: [getWeatherTool]

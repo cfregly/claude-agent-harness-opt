@@ -261,6 +261,7 @@ def _selected_runs(
                             "model": _model_name(profile, os.environ),
                             "profile": profile.get("name", profile.get("provider", "")),
                             "provider": profile.get("provider", ""),
+                            "tier": profile.get("tier", ""),
                             "tool_variant": variant.get("name", ""),
                         }
                         selected.append(
@@ -386,8 +387,9 @@ def _call_anthropic(
         "max_tokens": int(profile.get("max_tokens", 512)),
         "messages": [{"role": "user", "content": prompt}],
         "model": model,
-        "temperature": float(profile.get("temperature", 0)),
     }
+    if profile.get("temperature") is not None:
+        payload["temperature"] = float(profile["temperature"])
     if harness == "native_tools":
         payload["tools"] = [_anthropic_tool(tool) for tool in _tools_for_case(tools, case)]
         payload["tool_choice"] = {"type": "any"}
@@ -418,6 +420,8 @@ def _call_openai(
     instruction: dict[str, Any],
     env: dict[str, str],
 ) -> dict[str, Any]:
+    if profile.get("api_family") == "responses":
+        return _call_openai_responses(profile, model, api_key, harness, tools, case, instruction, env)
     url = (env.get("OPENAI_BASE_URL") or "https://api.openai.com").rstrip("/") + "/v1/chat/completions"
     prompt = _selection_prompt(tools, case, instruction, native=harness == "native_tools")
     payload: dict[str, Any] = {
@@ -445,6 +449,47 @@ def _call_openai(
                 "tool_name": function.get("name", ""),
             }
     return _parse_choice_json(str(message.get("content", "")))
+
+
+def _call_openai_responses(
+    profile: dict[str, Any],
+    model: str,
+    api_key: str,
+    harness: str,
+    tools: list[dict[str, Any]],
+    case: dict[str, Any],
+    instruction: dict[str, Any],
+    env: dict[str, str],
+) -> dict[str, Any]:
+    url = (env.get("OPENAI_BASE_URL") or "https://api.openai.com").rstrip("/") + "/v1/responses"
+    prompt = _selection_prompt(tools, case, instruction, native=harness == "native_tools")
+    payload: dict[str, Any] = {
+        "input": prompt,
+        "model": model,
+    }
+    if profile.get("max_tokens"):
+        payload["max_output_tokens"] = int(profile["max_tokens"])
+    reasoning = {}
+    if profile.get("reasoning_effort"):
+        reasoning["effort"] = profile["reasoning_effort"]
+    if profile.get("reasoning_summary"):
+        reasoning["summary"] = profile["reasoning_summary"]
+    if reasoning:
+        payload["reasoning"] = reasoning
+    if harness == "native_tools":
+        payload["tool_choice"] = "required"
+        payload["tools"] = [_openai_responses_tool(tool) for tool in _tools_for_case(tools, case)]
+    headers = {"authorization": f"Bearer {api_key}", "content-type": "application/json"}
+    response = _post_json(url, payload, headers, int(profile.get("timeout", DEFAULT_TIMEOUT)))
+    if harness == "native_tools":
+        function_call = _first_openai_response_function_call(response)
+        if function_call:
+            return {
+                "arguments": _parse_arguments(function_call.get("arguments", "{}")),
+                "rationale": _openai_response_reasoning_summary(response) or "responses function_call",
+                "tool_name": function_call.get("name", ""),
+            }
+    return _parse_choice_json(_openai_response_text(response))
 
 
 def _call_gemini(
@@ -585,6 +630,15 @@ def _openai_tool(tool: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _openai_responses_tool(tool: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "description": _tool_description(tool),
+        "name": tool["name"],
+        "parameters": _normalize_schema(tool),
+        "type": "function",
+    }
+
+
 def _gemini_tool(tool: dict[str, Any]) -> dict[str, Any]:
     return {
         "description": _tool_description(tool),
@@ -643,6 +697,44 @@ def _parse_choice_json(text: str) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise ModelMatrixError("model JSON choice must be an object")
     return data
+
+
+def _first_openai_response_function_call(response: dict[str, Any]) -> dict[str, Any] | None:
+    for item in response.get("output", []):
+        if isinstance(item, dict) and item.get("type") == "function_call":
+            return item
+        if isinstance(item, dict):
+            for part in item.get("content", []):
+                if isinstance(part, dict) and part.get("type") == "function_call":
+                    return part
+    return None
+
+
+def _openai_response_text(response: dict[str, Any]) -> str:
+    if response.get("output_text"):
+        return str(response["output_text"])
+    values = []
+    for item in response.get("output", []):
+        if not isinstance(item, dict):
+            continue
+        if item.get("type") == "message":
+            for part in item.get("content", []):
+                if isinstance(part, dict) and part.get("text"):
+                    values.append(str(part["text"]))
+        elif item.get("type") in {"output_text", "text"} and item.get("text"):
+            values.append(str(item["text"]))
+    return "\n".join(values)
+
+
+def _openai_response_reasoning_summary(response: dict[str, Any]) -> str:
+    values = []
+    for item in response.get("output", []):
+        if not isinstance(item, dict) or item.get("type") != "reasoning":
+            continue
+        for part in item.get("summary", []) or []:
+            if isinstance(part, dict) and part.get("text"):
+                values.append(str(part["text"]))
+    return "\n".join(values)
 
 
 def _parse_arguments(value: Any) -> dict[str, Any]:

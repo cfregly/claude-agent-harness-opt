@@ -71,8 +71,10 @@ The pull request body should include:
 - source package, version, repo, and commit
 - baseline and candidate variant names
 - provider, model, harness, instruction variant, and case names
+- provider profile and tier when present
 - pass counts, scores, delta, and minimum threshold
 - one failed baseline example and one passing candidate example
+- confusable alternatives checked, not accusatory forbidden wording
 - reproduction command
 - public harness repo backlink
 - specific result artifact link when the packet has a published matrix result

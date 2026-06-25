@@ -44,6 +44,8 @@ class PrPacketTests(unittest.TestCase):
             self.assertIn("public harness repo: https://github.com/cfregly/claude-agent-harness-optimization", body)
             self.assertIn("## What We Learned", body)
             self.assertIn("`tuned` beat `stock` by 1.000", body)
+            self.assertIn("confusable alternatives checked: example_stock", body)
+            self.assertNotIn("forbidden:", body)
 
             written = write_upstream_pr_packet(packet, Path(tmp) / "packet")
             self.assertTrue(Path(written["PR_BODY.md"]).exists())

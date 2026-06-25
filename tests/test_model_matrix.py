@@ -4,6 +4,9 @@ import unittest
 
 from claude_agent_harness_optimization.model_matrix import (
     MatrixFilters,
+    _first_openai_response_function_call,
+    _openai_response_reasoning_summary,
+    _openai_response_text,
     _tools_for_case,
     evaluate_model_choice,
     load_env_file,
@@ -48,6 +51,24 @@ class ModelMatrixTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertEqual(["Grep"], result["missing_expected"])
         self.assertEqual(["Read"], result["forbidden_used"])
+
+    def test_openai_responses_helpers_parse_tool_and_text_outputs(self):
+        response = {
+            "output": [
+                {"type": "reasoning", "summary": [{"text": "Checked the boundary."}]},
+                {"type": "function_call", "name": "gstack_browse", "arguments": '{"request": "test"}'},
+                {
+                    "type": "message",
+                    "content": [{"type": "output_text", "text": '{"tool_name": "gstack_browse"}'}],
+                },
+            ]
+        }
+
+        function_call = _first_openai_response_function_call(response)
+        self.assertIsNotNone(function_call)
+        self.assertEqual("gstack_browse", function_call["name"])
+        self.assertEqual('{"tool_name": "gstack_browse"}', _openai_response_text(response))
+        self.assertEqual("Checked the boundary.", _openai_response_reasoning_summary(response))
 
     def test_dry_run_model_matrix_plans_selected_cells(self):
         result = run_model_matrix(

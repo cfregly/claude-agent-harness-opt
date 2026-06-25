@@ -408,12 +408,14 @@ def _source_lines(source: dict[str, Any]) -> list[str]:
 
 def _run_surface_lines(result: dict[str, Any]) -> list[str]:
     values = []
-    seen: set[tuple[str, str, str, str]] = set()
+    seen: set[tuple[str, str, str, str, str, str]] = set()
     for item in result.get("results", []):
         if not isinstance(item, dict):
             continue
         key = (
             str(item.get("provider", "")),
+            str(item.get("profile", "")),
+            str(item.get("tier", "")),
             str(item.get("model", "")),
             str(item.get("harness", "")),
             str(item.get("instruction_variant", "")),
@@ -421,9 +423,9 @@ def _run_surface_lines(result: dict[str, Any]) -> list[str]:
         if key in seen:
             continue
         seen.add(key)
-        provider, model, harness, instruction = key
+        provider, profile, tier, model, harness, instruction = key
         values.append(
-            f"provider={provider}, model={model}, harness={harness}, instruction={instruction}"
+            f"provider={provider}, profile={profile}, tier={tier}, model={model}, harness={harness}, instruction={instruction}"
         )
         if len(values) >= 12:
             break
@@ -460,12 +462,12 @@ def _case_lines(cases: list[dict[str, Any]], *, include_task: bool = False) -> l
     for case in cases[:8]:
         name = str(case.get("name", "unnamed case"))
         expected = ",".join(str(item) for item in case.get("expected_tools", []))
-        forbidden = ",".join(str(item) for item in case.get("forbidden_tools", []))
+        confusable = ",".join(str(item) for item in case.get("forbidden_tools", []))
         line = f"- {name}"
         if expected:
-            line += f" | expected: {expected}"
-        if forbidden:
-            line += f" | forbidden: {forbidden}"
+            line += f" | expected selection: {expected}"
+        if confusable:
+            line += f" | confusable alternatives checked: {confusable}"
         lines.append(line)
         if include_task and case.get("task"):
             lines.append(f"  - task: {case['task']}")

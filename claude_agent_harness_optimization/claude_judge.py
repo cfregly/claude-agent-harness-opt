@@ -11,7 +11,7 @@ from urllib import error, request
 from .trace_review import TraceReview
 
 
-DEFAULT_MODEL = "claude-sonnet-4-5"
+DEFAULT_MODEL = "claude-opus-4-8"
 DEFAULT_BASE_URL = "https://api.anthropic.com"
 DEFAULT_ANTHROPIC_VERSION = "2023-06-01"
 

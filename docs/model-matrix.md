@@ -167,7 +167,7 @@ Use the same loop for `CLAUDE.md` and skill updates:
 
 ## Live Result From June 24, 2026
 
-Using local Anthropic, OpenAI, and Gemini keys, the matrix was run against:
+Using local Anthropic, OpenAI, and Gemini keys, the historical smoke matrix was run against:
 
 - Anthropic `claude-sonnet-4-5`
 - OpenAI `gpt-4.1`
@@ -189,6 +189,29 @@ all three providers and both harnesses.
 
 Gemini `prompt_json` initially failed because `maxOutputTokens` was too small for `gemini-2.5-pro`.
 Increasing the profile output budget to 4096 removed those harness errors.
+
+This was a useful first pass, not a comprehensive frontier sweep. Current target matrices should
+separate model profiles by tier:
+
+- frontier profiles for the strongest available model in a provider family
+- high profiles for expensive, capable models that are stable enough for repeated sweeps
+- balanced profiles for cheaper regression runs and CI-sized checks
+
+The gstack target currently includes these named profiles:
+
+- `anthropic-fable-frontier`
+- `anthropic-opus-high`
+- `anthropic-sonnet-balanced`
+- `openai-gpt55-frontier`
+- `openai-gpt54-high`
+- `openai-gpt41-balanced`
+- `gemini-31-pro-customtools-frontier`
+- `gemini-25-pro-high`
+
+Use a provider filter such as `--providers anthropic` to run every Anthropic profile. Use a named
+profile such as `--providers anthropic-opus-high` when the run should isolate one model. Upstream
+claims should say which profile tier was used and should not imply a whole-provider conclusion from a
+single balanced-model run.
 
 ## Harness Grind Result From June 24, 2026
 

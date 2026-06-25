@@ -38,12 +38,60 @@ python -m claude_agent_harness_optimization model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live --providers gemini --concurrency 6 \
   --out /tmp/gstack-skill-matrix-live-gemini-rerun.json
+
+python -m claude_agent_harness_optimization model-matrix \
+  evals/targets/gstack/gstack_skill_selection_matrix.json \
+  --env-file .env --live --require-live \
+  --providers anthropic-fable-frontier,anthropic-opus-high,openai-gpt55-frontier,openai-gpt54-high,gemini-31-pro-customtools-frontier,gemini-25-pro-high \
+  --concurrency 8 \
+  --out /tmp/gstack-skill-matrix-live-frontier-high.json
 ```
 
 Gemini was rerun after increasing its matrix `max_tokens` to `4096`. The first full run showed
 Gemini truncating prompt-JSON responses because internal thinking consumed the default output budget.
+The frontier and high command is the recommended next run before making claims about current
+top-tier models.
+
+High-profile smoke run:
+
+```bash
+python -m claude_agent_harness_optimization model-matrix \
+  evals/targets/gstack/gstack_skill_selection_matrix.json \
+  --env-file .env --live --require-live \
+  --providers anthropic-opus-high,openai-gpt54-high,gemini-25-pro-high \
+  --harnesses prompt_json \
+  --variants gstack_boundary_tuned_skill_descriptions \
+  --instruction-variants boundary_routing_rules \
+  --cases browser-headless,careful-mode \
+  --concurrency 3 \
+  --out evals/results/gstack_high_profile_smoke_2026-06-25.json
+```
+
+The first high-profile smoke exposed a real harness compatibility issue: Claude Opus rejected the
+default `temperature` parameter. The harness now omits temperature unless a profile explicitly sets
+it.
+
+Native high-profile smoke run:
+
+```bash
+python -m claude_agent_harness_optimization model-matrix \
+  evals/targets/gstack/gstack_skill_selection_matrix.json \
+  --env-file .env --live --require-live \
+  --providers anthropic-opus-high,openai-gpt54-high,gemini-25-pro-high \
+  --harnesses native_tools \
+  --variants gstack_boundary_tuned_skill_descriptions \
+  --instruction-variants boundary_routing_rules \
+  --cases browser-headless \
+  --concurrency 3 \
+  --out evals/results/gstack_high_profile_native_smoke_2026-06-25.json
+```
 
 ## Results
+
+This live result is a historical three-profile sweep. It covered one Anthropic profile, one OpenAI
+profile, and one Gemini profile. It should not be presented as a complete frontier-model sweep.
+The current generated matrix now includes separate frontier, high, and balanced profiles so a new
+run can test stronger models explicitly.
 
 Deterministic checks:
 
@@ -63,6 +111,26 @@ Live matrix:
 | Errors | 0 |
 | Score | 0.983 |
 
+High-profile smoke matrix:
+
+| Metric | Value |
+|---|---:|
+| Total live cells | 6 |
+| Passed | 6 |
+| Failed | 0 |
+| Errors | 0 |
+| Score | 1.000 |
+
+Native high-profile smoke matrix:
+
+| Metric | Value |
+|---|---:|
+| Total live cells | 3 |
+| Passed | 3 |
+| Failed | 0 |
+| Errors | 0 |
+| Score | 1.000 |
+
 Variant comparison from the generated PR packet:
 
 | Variant | Score |
@@ -74,6 +142,13 @@ Variant comparison from the generated PR packet:
 | Promotion | yes |
 
 ## Signals
+
+What we learned:
+
+- The generated gstack skill catalog is mostly well routed across the tested harnesses.
+- Boundary tuning still adds measurable value on the pinned surface.
+- The useful failures are adjacent-skill confusion, not broad quality failure.
+- The next stronger claim requires rerunning the expanded frontier and high-profile matrix.
 
 Browser alias boundary:
 
@@ -117,3 +192,5 @@ Gemini harness budget:
 - Gemini rerun result: `evals/results/gstack_skill_matrix_live_gemini_rerun_2026-06-25.json`
 - Surface snapshot: `evals/results/gstack_surface_snapshot_2026-06-25.json`
 - Upstream PR packet: `evals/pr_packets/gstack_skill_routing_2026-06-25/`
+- High-profile smoke result: `evals/results/gstack_high_profile_smoke_2026-06-25.json`
+- Native high-profile smoke result: `evals/results/gstack_high_profile_native_smoke_2026-06-25.json`

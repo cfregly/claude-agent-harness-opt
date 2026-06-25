@@ -1,0 +1,269 @@
+{
+  "case_definitions": [
+    {
+      "expected_tools": [
+        "gstack_browse"
+      ],
+      "forbidden_tools": [
+        "gstack_gstack",
+        "gstack_connect_chrome",
+        "gstack_qa"
+      ],
+      "name": "browser-headless",
+      "task": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+    },
+    {
+      "expected_tools": [
+        "gstack_careful"
+      ],
+      "forbidden_tools": [
+        "gstack_freeze",
+        "gstack_guard"
+      ],
+      "name": "careful-mode",
+      "task": "Be careful while touching production and warn me before destructive shell commands."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 2,
+      "provider": "anthropic",
+      "score": 1.0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 2,
+      "provider": "gemini",
+      "score": 1.0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 2,
+      "provider": "openai",
+      "score": 1.0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    }
+  ],
+  "description": "Cross-provider skill-routing matrix for the pinned gstack Codex-compatible skill catalog.",
+  "filters": {
+    "cases": [
+      "browser-headless",
+      "careful-mode"
+    ],
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": [
+      "boundary_routing_rules"
+    ],
+    "providers": [
+      "anthropic-opus-high",
+      "gemini-25-pro-high",
+      "openai-gpt54-high"
+    ],
+    "variants": [
+      "gstack_boundary_tuned_skill_descriptions"
+    ]
+  },
+  "live": true,
+  "matrix": "gstack skill-routing matrix",
+  "matrix_path": "evals/targets/gstack/gstack_skill_selection_matrix.json",
+  "max_cases": null,
+  "passed": true,
+  "results": [
+    {
+      "arg_details": [],
+      "case": "browser-headless",
+      "choice": {
+        "arguments": {
+          "request": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+        },
+        "confidence": 0.9,
+        "rationale": "The task is explicit browser testing: navigate a URL, interact with the signup flow, and take screenshots of bug evidence without requesting code fixes. gstack_browse is the narrow headless browser skill for navigation, interaction, and screenshot capture, preferred over the gstack_gstack alias.",
+        "tool_name": "gstack_browse"
+      },
+      "chosen_tools": [
+        "gstack_browse"
+      ],
+      "elapsed_ms": 2977,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "careful-mode",
+      "choice": {
+        "arguments": {
+          "request": "Be careful while touching production and warn me before destructive shell commands."
+        },
+        "confidence": 0.94,
+        "rationale": "The user explicitly wants destructive-command warnings (e.g., rm -rf, force-push) while touching production, which is precisely gstack_careful's purpose. They did not request edit directory locking, so gstack_guard or gstack_freeze are not needed.",
+        "tool_name": "gstack_careful"
+      },
+      "chosen_tools": [
+        "gstack_careful"
+      ],
+      "elapsed_ms": 2952,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "browser-headless",
+      "choice": {
+        "arguments": {
+          "request": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+        },
+        "confidence": 0.98,
+        "rationale": "This is a browser testing request: navigate to a site, interact with the signup flow, and capture screenshot evidence of bugs. gstack_browse is the narrow, explicit skill for headless browser QA navigation and evidence collection, and is preferred over the broader gstack_gstack alias. The request does not ask for code fixes, so gstack_qa is not appropriate.",
+        "tool_name": "gstack_browse"
+      },
+      "chosen_tools": [
+        "gstack_browse"
+      ],
+      "elapsed_ms": 4172,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "gpt-5.4",
+      "passed": true,
+      "profile": "openai-gpt54-high",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "careful-mode",
+      "choice": {
+        "arguments": {
+          "request": "Be careful while touching production and warn me before destructive shell commands."
+        },
+        "confidence": 0.99,
+        "rationale": "This is a safety-mode request focused specifically on production caution and warnings before destructive commands. gstack_careful is the narrowest matching workflow because it adds guardrails for destructive shell and infrastructure actions without adding unrelated edit-freezing behavior.",
+        "tool_name": "gstack_careful"
+      },
+      "chosen_tools": [
+        "gstack_careful"
+      ],
+      "elapsed_ms": 3677,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "gpt-5.4",
+      "passed": true,
+      "profile": "openai-gpt54-high",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "browser-headless",
+      "choice": {
+        "arguments": {
+          "request": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+        },
+        "confidence": 1,
+        "rationale": "The user wants to perform a specific set of actions in a browser for QA purposes: navigate to a URL, interact with elements in a user flow (signup), and capture screenshots as bug evidence. The `gstack_browse` tool is designed for exactly this kind of direct browser control for QA testing and dogfooding. It is more specific than the `gstack_gstack` alias and more appropriate than `gstack_qa` which implies a broader, automated testing and fixing process rather than following a specific user-provided script.",
+        "tool_name": "gstack_browse"
+      },
+      "chosen_tools": [
+        "gstack_browse"
+      ],
+      "elapsed_ms": 14150,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "gemini-2.5-pro",
+      "passed": true,
+      "profile": "gemini-25-pro-high",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "arg_details": [],
+      "case": "careful-mode",
+      "choice": {
+        "arguments": {
+          "request": "Be careful while touching production and warn me before destructive shell commands."
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to 'Be careful' and be warned before 'destructive shell commands' when 'touching production'. The `gstack_careful` tool is designed for exactly this purpose, providing safety guardrails and warnings for such operations.",
+        "tool_name": "gstack_careful"
+      },
+      "chosen_tools": [
+        "gstack_careful"
+      ],
+      "elapsed_ms": 10421,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "missing_expected": [],
+      "model": "gemini-2.5-pro",
+      "passed": true,
+      "profile": "gemini-25-pro-high",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    }
+  ],
+  "source": {
+    "commit": "cd66fc2f890982351e3178925be563681d0ab2c5",
+    "generated_surface_hash": "68d60eeefdde254818b03ee310bf1c4c9aaf0efee8d6db35141fe9cb7da8ae12",
+    "package_name": "gstack",
+    "package_version": "0.13.3.0",
+    "remote": "git@github.com:garrytan/gstack.git",
+    "source_path": "/Users/admin/dev/gstack",
+    "target_surface": ".agents/skills/*/SKILL.md generated skill files",
+    "target_surface_dirty": false,
+    "worktree_dirty": true
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 0,
+    "passed_cases": 6,
+    "planned": 6,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 6
+  }
+}

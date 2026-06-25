@@ -28,21 +28,21 @@ python -m claude_agent_harness_optimization model-matrix evals/targets/gstack/gs
 
 ## Cases
 
-- browser-headless | expected: gstack_browse | forbidden: gstack_gstack,gstack_connect_chrome,gstack_qa
+- browser-headless | expected selection: gstack_browse | confusable alternatives checked: gstack_gstack,gstack_connect_chrome,gstack_qa
   - task: Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence.
-- qa-fix | expected: gstack_qa | forbidden: gstack_qa_only,gstack_browse
+- qa-fix | expected selection: gstack_qa | confusable alternatives checked: gstack_qa_only,gstack_browse
   - task: QA this staging site, fix the bugs you find, add regression tests, and commit each fix atomically.
-- qa-report-only | expected: gstack_qa_only | forbidden: gstack_qa,gstack_browse
+- qa-report-only | expected selection: gstack_qa_only | confusable alternatives checked: gstack_qa,gstack_browse
   - task: Test this app and give me a bug report with repro steps, but do not edit any files.
-- implemented-design-polish | expected: gstack_design_review | forbidden: gstack_plan_design_review,gstack_design_consultation
+- implemented-design-polish | expected selection: gstack_design_review | confusable alternatives checked: gstack_plan_design_review,gstack_design_consultation
   - task: Audit the implemented dashboard UI for spacing, hierarchy, and visual slop, then fix the issues.
-- design-plan-review | expected: gstack_plan_design_review | forbidden: gstack_design_review,gstack_plan_eng_review
+- design-plan-review | expected selection: gstack_plan_design_review | confusable alternatives checked: gstack_design_review,gstack_plan_eng_review
   - task: Review this UI plan before implementation and score the design dimensions with recommendations.
-- design-system | expected: gstack_design_consultation | forbidden: gstack_design_shotgun,gstack_plan_design_review
+- design-system | expected selection: gstack_design_consultation | confusable alternatives checked: gstack_design_shotgun,gstack_plan_design_review
   - task: Create a design system and DESIGN.md for a new B2B workflow product.
-- design-variants | expected: gstack_design_shotgun | forbidden: gstack_design_consultation,gstack_design_review
+- design-variants | expected selection: gstack_design_shotgun | confusable alternatives checked: gstack_design_consultation,gstack_design_review
   - task: Show me several visual directions for this feature and let me compare options before choosing.
-- product-brainstorm | expected: gstack_office_hours | forbidden: gstack_spec_qa,gstack_plan_ceo_review
+- product-brainstorm | expected selection: gstack_office_hours | confusable alternatives checked: gstack_spec_qa,gstack_plan_ceo_review
   - task: I have an idea for a restaurant waitlist tool. Help me pressure-test whether it is worth building.
 
 ## Summary Counts
