@@ -142,6 +142,14 @@ def render_upstream_pr_body(
             f"- delta: {_format_score(comparison.get('delta'))}",
             f"- minimum delta: {_format_score(comparison.get('minimum_delta'))}",
             "",
+            "## What We Learned",
+            "",
+        ]
+    )
+    lines.extend(f"- {item}" for item in _learning_lines(result, comparison, options))
+    lines.extend(
+        [
+            "",
             "## Run surfaces",
             "",
         ]
@@ -486,6 +494,29 @@ def _status_lines(result: dict[str, Any], variant: str, status: str) -> list[str
         lines.append(f"{item.get('case', 'unnamed case')}{suffix}")
         if len(lines) >= 8:
             break
+    return lines
+
+
+def _learning_lines(result: dict[str, Any], comparison: dict[str, Any], options: PacketOptions) -> list[str]:
+    baseline = str(comparison.get("baseline_variant") or options.baseline_variant or "baseline")
+    candidate = str(comparison.get("candidate_variant") or options.candidate_variant or "candidate")
+    lines = [
+        f"`{candidate}` beat `{baseline}` by {_format_score(comparison.get('delta'))} against a minimum delta of {_format_score(comparison.get('minimum_delta'))}.",
+    ]
+    failures = _failure_lines(result, baseline)
+    cases = []
+    seen: set[str] = set()
+    for item in failures:
+        case = item.split(" chose ", 1)[0]
+        if case and case not in seen:
+            seen.add(case)
+            cases.append(case)
+    if cases:
+        lines.append(f"Baseline mistakes clustered on these cases: {', '.join(cases[:5])}.")
+    if comparison.get("promote"):
+        lines.append("The suggested change clears the adversarially-confirmed value bar for this pinned surface.")
+    else:
+        lines.append("The suggested change does not clear the value bar yet, so treat it as diagnostic evidence.")
     return lines
 
 

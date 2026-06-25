@@ -29,6 +29,12 @@ This change is backed by a harness matrix result, not a prose-only review. The b
 - delta: 0.017
 - minimum delta: 0.010
 
+## What We Learned
+
+- `gstack_boundary_tuned_skill_descriptions` beat `gstack_stock_skill_descriptions` by 0.017 against a minimum delta of 0.010.
+- Baseline mistakes clustered on these cases: careful-mode, browser-headless.
+- The suggested change clears the adversarially-confirmed value bar for this pinned surface.
+
 ## Run surfaces
 
 - provider=anthropic, model=claude-sonnet-4-5, harness=native_tools, instruction=baseline_skill_routing
