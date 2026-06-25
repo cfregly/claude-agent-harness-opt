@@ -34,6 +34,7 @@ python -m claude_agent_harness_optimization audit-agent <bundle.json> --claude-j
 python -m claude_agent_harness_optimization optimize-tools <bundle.json> --markdown
 python -m claude_agent_harness_optimization optimize-tools <bundle.json> --claude-judge
 python -m claude_agent_harness_optimization model-matrix <matrix.json> --markdown
+python -m claude_agent_harness_optimization model-matrix evals/model_matrix/agent_audit_skill_selection.json --env-file .env --live --require-live --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants no_skill,agent_audit_skill --markdown
 python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --harnesses agent_sdk_trace,cursor_trace --variants exported_trace_tools --instruction-variants exported_trace --markdown
 python -m claude_agent_harness_optimization model-matrix <matrix.json> --env-file .env --live --concurrency 8 --markdown
 python -m claude_agent_harness_optimization grind-harness <matrix.json> --env-file .env --live --require-live --heldout-cases "<case 1>,<case 2>" --min-improvement 0.05 --concurrency 8 --markdown
@@ -77,6 +78,9 @@ human.
   missing forbidden tools, missing contrast between similar tools, missing rationale, exact tool
   order that overfits one valid strategy.
 - Model matrix: provider-specific failures, native-tool failures, JSON-choice failures, baseline versus tuned description gaps, instruction variant regressions.
+- Skills: stale decision trees, missing routing rules, instructions that only restate tool names,
+  no no-skill baseline, no thin-description stress case, or no held-out cases showing the skill
+  adds value beyond clear tool descriptions.
 - Harness grind: repeated failures that can be turned into a candidate variant, retested live
   against the baseline, confirmed against held-out cases, and logged as kept or rejected.
 - Tool outputs: missing result, result linked to no call, errors without recovery.

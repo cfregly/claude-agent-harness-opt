@@ -97,6 +97,23 @@ class ModelMatrixTests(unittest.TestCase):
         self.assertEqual(4, result["summary"]["passed_cases"])
         self.assertEqual({"Task"}, {item["chosen_tools"][0] for item in result["results"]})
 
+    def test_agent_audit_skill_matrix_plans_selected_cells(self):
+        result = run_model_matrix(
+            ROOT / "evals" / "model_matrix" / "agent_audit_skill_selection.json",
+            filters=MatrixFilters(
+                providers={"anthropic"},
+                harnesses={"prompt_json"},
+                variants={"thin_workflow_tools"},
+                instruction_variants={"agent_audit_skill"},
+            ),
+            max_cases=2,
+        )
+
+        self.assertTrue(result["passed"])
+        self.assertFalse(result["live"])
+        self.assertEqual(2, result["summary"]["total"])
+        self.assertEqual("planned", result["results"][0]["status"])
+
 
 if __name__ == "__main__":
     unittest.main()

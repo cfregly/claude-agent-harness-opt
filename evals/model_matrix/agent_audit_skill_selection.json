@@ -1,0 +1,339 @@
+{
+  "name": "agent audit skill workflow-selection matrix",
+  "description": "Evaluate whether the agent-audit skill improves workflow tool choice for trace, tool, and harness audit requests.",
+  "profiles": [
+    {
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "harnesses": ["native_tools", "prompt_json"],
+      "model": "claude-sonnet-4-5",
+      "model_env": "ANTHROPIC_MATRIX_MODEL",
+      "name": "anthropic-sonnet",
+      "provider": "anthropic"
+    }
+  ],
+  "instruction_variants": [
+    {
+      "instructions": "Choose the workflow tool that best matches the user request.",
+      "name": "no_skill"
+    },
+    {
+      "instructions": "Use this skill routing policy. If the user gives raw Agent SDK or IDE-agent event exports, choose normalize_runtime before judging. If the user gives one normalized trace, choose review_trace. If the user gives a regression suite, choose trace_suite. If the user gives a tool inventory plus traces or value-bar proof, choose audit_agent. If the user asks whether tool descriptions or schemas cause bad tool choice, choose optimize_tools. If the user asks about a new model, provider, reasoning mode, project instruction, or skill tuning, choose model_matrix. If repeated matrix failures need a candidate tool-description or harness instruction change, choose grind_harness with held-out cases and a live call cap. Do not claim access to hidden chain-of-thought.",
+      "name": "agent_audit_skill"
+    }
+  ],
+  "tool_variants": [
+    {
+      "name": "thin_workflow_tools",
+      "tools": [
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["path"],
+            "type": "object"
+          },
+          "name": "review_trace",
+          "purpose": "Run one review workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when a review workflow is needed."
+        },
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "events_path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["events_path"],
+            "type": "object"
+          },
+          "name": "normalize_runtime",
+          "purpose": "Run one conversion workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when a conversion workflow is needed."
+        },
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "suite_path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["suite_path"],
+            "type": "object"
+          },
+          "name": "trace_suite",
+          "purpose": "Run one suite workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when a suite workflow is needed."
+        },
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "bundle_path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["bundle_path"],
+            "type": "object"
+          },
+          "name": "audit_agent",
+          "purpose": "Run one audit workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when an audit workflow is needed."
+        },
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "bundle_path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["bundle_path"],
+            "type": "object"
+          },
+          "name": "optimize_tools",
+          "purpose": "Run one optimization workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when an optimization workflow is needed."
+        },
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "matrix_path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["matrix_path"],
+            "type": "object"
+          },
+          "name": "model_matrix",
+          "purpose": "Run one comparison workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when a comparison workflow is needed."
+        },
+        {
+          "avoid_when": "Avoid only when another workflow is clearly better.",
+          "input_schema": {
+            "properties": {
+              "matrix_path": {
+                "description": "Path to a JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["matrix_path"],
+            "type": "object"
+          },
+          "name": "grind_harness",
+          "purpose": "Run one improvement workflow.",
+          "quality_checks": ["Choose the most relevant workflow."],
+          "use_when": "Use when an improvement workflow is needed."
+        }
+      ]
+    },
+    {
+      "name": "workflow_tools",
+      "tools": [
+        {
+          "avoid_when": "Avoid when the input is raw runtime events, a suite, a full bundle, or a tool catalog question.",
+          "input_schema": {
+            "properties": {
+              "path": {
+                "description": "Path to one normalized trace JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["path"],
+            "type": "object"
+          },
+          "name": "review_trace",
+          "purpose": "Review one already-normalized agent trace for reasoning, tool calls, tool outputs, and final grounding.",
+          "quality_checks": ["Use only after raw runtime exports are normalized."],
+          "use_when": "Use when the user has a single normalized trace and wants a deterministic or Claude-judged trace review."
+        },
+        {
+          "avoid_when": "Avoid when the trace is already normalized or when the user gives a full audit bundle.",
+          "input_schema": {
+            "properties": {
+              "events_path": {
+                "description": "Path to raw runtime event JSON from an Agent SDK or IDE agent.",
+                "type": "string"
+              }
+            },
+            "required": ["events_path"],
+            "type": "object"
+          },
+          "name": "normalize_runtime",
+          "purpose": "Convert raw Agent SDK or IDE-agent event exports into the shared trace contract.",
+          "quality_checks": ["Preserve ordered reasoning notes, tool calls, tool results, and final output."],
+          "use_when": "Use before review when the input is raw runtime events rather than a normalized trace."
+        },
+        {
+          "avoid_when": "Avoid for one trace, raw events, or a model matrix comparison.",
+          "input_schema": {
+            "properties": {
+              "suite_path": {
+                "description": "Path to a trace regression suite JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["suite_path"],
+            "type": "object"
+          },
+          "name": "trace_suite",
+          "purpose": "Run a trace regression suite with known-good and known-bad cases.",
+          "quality_checks": ["Check that known-bad cases still fail."],
+          "use_when": "Use when the user provides a regression suite or asks to rerun many trace cases together."
+        },
+        {
+          "avoid_when": "Avoid for isolated tool-description tuning or a single trace without tool inventory.",
+          "input_schema": {
+            "properties": {
+              "bundle_path": {
+                "description": "Path to an audit bundle containing tools, traces, metrics, and value-bar proof.",
+                "type": "string"
+              }
+            },
+            "required": ["bundle_path"],
+            "type": "object"
+          },
+          "name": "audit_agent",
+          "purpose": "Review a full agent audit bundle containing tool inventory, traces, metrics, and value-bar proof.",
+          "quality_checks": ["Fail the audit when value-bar proof is missing."],
+          "use_when": "Use when the user provides a bundle or asks for a full agent audit across tools, traces, and value."
+        },
+        {
+          "avoid_when": "Avoid when the user asks to compare model generations or run live provider cells.",
+          "input_schema": {
+            "properties": {
+              "bundle_path": {
+                "description": "Path to a tool-selection audit bundle.",
+                "type": "string"
+              }
+            },
+            "required": ["bundle_path"],
+            "type": "object"
+          },
+          "name": "optimize_tools",
+          "purpose": "Review tool descriptions, schemas, selection cases, held-out cases, and trace-derived tool failures.",
+          "quality_checks": ["Map each failed check to a concrete tool-description or schema change."],
+          "use_when": "Use when the user suspects bad tool descriptions, vague schemas, or poor tool-selection cases."
+        },
+        {
+          "avoid_when": "Avoid when the user only has one trace or wants a candidate generated from repeated failures.",
+          "input_schema": {
+            "properties": {
+              "matrix_path": {
+                "description": "Path to a model matrix JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["matrix_path"],
+            "type": "object"
+          },
+          "name": "model_matrix",
+          "purpose": "Compare model, provider, harness, instruction, skill, and tool-description variants on the same cases.",
+          "quality_checks": ["Read cell summaries before recommending a prompt, skill, or harness change."],
+          "use_when": "Use when the user asks about new models, provider differences, harness differences, reasoning modes, skills, or project instructions."
+        },
+        {
+          "avoid_when": "Avoid for the first comparison run or when there are no repeated matrix failures.",
+          "input_schema": {
+            "properties": {
+              "matrix_path": {
+                "description": "Path to a model matrix JSON file.",
+                "type": "string"
+              }
+            },
+            "required": ["matrix_path"],
+            "type": "object"
+          },
+          "name": "grind_harness",
+          "purpose": "Generate and evaluate candidate tool-description or harness-instruction variants from repeated matrix failures.",
+          "quality_checks": ["Require a live run, held-out cases, a call cap, and a minimum improvement threshold."],
+          "use_when": "Use after the model matrix shows repeated failures that should be hill-climbed."
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "expected_args_contains": {
+        "events_path": ".json"
+      },
+      "expected_tools": ["normalize_runtime"],
+      "forbidden_tools": ["review_trace", "trace_suite", "audit_agent", "optimize_tools", "model_matrix", "grind_harness"],
+      "name": "raw ide events need normalization",
+      "task": "I exported raw Cursor event JSON from an IDE agent at cursor_events.json. It has tool_call and tool_result events, but it is not in your trace contract yet. Audit it."
+    },
+    {
+      "expected_args_contains": {
+        "path": ".json"
+      },
+      "expected_tools": ["review_trace"],
+      "forbidden_tools": ["normalize_runtime", "trace_suite", "audit_agent", "optimize_tools", "model_matrix", "grind_harness"],
+      "name": "single normalized trace review",
+      "task": "Here is one normalized trace JSON at agent_trace_good.json. Check whether the reasoning before and after tools is good and whether the final answer is grounded."
+    },
+    {
+      "expected_args_contains": {
+        "suite_path": ".json"
+      },
+      "expected_tools": ["trace_suite"],
+      "forbidden_tools": ["normalize_runtime", "review_trace", "audit_agent", "optimize_tools", "model_matrix", "grind_harness"],
+      "name": "trace regression suite",
+      "task": "Run trace_suite.json, a suite of known-good and known-bad traces and tell me if the regression behavior still holds."
+    },
+    {
+      "expected_args_contains": {
+        "bundle_path": ".json"
+      },
+      "expected_tools": ["audit_agent"],
+      "forbidden_tools": ["normalize_runtime", "review_trace", "trace_suite", "optimize_tools", "model_matrix", "grind_harness"],
+      "name": "full agent audit bundle",
+      "task": "agent_audit_bundle.json has tool inventory, traces, metrics, and value-bar proof. Review the whole agent."
+    },
+    {
+      "expected_args_contains": {
+        "bundle_path": ".json"
+      },
+      "expected_tools": ["optimize_tools"],
+      "forbidden_tools": ["normalize_runtime", "review_trace", "trace_suite", "audit_agent", "model_matrix", "grind_harness"],
+      "name": "tool descriptions causing bad selection",
+      "task": "The agent keeps choosing the wrong similar tool. Review the tool descriptions, schemas, and selection cases in tool_selection_bundle.json for the catalog."
+    },
+    {
+      "expected_args_contains": {
+        "matrix_path": ".json"
+      },
+      "expected_tools": ["model_matrix"],
+      "forbidden_tools": ["normalize_runtime", "review_trace", "trace_suite", "audit_agent", "optimize_tools", "grind_harness"],
+      "name": "new model skill tuning",
+      "task": "We changed model versions and may need to tune the skill and CLAUDE.md instructions. Compare providers and harnesses in skill_matrix.json on the same cases."
+    },
+    {
+      "expected_args_contains": {
+        "matrix_path": ".json"
+      },
+      "expected_tools": ["grind_harness"],
+      "forbidden_tools": ["normalize_runtime", "review_trace", "trace_suite", "audit_agent", "optimize_tools", "model_matrix"],
+      "name": "repeated matrix failures need hill climb",
+      "task": "The model matrix keeps failing the same boundary across harnesses. Use repeated_failures_matrix.json to generate a candidate harness improvement and confirm it with held-out cases."
+    }
+  ]
+}

@@ -103,6 +103,8 @@ scripts/             # prose gate for public artifacts
 
 Start with [docs/tool-writing-best-practices.md](docs/tool-writing-best-practices.md) when designing
 or reviewing a new tool catalog.
+Use [docs/skills-vs-tools.md](docs/skills-vs-tools.md) when deciding whether a workflow belongs in
+a callable tool description or in a skill instruction policy.
 Use [docs/autoresearch-hill-climbing.md](docs/autoresearch-hill-climbing.md) when the goal is to
 run an eval-driven optimization loop over harness, tool, `CLAUDE.md`, or skill changes.
 
@@ -156,11 +158,14 @@ provider, reasoning mode, or harness:
 ```bash
 python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --markdown
 python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+python -m claude_agent_harness_optimization model-matrix evals/model_matrix/agent_audit_skill_selection.json --env-file .env --live --require-live --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants no_skill,agent_audit_skill --markdown
 ```
 
 The included matrix tests Claude Code style `Task`, `Glob`, `Grep`, and `Read` tool selection across
 Anthropic, OpenAI, and Gemini. It compares short descriptions against tuned boundary descriptions,
 and it compares native provider tool calling against a standardized JSON-choice harness.
+The agent-audit skill matrix shows how to test a skill as an instruction variant against a no-skill
+baseline and a thin-description stress case.
 
 Use `grind-harness` when the goal is to tune the harness itself. It runs a baseline matrix cell,
 creates a candidate tool-description variant from the failed cases, reruns the selected cells,
@@ -219,6 +224,7 @@ python -m claude_agent_harness_optimization audit-agent evals/examples/agent_aud
 python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json
+python -m claude_agent_harness_optimization model-matrix evals/model_matrix/agent_audit_skill_selection.json --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants agent_audit_skill --max-cases 2
 python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture
 python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json
 python scripts/check_value_bar.py
