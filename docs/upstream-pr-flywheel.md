@@ -70,6 +70,9 @@ The pull request body should include:
 
 - catchy title that names the specific workflow value
 - value proposition before implementation details
+- what already works so the feedback does not read as a broad criticism
+- proof of usefulness from the matrix, not only a rationale
+- downside of leaving the ambiguity unchanged
 - source package, version, repo, and commit
 - baseline and candidate variant names
 - provider, model, harness, instruction variant, and case names

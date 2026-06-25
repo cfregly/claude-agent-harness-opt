@@ -145,6 +145,24 @@ def render_upstream_pr_body(
     lines.extend(f"- {item}" for item in _value_proposition_lines(result, comparison, options))
     lines.extend([
         "",
+        "## What Already Works",
+        "",
+    ])
+    lines.extend(f"- {item}" for item in _what_already_works_lines(result, comparison, options))
+    lines.extend([
+        "",
+        "## How This Is Proven Useful",
+        "",
+    ])
+    lines.extend(f"- {item}" for item in _proof_lines(result, comparison, options))
+    lines.extend([
+        "",
+        "## Downside If Not Changed",
+        "",
+    ])
+    lines.extend(f"- {item}" for item in _downside_lines(result, comparison, options))
+    lines.extend([
+        "",
         f"## Proposed change for {target}",
         "",
         change,
@@ -571,6 +589,54 @@ def _value_proposition_lines(result: dict[str, Any], comparison: dict[str, Any],
     return value
 
 
+def _what_already_works_lines(result: dict[str, Any], comparison: dict[str, Any], options: PacketOptions) -> list[str]:
+    target = options.target_name or "tool catalog"
+    counts = _summary_counts(result)
+    lines = []
+    if counts and counts["total"]:
+        lines.append(
+            f"The tested {target} surface is already strong: {counts['passed']}/{counts['total']} live cells passed with {counts['errors']} errors."
+        )
+    candidate_score = comparison.get("candidate_score")
+    if isinstance(candidate_score, (float, int)):
+        lines.append(f"The candidate score is {_format_score(candidate_score)}, so this is a boundary tightening, not a broad rewrite.")
+    lines.append("The packet keeps passing behavior visible so maintainers can see what does not need to change.")
+    return lines
+
+
+def _proof_lines(result: dict[str, Any], comparison: dict[str, Any], options: PacketOptions) -> list[str]:
+    baseline = str(comparison.get("baseline_variant") or options.baseline_variant or "baseline")
+    candidate = str(comparison.get("candidate_variant") or options.candidate_variant or "candidate")
+    lines = [
+        f"The proof compares `{baseline}` and `{candidate}` on the same tasks, providers, harnesses, and instruction variants.",
+        f"The measured delta is {_format_score(comparison.get('delta'))} against a required minimum of {_format_score(comparison.get('minimum_delta'))}.",
+    ]
+    counts = _summary_counts(result)
+    if counts and counts["total"]:
+        lines.append(f"The run contains {counts['total']} matrix cells, with {counts['failed']} failures preserved as evidence instead of hand-waved examples.")
+    lines.append("The source pin, exact cases, reproduction command, and result artifact are included so the claim can be rerun or challenged.")
+    return lines
+
+
+def _downside_lines(result: dict[str, Any], comparison: dict[str, Any], options: PacketOptions) -> list[str]:
+    baseline = str(comparison.get("baseline_variant") or options.baseline_variant or "baseline")
+    cases = _failure_case_names(result, baseline)
+    focus = _focus_phrase(cases)
+    lines = [
+        "Ambiguous descriptions let plausible adjacent tools win, so failures look reasonable in transcripts even when the selected workflow is wrong.",
+        "Model or harness upgrades can reintroduce the same mistake unless the boundary is encoded in descriptions and regression cases.",
+    ]
+    if "browser" in focus:
+        lines.append("Browser ambiguity can route a request to a broad compatibility alias instead of the purpose-built browser-testing workflow.")
+    if "safety" in focus:
+        lines.append("Safety ambiguity can escalate warning-only or directory-only requests into full guard mode, adding constraints the user did not ask for.")
+    if "retrieval" in focus:
+        lines.append("Retrieval ambiguity can make single-page extraction use a broader multi-page workflow, increasing cost and reducing precision.")
+    if "database" in focus:
+        lines.append("Database ambiguity can route schema-changing work through ordinary SQL instead of migration-safe workflows.")
+    return lines
+
+
 def _failure_case_names(result: dict[str, Any], variant: str) -> list[str]:
     cases = []
     seen: set[str] = set()
@@ -611,6 +677,24 @@ def _summary_total(result: dict[str, Any]) -> int | None:
     if isinstance(summary, dict) and isinstance(summary.get("total"), int):
         return int(summary["total"])
     return None
+
+
+def _summary_counts(result: dict[str, Any]) -> dict[str, int] | None:
+    summary = result.get("summary")
+    if not isinstance(summary, dict):
+        return None
+    total = summary.get("total")
+    if not isinstance(total, int):
+        return None
+    passed = summary.get("passed_cases", 0)
+    failed = summary.get("failed_cases", 0)
+    errors = summary.get("errors", 0)
+    return {
+        "errors": int(errors) if isinstance(errors, int) else 0,
+        "failed": int(failed) if isinstance(failed, int) else 0,
+        "passed": int(passed) if isinstance(passed, int) else 0,
+        "total": total,
+    }
 
 
 def _score(value: Any) -> float | None:

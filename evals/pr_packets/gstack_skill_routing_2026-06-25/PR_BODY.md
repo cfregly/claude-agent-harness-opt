@@ -8,6 +8,26 @@ Suggested title: Tighten gstack browser and safety routing with live evals
 - Baseline mistakes clustered on careful-mode and browser-headless.
 - The change clears the adversarially-confirmed value bar for this pinned evaluation.
 
+## What Already Works
+
+- The tested gstack surface is already strong: 708/720 live cells passed with 0 errors.
+- The candidate score is 0.992, so this is a boundary tightening, not a broad rewrite.
+- The packet keeps passing behavior visible so maintainers can see what does not need to change.
+
+## How This Is Proven Useful
+
+- The proof compares `gstack_stock_skill_descriptions` and `gstack_boundary_tuned_skill_descriptions` on the same tasks, providers, harnesses, and instruction variants.
+- The measured delta is 0.017 against a required minimum of 0.010.
+- The run contains 720 matrix cells, with 12 failures preserved as evidence instead of hand-waved examples.
+- The source pin, exact cases, reproduction command, and result artifact are included so the claim can be rerun or challenged.
+
+## Downside If Not Changed
+
+- Ambiguous descriptions let plausible adjacent tools win, so failures look reasonable in transcripts even when the selected workflow is wrong.
+- Model or harness upgrades can reintroduce the same mistake unless the boundary is encoded in descriptions and regression cases.
+- Browser ambiguity can route a request to a broad compatibility alias instead of the purpose-built browser-testing workflow.
+- Safety ambiguity can escalate warning-only or directory-only requests into full guard mode, adding constraints the user did not ask for.
+
 ## Proposed change for gstack
 
 Clarify browser alias and safety-mode skill routing boundaries.

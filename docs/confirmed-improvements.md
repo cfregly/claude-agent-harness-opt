@@ -15,6 +15,44 @@ A change is promoted only when it clears the repo bar:
 - no verifier trick, brittle exact-match dependency, or held-out regression
 - value maps to a practical failure avoided before execution
 
+## Cross-Target Lessons
+
+What is working:
+
+- Most mature public MCP catalogs passed the current slices outright. GitHub, Playwright, Slack,
+  Filesystem, Postgres MCP Pro, Context7, and ClickHouse are useful guardrails, not current
+  description rewrites.
+- gstack also looks strong. The historical full run passed 708 of 720 live cells with zero errors.
+- The useful feedback is narrow. The wins came from adjacent-boundary confusion, not broad tool
+  catalog failure.
+
+What produced confirmed value:
+
+- Firecrawl needed a sharper scrape-versus-extract boundary for one known URL with structured
+  fields.
+- Supabase needed schema-changing SQL to route to migrations, not ordinary SQL execution.
+- Zymtrace needed resource-first/default-project rules, metrics-first GPU workflows, and bounded
+  hot-trace drilldown arguments.
+- gstack needed browser-alias and safety-mode routing tightened, with high-profile smoke checks
+  confirming the sensitive cases on Claude Opus, GPT-5.4, and Gemini 2.5 Pro.
+
+How usefulness is proven:
+
+- Each promoted suggestion compares baseline and candidate descriptions on the same realistic
+  prompts, providers, harnesses, and instruction variants.
+- The useful signal is a live model-call delta that changes the next tool call or required
+  arguments in the ambiguous boundary case.
+- The packet includes source pins, exact cases, reproduction commands, and result artifacts so an
+  upstream maintainer can rerun or challenge the claim.
+
+Downside of ignoring confirmed suggestions:
+
+- Plausible adjacent tools keep winning, which makes bad routing hard to notice in transcripts.
+- Model and harness upgrades can reintroduce the same mistake unless the boundary is encoded as a
+  regression case.
+- Wrong tool choice can increase cost, choose a broader workflow than requested, skip migration
+  safety, or apply safety constraints the user did not ask for.
+
 ## Wins
 
 | Target | Upstream Pin | Baseline | Candidate | Signal | Promoted Pattern |
@@ -42,7 +80,7 @@ The repo uses matrix files under `evals/model_matrix/`. Each matrix defines:
 - provider profiles
 - harnesses such as native tools or prompt JSON
 - baseline and candidate tool-description variants
-- realistic cases with expected and forbidden tools
+- realistic cases with expected tools and confusable alternatives
 - optional argument checks that avoid overfitting valid alternatives
 
 The useful signal is a live baseline-to-candidate delta. Firecrawl, Supabase, and Zymtrace changed
