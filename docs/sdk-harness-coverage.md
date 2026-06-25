@@ -4,6 +4,9 @@ Checked on 2026-06-25.
 
 This repo now separates terminal products from SDK harnesses.
 
+For the public, versioned explanation of how the SDK harnesses work, including
+examples and maintenance steps, see [agent-sdk-harnesses.md](agent-sdk-harnesses.md).
+
 | Vendor | Product or SDK | What is covered |
 |---|---|---|
 | Anthropic | Claude Code | Headless CLI harness via `claude -p --output-format stream-json --verbose` |

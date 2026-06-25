@@ -82,20 +82,44 @@ Checked on 2026-06-25.
 - [Claude Agent SDK overview](https://code.claude.com/docs/en/agent-sdk/overview)
   - Used for the distinction between Claude Code as a product and Claude Agent SDK as the library
     harness that exposes Claude Code's loop and capabilities.
+- [Claude Agent SDK agent loop](https://code.claude.com/docs/en/agent-sdk/agent-loop)
+  - Used for the SDK loop, turn limits, budget controls, tool execution order, subagent context,
+    and permission behavior documented in `docs/agent-sdk-harnesses.md`.
+- [Claude Agent SDK docs index](https://code.claude.com/docs/llms.txt)
+  - Used for the public inventory of Claude Agent SDK docs pages that define the maintained
+    coverage surface.
 - [Migrate to Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/migration-guide)
   - Used for the rename from Claude Code SDK to Claude Agent SDK.
 - [Claude Agent SDK Python reference](https://code.claude.com/docs/en/agent-sdk/python)
   - Used for `query`, `ClaudeAgentOptions`, custom tools, in-process MCP server coverage, hooks,
     permissions, skills, subagents, sessions, and thinking or budget surface inventory.
+- [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)
+  - Used for the Managed Agents distinction from Claude Agent SDK, including agents,
+    environments, sessions, events, infrastructure, and beta status.
+- [Claude Managed Agents reference](https://platform.claude.com/docs/en/managed-agents/reference)
+  - Used for Managed Agents event types, self-hosted worker shape, MCP support, and rate-limit
+    context.
+- [Claude platform overview](https://platform.claude.com/docs/en/build-with-claude/overview)
+  - Used for the Claude Developer Platform surface in `docs/agent-sdk-harnesses.md`.
+- [Claude tool use overview](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview)
+  - Used for the distinction between client tools and server tools.
+- [Claude Agent Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
+  - Used for Skills packaging, progressive loading, beta headers, and zero-data-retention caveats.
 - [OpenAI Agents SDK guide](https://developers.openai.com/api/docs/guides/agents)
   - Used for OpenAI's equivalent agent SDK coverage and its role as an orchestration layer over
     model calls and tools.
 - [OpenAI Agents SDK Python reference](https://openai.github.io/openai-agents-python/agents/)
   - Used for `Agent`, `Runner`, function-tool smoke coverage, handoffs, guardrails, MCP, sessions,
     tracing, hosted tools, shell tools, and computer-tool surface inventory.
+- [OpenAI Agents SDK JavaScript docs](https://openai.github.io/openai-agents-js/)
+  - Used for TypeScript runner options, tool examples, sandbox agents, and session-state patterns.
 - [Google Agent Development Kit](https://adk.dev/)
   - Used for Google's equivalent SDK coverage, supported language scope, tools, workflows, sessions,
     memory, planners, code execution, telemetry, and evaluation surface inventory.
+- [Google ADK runtime](https://adk.dev/runtime/)
+  - Used for ADK runtime concepts in the harness boundary comparison.
+- [Google ADK event loop](https://adk.dev/runtime/event-loop/)
+  - Used for ADK event-loop and event-oriented runtime behavior.
 - [Google ADK Cloud docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/adk)
   - Used for Google ADK positioning as an enterprise-scale agent development framework.
 

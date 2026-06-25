@@ -158,6 +158,8 @@ Use [docs/live-harness-hardening.md](docs/live-harness-hardening.md) when testin
 Code, Gemini CLI, Cursor Agent, OpenCode, or another installed harness as the system under test.
 Use [docs/sdk-harness-coverage.md](docs/sdk-harness-coverage.md) when testing Claude Agent SDK,
 OpenAI Agents SDK, Google ADK, or another SDK harness directly.
+Use [docs/agent-sdk-harnesses.md](docs/agent-sdk-harnesses.md) for the versioned public reference
+on how the Claude Agent SDK, Claude Managed Agents, OpenAI Agents SDK, and Google ADK harnesses work.
 
 ## Claude Code Skill
 
