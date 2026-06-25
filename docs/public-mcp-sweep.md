@@ -20,8 +20,9 @@ The current sweep covers:
 - Context7 MCP: library ID resolution and documentation queries.
 - Supabase MCP: database metadata, migrations, SQL execution, extensions, and schema changes.
 - ClickHouse MCP: database listing, table metadata, and read-only SELECT queries.
-- Zymtrace MCP: project discovery, time-window normalization, top functions/entities, hot traces,
-  flamegraphs, metrics discovery/query, recommendations, and raw project event/stat APIs.
+- Zymtrace MCP: MCP resources, project discovery, time-window normalization, top
+  functions/entities, hot traces, flamegraphs, metrics discovery/query, recommendations, raw project
+  event/stat APIs, and CPU/GPU optimization skill routing.
 
 ## What Cleared
 
@@ -89,18 +90,26 @@ ClickHouse adds a safety-oriented prompt-JSON matrix:
   control-plane access. End-to-end MCP query traces also need database host/user/password.
 
 Zymtrace adds a profiling-analysis matrix against the locally installed `zymtrace-mcp` 26.6.1
-surface:
+surface and the installed Zymtrace optimization skills:
 
 - The live MCP endpoint advertises 25 tools at `http://localhost:8080/mcp`.
-- The tuned variant encodes the important next-tool boundaries: `projects_search` before
-  project-id-scoped calls, `get_date_time` before generated REST-style tools with relative time
-  ranges, `topfunctions` versus `topentities`, first-pass `hot_traces` with `meta_only=true`,
-  high-level versus project JSON flamegraphs, metrics discovery before metrics query, and raw event
-  APIs only when explicitly requested.
+- The live MCP endpoint advertises 3 resources: `topfunctions`, `topentities`, and `flamegraph`.
+- The rerun found a real tuning miss in the first Zymtrace matrix: the live server says to prefer
+  resources before same-named tools, use default project
+  `00000000-0000-0000-0000-000000000000` unless the user explicitly asks for another project, and
+  reserve `projects_search` for project listing/search/switching.
+- The installed Zymtrace CPU/GPU skills add workflow boundaries: CPU rank-first requests start with
+  `topentities`/`topfunctions`; GPU/inference investigations start with metric discovery; call-tree
+  analysis prefers first-pass `hot_traces` with `meta_only=true`; full trace drilldown requires a
+  selected `prefix_hash`, `meta_only=false`, and `limit=1`.
+- The tuned variant now encodes those boundaries plus metrics discovery before metrics query,
+  high-level versus project JSON flamegraphs, recommendations, and raw event APIs only when
+  explicitly requested.
 - The local profiler is CPU/eBPF-ready. GPU profiling is not treated as available until the
   Zymtrace license reports GPU support.
-- No tuned Zymtrace wording is promoted as a confirmed live win yet; the matrix is the regression
-  harness for proving one.
+- No tuned Zymtrace wording is promoted as a confirmed live provider win yet because this environment
+  has no Anthropic/OpenAI/Gemini keys. The matrix is now the regression harness for proving the
+  discovered tool/skill boundaries once provider credentials are present.
 
 ## Commands
 
@@ -154,8 +163,20 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymt
   --providers anthropic \
   --harnesses prompt_json \
   --variants tuned_zymtrace_mcp_boundaries \
-  --instruction-variants zymtrace_host_rules \
+  --instruction-variants zymtrace_host_and_skill_rules \
   --max-cases 2 \
+  --markdown
+```
+
+Dry Zymtrace held-out skill boundary check:
+
+```bash
+python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+  --providers anthropic \
+  --harnesses prompt_json \
+  --variants tuned_zymtrace_mcp_boundaries \
+  --instruction-variants zymtrace_host_and_skill_rules \
+  --cases "default project metrics discovery skips search,cpu rank first containerized apps,gpu inference workflow starts with metrics,gpu call tree uses hot traces,selected trace drilldown is bounded" \
   --markdown
 ```
 
@@ -169,7 +190,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymt
   --providers anthropic,openai,gemini \
   --harnesses prompt_json \
   --variants stock_zymtrace_mcp,tuned_zymtrace_mcp_boundaries \
-  --instruction-variants zymtrace_host_rules \
+  --instruction-variants zymtrace_host_rules,zymtrace_host_and_skill_rules \
   --concurrency 3 \
   --markdown
 ```
@@ -221,3 +242,9 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/fire
 - `https://clickhouse.com/docs/use-cases/AI/MCP`
 - `https://docs.zymtrace.com/getting-started/`
 - `https://docs.zymtrace.com/category/model-context-protocol-mcp/`
+- local `zymtrace-mcp` 26.6.1 `initialize`, `resources/list`, `tools/list`, and `get_date_time`
+  MCP responses from `http://localhost:8080/mcp`
+- local Zymtrace skill cache:
+  `~/.codex/plugins/cache/zymtrace-skills/zymtrace/26.6.0/skills/optimize-cpu-workloads/SKILL.md`
+- local Zymtrace skill cache:
+  `~/.codex/plugins/cache/zymtrace-skills/zymtrace/26.6.0/skills/optimize-gpu-workloads/SKILL.md`

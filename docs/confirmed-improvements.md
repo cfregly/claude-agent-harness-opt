@@ -33,6 +33,7 @@ A change is promoted only when it clears the repo bar:
 | Postgres MCP Pro | `crystaldba/postgres-mcp` public docs and repo reference checked from the matrix source | Stock and tuned variants both passed the tested schema, SQL, explain, workload, index, and health cases. | No baseline delta. |
 | Slack MCP | Slack official MCP docs and Docker MCP reference checked from the matrix source | Stock and tuned variants both passed the tested channel, thread, message, reaction, and user cases. | No baseline delta. |
 | Filesystem MCP | Model Context Protocol filesystem registry and Docker MCP reference checked from the matrix source | Stock and tuned variants both passed after an isolated rerun. | The apparent miss was transient, not a stable description gap. |
+| Zymtrace MCP | local `zymtrace-mcp` 26.6.1 at `http://localhost:8080/mcp`; local Zymtrace skills plugin cache 26.6.0 | Live MCP introspection found a missing resource-first/default-project/skill-workflow boundary in the first matrix. The tuned matrix now covers 25 tools, 3 resources, and CPU/GPU skill routing held-out cases. | No live provider delta yet because this environment has no Anthropic/OpenAI/Gemini API keys. Keep as a focused regression harness until a credentialed matrix run confirms baseline-to-candidate movement. |
 
 ## How The Signals Were Found
 
@@ -46,7 +47,9 @@ The repo uses matrix files under `evals/model_matrix/`. Each matrix defines:
 
 The useful signal is a live baseline-to-candidate delta. Firecrawl and Supabase changed the next tool
 call in exactly the ambiguous boundary case. ClickHouse, Context7, GitHub, Playwright, Postgres,
-Slack, and Filesystem did not show that delta, so their matrices stay as regression coverage.
+Slack, Filesystem, and Zymtrace did not show that delta in this environment, so their matrices stay
+as regression coverage. Zymtrace is different from the no-delta public catalogs because local MCP
+introspection did expose missing instructions; it still needs a provider-keyed run before promotion.
 
 ## Skill Pin
 
