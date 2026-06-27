@@ -19,6 +19,11 @@ For a founder using this on a real tool catalog, the loop is: build one narrow t
 with routing and argument evals, avoid broad side-effect tools without policy and trace evidence,
 then widen access only after the held-out cases, logs, fallback, and stop trigger pass.
 
+Tune one tool means pick one callable in your product and tighten its name, `use_when`,
+`avoid_when`, `input_schema`, output contract, context controls, error guidance, examples, negative
+guidance, and held-out cases. The demo shows a weak search contract fail, then a stronger research
+tool bundle pass.
+
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -38,6 +43,7 @@ python -m claude_agent_harness_optimization mcp-e2e evals/e2e/github_readonly.js
 python -m claude_agent_harness_optimization trace-suite evals/suites/agent_trace_suite.json
 python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --markdown
@@ -201,9 +207,14 @@ Use `optimize-tools` when the question is whether the agent has the right tool d
 and calibration cases to choose tools correctly:
 
 ```bash
+python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 ```
+
+The first command is a deliberate before-state negative control. It should fail and recommend an
+`input_schema`, calibration cases, held-out cases, stronger avoid guidance, quality checks, and
+runtime metrics. The second command is the after-state sample that passes.
 
 The optimizer checks that every tool has a distinct purpose, `use_when`, `avoid_when`,
 `input_schema`, and result `quality_checks`. It also checks `tool_selection_cases` and maps trace

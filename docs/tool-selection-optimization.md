@@ -3,6 +3,10 @@
 Tool descriptions are part of the agent runtime. If two tools sound similar, the agent has to guess.
 The optimizer turns that guesswork into a testable loop.
 
+Tune one tool means choose one callable and make the contract testable: name, `use_when`,
+`avoid_when`, `input_schema`, output contract, context controls, error guidance, examples, negative
+guidance, calibration cases, and held-out cases.
+
 ## Inputs
 
 `optimize-tools` reads an agent audit bundle with:
@@ -59,10 +63,16 @@ baseline.
 ## Commands
 
 ```bash
+python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
 python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
 ```
+
+The before bundle is a deliberate negative control. It proves the gate catches a vague search tool
+with no schema, no calibration cases, no held-out cases, no result checks, no runtime metrics, and no
+value-bar receipt. The after bundle proves the same harness can pass a sharper tool catalog with
+separate discovery, fetch, and calculation contracts.
 
 `audit-agent --claude-judge` includes the tool-selection optimizer, so a real audit cannot pass on
 trace shape alone.

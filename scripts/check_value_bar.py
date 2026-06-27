@@ -94,9 +94,10 @@ def _check_agent_audit_bundles() -> list[str]:
 
     negative_controls = 0
     for path in bundle_paths:
+        bundle = _load_json(path)
         result = review_agent_bundle(path)
         rel = path.relative_to(ROOT)
-        if "missing_value_bar" in path.stem:
+        if "missing_value_bar" in path.stem or bundle.get("negative_control") is True:
             negative_controls += 1
             if result["passed"] or result["value_bar"]["passed"]:
                 failures.append(f"{rel}: negative value-bar control unexpectedly passed")

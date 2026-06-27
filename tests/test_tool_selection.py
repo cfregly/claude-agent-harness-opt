@@ -50,6 +50,16 @@ class ToolSelectionTests(unittest.TestCase):
         self.assertIn("tool_selection_cases", joined)
         self.assertIn("heldout_tool_selection_cases", joined)
 
+    def test_before_bundle_recommends_actionable_contract_changes(self):
+        review = review_tool_selection_bundle(
+            ROOT / "evals" / "examples" / "tool_tuning_before_bundle.json"
+        )
+        self.assertFalse(review.passed)
+        joined = "\n".join(review.recommendations)
+        self.assertIn("input_schema", joined)
+        self.assertIn("tool_selection_cases", joined)
+        self.assertIn("heldout_tool_selection_cases", joined)
+
     def test_selection_cases_require_verifiable_outcomes_without_exact_order(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             bundle = Path(tmpdir) / "bundle.json"
@@ -120,6 +130,25 @@ class ToolSelectionTests(unittest.TestCase):
         )
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("# Tool Selection Optimizer", result.stdout)
+
+    def test_cli_optimize_tools_before_bundle_fails_with_recommendations(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "claude_agent_harness_optimization",
+                "optimize-tools",
+                "evals/examples/tool_tuning_before_bundle.json",
+                "--markdown",
+            ],
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("Passed: no", result.stdout)
+        self.assertIn("input_schema", result.stdout)
 
 
 if __name__ == "__main__":
