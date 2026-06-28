@@ -1,28 +1,21 @@
 # claude-agent-harness-opt
 
 [![ci](https://github.com/cfregly/claude-agent-harness-opt/actions/workflows/ci.yml/badge.svg)](https://github.com/cfregly/claude-agent-harness-opt/actions/workflows/ci.yml)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/cfregly/claude-agent-harness-opt/blob/main/LICENSE)
 
-A runnable prompt kit for Claude-style agents: decide whether a task deserves an agent, render a
-structured system prompt, check tool design, run local evals over agent transcripts, and optionally
-ask Claude to semantically judge trace quality.
+A runnable workbench for Claude-style agent harnesses. It helps you decide whether a task deserves
+an agent, render a structured system prompt, lint tool contracts, run local transcript evals, import
+external agent traces, and ask Claude to judge trace quality when a live key is available.
 
-The bar is always "adversarially-confirmed to add value." An audit passes only when it names the
-value claim, compares against a baseline, meets a minimum improvement threshold, and survives an
-adversarial check with no open objections.
+Use it when an agent is failing for boring reasons: fuzzy tool names, broad schemas, weak stop
+criteria, missing held-out cases, unclear reasoning summaries, or no baseline. The repo turns those
+failure modes into repeatable checks.
 
-The repo turns the main ideas from Anthropic's "Prompting for Agents" talk into code and templates.
-The deterministic checks run first, then real semantic audits call Claude through the Messages API
-with `ANTHROPIC_API_KEY`. CI requires a live Claude judge pass.
+The value bar is adversarially-confirmed to add value. A prompt, tool, harness, or matrix result is
+promoted only when it names the value claim, compares against a baseline, clears the threshold, and
+survives an adversarial check with no open objections.
 
-For a founder using this on a real tool catalog, the loop is: build one narrow tool contract, test it
-with routing and argument evals, avoid broad side-effect tools without policy and trace evidence,
-then widen access only after the held-out cases, logs, fallback, and stop trigger pass.
-
-Tune one tool means pick one callable in your product and tighten its name, `use_when`,
-`avoid_when`, `input_schema`, output contract, context controls, error guidance, examples, negative
-guidance, and held-out cases. The demo shows a weak search contract fail, then a stronger research
-tool bundle pass.
+## Quickstart
 
 ```bash
 python3.11 -m venv .venv
@@ -34,75 +27,24 @@ python -m claude_agent_harness_opt score recipes/agentic_search.json
 python -m claude_agent_harness_opt lint-tools recipes/agentic_search.json
 python -m claude_agent_harness_opt eval evals/examples/search_answer.json
 python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json
-python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_parallel_good.json
-python -m claude_agent_harness_opt normalize-claude evals/examples/claude_messages.json
-python -m claude_agent_harness_opt normalize-runtime evals/examples/cursor_trace_review_events.json
-python -m claude_agent_harness_opt import-run evals/examples/import_run_cursor_export.json --adapter cursor --out-dir /tmp/imported-run
-python -m claude_agent_harness_opt snapshot-surface --matrix evals/model_matrix/harness_trace_adapters.json --skill .claude/skills/agent-audit/SKILL.md --out /tmp/surface-snapshot.json
-python -m claude_agent_harness_opt mcp-e2e evals/e2e/github_readonly.json --dry-run
-python -m claude_agent_harness_opt trace-suite evals/suites/agent_trace_suite.json
-python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_opt optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
-python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --markdown
-python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --markdown
-python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
-python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --heldout-cases "find python files,read known file" --markdown
-python -m claude_agent_harness_opt live-harness evals/live_harnesses/headless_cli_smoke.json --env-file .env --out-dir /tmp/aho-live --markdown
-python -m claude_agent_harness_opt live-harness evals/live_harnesses/sdk_agent_smoke.json --env-file .env --out-dir /tmp/aho-sdk-live --markdown
-uvx --with claude-agent-sdk --with openai-agents --with google-adk python scripts/sdk_surface_inventory.py
-python -m claude_agent_harness_opt render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
-python -m claude_agent_harness_opt pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
-python scripts/probe_service_keys.py --env-file .env --no-fail
-python -m claude_agent_harness_opt judge-prompt evals/examples/search_answer.json
 ```
+
+Those commands are keyless except for live Claude judging and cross-provider sweeps. For the wider
+surface, start with [Setup](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/setup.md)
+and [Techniques](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/techniques.md).
 
 ## What it implements
 
-The kit encodes the agent prompting patterns that show up repeatedly in the talk and the current
-Claude prompt engineering docs:
+The kit covers four jobs:
 
-- task-fit scoring across complexity, value, viability, error cost, and recoverability
-- simple starting prompts that grow only from observed failures
-- explicit tool-selection guidance instead of relying on short tool descriptions
-- distinct tool names and descriptions, with linting for overlap
-- tool-writing checks for verifiable outcomes, held-out cases, response formats, context controls,
-  helpful errors, and namespace hygiene
-- initial planning, reflection after tool results, source verification, and self-checks
-- directed thinking checks for initial complexity, tool budget, evidence or stop criteria, result
-  quality, verification, and continue or stop decisions
-- tool-call budgets for simple, standard, and complex work
-- stop criteria, fallback behavior, and rollback of harmful prompt changes
-- reversibility rules for destructive, shared, or hard to undo actions
-- context strategy through progress files, compaction notes, and subagent summaries
-- parallel tool calls when work is independent
-- evals for answer accuracy, tool use accuracy, and final state accuracy
-- flexible verifiers for alternate phrasing, numeric ranges, regex output shape, and valid tool paths
-- small realistic eval sets, LLM judge rubrics, and manual review
-- examples added only after failures show where they help
-- ordered trace review for reasoning, tool calls, tool outputs, and final answers
-- trace regression suites for keeping known-good and known-bad cases stable
-- agent audit bundles that review a tool inventory plus representative traces
-- Claude-backed semantic judging of visible reasoning summaries, tool outputs, and final grounding
-- tool-selection optimization from tool descriptions, schemas, calibration cases, and trace failures
-- model matrix sweeps across providers, model ids, harnesses, instruction variants, and tool-description variants
-- trace adapters that normalize exported Agent SDK and IDE-agent runs into the same matrix contract
-- run import that writes both a normalized trace and an audit bundle for external harness exports
-- surface snapshots for the exact matrix, tool catalog, skill, and prompt files under evaluation
-- read-oriented credentialed E2E specs for service-backed MCP and harness checks
-- static HTML and PR-comment reports with backing data from audit, matrix, grind, snapshot, and E2E JSON
-- upstream PR packets with source pins, exact examples, reproduction commands, result evidence,
-  and public repo backlinks
-- reusable harness check families for boundary, safety, argument, recovery, output, resource, thinking, parity, and reproducibility failures
-- live headless CLI harness probes for Codex, Claude Code, Gemini CLI, Cursor Agent, and OpenCode,
-  with redacted artifacts, version pins, normalized traces, and directed-thinking visibility status
-- live latest-package SDK probes for Claude Agent SDK, OpenAI Agents SDK, and Google ADK
-- latest-package SDK surface inventory for Claude Agent SDK, OpenAI Agents SDK, and Google ADK
-- autoresearch-style harness grinding that turns matrix failures into candidate variants, checks
-  held-out cases, logs keep or reject decisions, and promotes only live improvements
-- value-bar enforcement for baseline comparison, minimum improvement, and adversarial confirmation
+- **Prompt and tool design:** task-fit scoring, prompt rendering, tool-description linting, tool
+  budget checks, stop criteria, fallback behavior, and destructive-action guardrails.
+- **Trace and eval review:** answer evals, tool-use evals, final-state evals, trace suites, audit
+  bundles, and optional Claude judging over visible reasoning summaries and tool outputs.
+- **Harness import and comparison:** adapters for Claude Messages, Agent SDK exports, IDE-agent
+  events, live harness CLI runs, model matrices, and surface snapshots.
+- **Tool-contract optimization:** baseline matrices, candidate tool-description variants, held-out
+  checks, reports, and upstream PR packets that promote only measured improvements.
 
 ## Layout
 
@@ -139,40 +81,51 @@ scripts/             # prose gate for public artifacts
 .claude/skills/      # project-local Claude Code skill for agent audits
 ```
 
-Start with [docs/tool-writing-best-practices.md](docs/tool-writing-best-practices.md) when designing
-or reviewing a new tool catalog.
-Use [docs/skills-vs-tools.md](docs/skills-vs-tools.md) when deciding whether a workflow belongs in
-a callable tool description or in a skill instruction policy.
-Use [docs/github-mcp-tool-tuning.md](docs/github-mcp-tool-tuning.md) for a public GitHub MCP Server
-tool-selection baseline across Anthropic, OpenAI, Gemini, native tools, and prompt JSON harnesses.
-Use [docs/public-mcp-sweep.md](docs/public-mcp-sweep.md) for the broader public MCP sweep across
-GitHub, Playwright, Slack, Filesystem, Postgres MCP Pro, Firecrawl, Context7, Supabase, and
-ClickHouse, and Zymtrace.
-Use [docs/confirmed-improvements.md](docs/confirmed-improvements.md) for the pinned ledger of
-confirmed tuning wins, guardrails without promotion, and the upstream MCP versions those results
-apply to.
-Use [docs/upstream-pr-flywheel.md](docs/upstream-pr-flywheel.md) when turning a confirmed matrix win
-into an upstream pull request packet with reproducible evidence.
-Use [docs/codex-and-model-migration-harnesses.md](docs/codex-and-model-migration-harnesses.md)
-when treating Codex exports or provider model-migration tools as harnesses under test.
-Use [docs/firecrawl-mcp-tool-tuning.md](docs/firecrawl-mcp-tool-tuning.md) for the confirmed
-Firecrawl scrape-versus-extract description optimization.
-Use [docs/supabase-mcp-tool-tuning.md](docs/supabase-mcp-tool-tuning.md) for the confirmed
-Supabase DDL-versus-SQL migration boundary optimization.
-Use [docs/gstack-skill-routing-audit.md](docs/gstack-skill-routing-audit.md) for the cross-provider
-gstack skills-as-tools routing matrix and upstream PR packet evidence.
-Use [docs/credentialed-service-probes.md](docs/credentialed-service-probes.md) to verify local
-service credentials without printing secrets or mutating vendor state.
-Use [docs/autoresearch-hill-climbing.md](docs/autoresearch-hill-climbing.md) when the goal is to
-run an eval-driven optimization loop over harness, tool, `CLAUDE.md`, or skill changes.
-Use [docs/repeatable-harness-lab.md](docs/repeatable-harness-lab.md) to import a real harness run,
-pin the tested surfaces, run credentialed read checks, and produce review artifacts.
-Use [docs/live-harness-hardening.md](docs/live-harness-hardening.md) when testing Codex, Claude
-Code, Gemini CLI, Cursor Agent, OpenCode, or another installed harness as the system under test.
-Use [docs/sdk-harness-coverage.md](docs/sdk-harness-coverage.md) when testing Claude Agent SDK,
-OpenAI Agents SDK, Google ADK, or another SDK harness directly.
-Use [docs/agent-sdk-harnesses.md](docs/agent-sdk-harnesses.md) for the versioned public reference
-on how the Claude Agent SDK, Claude Managed Agents, OpenAI Agents SDK, and Google ADK harnesses work.
+## Start Here
+
+| Need | Open |
+|---|---|
+| Send a founder one clean finding | [Founder Findings](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings) |
+| See every promoted win and guardrail | [Confirmed Improvements](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/confirmed-improvements.md) |
+| Review the YC P2026 sweep | [YC P2026 MCP Sweep](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/yc-p2026-mcp-sweep.md) |
+| Learn the tool-writing standard | [Tool Writing Best Practices](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/tool-writing-best-practices.md) |
+| Decide whether a workflow is a skill or a tool | [Skills vs Tools](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/skills-vs-tools.md) |
+| Run the broader public MCP sweep | [Public MCP Sweep](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/public-mcp-sweep.md) |
+
+## Founder Packets
+
+These links are meant to be shared directly. A confirmed packet has a live baseline-to-tuned delta.
+A guardrail packet means the public catalog already passed the tested slice, so no change is
+promoted.
+
+| Target | Result | Packet |
+|---|---|---|
+| InsForge | Confirmed improvement | [InsForge](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/insforge) |
+| Screenpipe | Confirmed improvement | [Screenpipe](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/screenpipe) |
+| Firecrawl | Confirmed improvement | [Firecrawl](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/firecrawl) |
+| Supabase | Confirmed improvement | [Supabase](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/supabase) |
+| Zymtrace | Confirmed improvement | [Zymtrace](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/zymtrace) |
+| Humwork | Guardrail | [Humwork](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/humwork) |
+| OpenWork | Guardrail | [OpenWork](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/openwork) |
+
+## Deeper References
+
+| Topic | Doc |
+|---|---|
+| GitHub MCP baseline | [GitHub MCP Tool Tuning](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/github-mcp-tool-tuning.md) |
+| Firecrawl finding | [Firecrawl MCP Tool Tuning](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/firecrawl-mcp-tool-tuning.md) |
+| Supabase finding | [Supabase MCP Tool Tuning](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/supabase-mcp-tool-tuning.md) |
+| Screenpipe finding | [Screenpipe MCP Tool Tuning](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/screenpipe-mcp-tool-tuning.md) |
+| InsForge finding | [InsForge MCP Tool Tuning](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/insforge-mcp-tool-tuning.md) |
+| Upstream PR packets | [Upstream PR Flywheel](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/upstream-pr-flywheel.md) |
+| Harness grinding | [Autoresearch Hill Climbing](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/autoresearch-hill-climbing.md) |
+| Harness imports | [Repeatable Harness Lab](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/repeatable-harness-lab.md) |
+| Live CLI harnesses | [Live Harness Hardening](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/live-harness-hardening.md) |
+| SDK harnesses | [SDK Harness Coverage](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/sdk-harness-coverage.md) |
+| Agent SDK reference | [Agent SDK Harnesses](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/agent-sdk-harnesses.md) |
+| Service probes | [Credentialed Service Probes](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/credentialed-service-probes.md) |
+| gstack routing audit | [gstack Skill Routing Audit](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/gstack-skill-routing-audit.md) |
+| Model migration harnesses | [Codex and Model Migration Harnesses](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/codex-and-model-migration-harnesses.md) |
 
 ## Claude Code Skill
 
@@ -216,6 +169,18 @@ The first command is a deliberate before-state negative control. It should fail 
 `input_schema`, calibration cases, held-out cases, stronger avoid guidance, quality checks, and
 runtime metrics. The second command is the after-state sample that passes.
 
+The public MCP shortcut wraps the stored matrices for known targets:
+
+```bash
+make optimize mcp=insforge
+make optimize mcp=humwork
+make optimize mcp=openwork
+make optimize mcp=screenpipe
+make optimize url=https://github.com/InsForge/insforge-mcp
+```
+
+Unknown URLs fail rather than falling back to another target.
+
 The optimizer checks that every tool has a distinct purpose, `use_when`, `avoid_when`,
 `input_schema`, and result `quality_checks`. It also checks `tool_selection_cases` and maps trace
 failures back to concrete changes like stronger avoid rules, argument schemas, examples, or stop
@@ -231,6 +196,8 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_s
 python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
 python -m claude_agent_harness_opt model-matrix evals/model_matrix/agent_audit_skill_selection.json --env-file .env --live --require-live --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants no_skill,agent_audit_skill --markdown
 python -m claude_agent_harness_opt model-matrix evals/model_matrix/github_mcp_tool_selection.json --env-file .env --live --require-live --providers anthropic,openai,gemini --harnesses native_tools,prompt_json --variants stock_github_mcp,tuned_github_mcp_boundaries --instruction-variants github_mcp_host_rules --concurrency 4 --markdown
+make optimize mcp=screenpipe
+make optimize url=https://github.com/screenpipe/screenpipe
 ```
 
 The included matrix tests Claude Code style `Task`, `Glob`, `Grep`, and `Read` tool selection across
@@ -266,7 +233,7 @@ Treat each runtime as a harness target. Provider native tools, prompt JSON wrapp
 loops, Codex JSONL exports, IDE agents, and Cursor-like environments should export the same visible
 trace contract: decision notes, tool calls, tool results, and final answers. Once the adapter emits
 that contract, the trace suite, Claude judge, model matrix, and harness grind can compare it against
-other harnesses. See [docs/harness-optimization.md](docs/harness-optimization.md) for the adapter
+other harnesses. See [Harness Optimization](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/harness-optimization.md) for the adapter
 and upgrade loop.
 
 To test an exported harness without an API key, normalize a runtime event file and run the fixture
@@ -332,8 +299,8 @@ python scripts/check_value_bar.py
 ## Sources
 
 The technique map is grounded in Anthropic's public video and docs. See
-[docs/source-map.md](docs/source-map.md) for the source list and timestamps used while building the
-repo. See [docs/video-coverage-audit.md](docs/video-coverage-audit.md) for the implementation
+[Source Map](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/source-map.md) for the source list and timestamps used while building the
+repo. See [Video Coverage Audit](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/video-coverage-audit.md) for the implementation
 coverage check against the talk.
 
 ## License

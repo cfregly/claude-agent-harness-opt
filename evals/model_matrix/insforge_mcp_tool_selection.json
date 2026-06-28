@@ -1,0 +1,111 @@
+{
+  "name": "insforge mcp tool-selection matrix",
+  "description": "Compare README-level and source-level descriptions for InsForge backend MCP routing.",
+  "source": {
+    "repo": "https://github.com/InsForge/insforge-mcp",
+    "commit": "dad794d445d05e7df2efcb8280dba59682b97a87",
+    "package": "@insforge/mcp",
+    "package_version": "1.2.10",
+    "yc": "InsForge, YC P2026",
+    "slice": "backend metadata, database operations, starter templates, storage, edge functions, deployments, logs, docs, and public client tokens"
+  },
+  "profiles": [
+    {
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "harnesses": ["prompt_json"],
+      "model": "claude-sonnet-4-5",
+      "model_env": "ANTHROPIC_MATRIX_MODEL",
+      "name": "anthropic-sonnet",
+      "provider": "anthropic"
+    },
+    {
+      "api_key_env": "OPENAI_API_KEY",
+      "harnesses": ["prompt_json"],
+      "model": "gpt-4.1",
+      "model_env": "OPENAI_MATRIX_MODEL",
+      "name": "openai-default",
+      "provider": "openai"
+    },
+    {
+      "api_key_env": "GEMINI_API_KEY",
+      "harnesses": ["prompt_json"],
+      "max_tokens": 4096,
+      "model": "gemini-2.5-pro",
+      "model_env": "GEMINI_MATRIX_MODEL",
+      "name": "gemini-default",
+      "provider": "gemini"
+    }
+  ],
+  "instruction_variants": [
+    {
+      "name": "insforge_host_rules",
+      "instructions": "Choose the single InsForge MCP tool that should be called next. The tool catalog manages one InsForge backend. If no provided InsForge tool can safely perform the next step, choose NO_TOOL."
+    }
+  ],
+  "tool_variants": [
+    {
+      "name": "readme_insforge_mcp",
+      "tools": [
+        {"name": "fetch-docs", "purpose": "Fetch InsForge documentation.", "input_schema": {"properties": {"docType": {"type": "string"}}, "required": ["docType"], "type": "object"}},
+        {"name": "fetch-sdk-docs", "purpose": "Fetch InsForge SDK documentation for a feature and language.", "input_schema": {"properties": {"sdkFeature": {"type": "string"}, "sdkLanguage": {"type": "string"}}, "required": ["sdkFeature", "sdkLanguage"], "type": "object"}},
+        {"name": "get-anon-key", "purpose": "Generate an anonymous JWT token for client-side applications.", "input_schema": {"properties": {"apiKey": {"type": "string"}}, "type": "object"}},
+        {"name": "get-container-logs", "purpose": "Get latest logs from a container or service.", "input_schema": {"properties": {"source": {"type": "string"}, "limit": {"type": "integer"}}, "required": ["source"], "type": "object"}},
+        {"name": "get-table-schema", "purpose": "Return detailed schema of a specific table.", "input_schema": {"properties": {"tableName": {"type": "string"}}, "required": ["tableName"], "type": "object"}},
+        {"name": "get-backend-metadata", "purpose": "Index all backend metadata.", "input_schema": {"properties": {}, "type": "object"}},
+        {"name": "run-raw-sql", "purpose": "Execute raw SQL query with optional parameters.", "input_schema": {"properties": {"query": {"type": "string"}, "params": {"items": {}, "type": "array"}}, "required": ["query"], "type": "object"}},
+        {"name": "download-template", "purpose": "Download a pre-configured starter template.", "input_schema": {"properties": {"frame": {"type": "string"}, "projectName": {"type": "string"}}, "required": ["frame"], "type": "object"}},
+        {"name": "bulk-upsert", "purpose": "Bulk insert or update data from CSV or JSON file.", "input_schema": {"properties": {"table": {"type": "string"}, "filePath": {"type": "string"}, "upsertKey": {"type": "string"}}, "required": ["table", "filePath"], "type": "object"}},
+        {"name": "create-bucket", "purpose": "Create new storage bucket.", "input_schema": {"properties": {"bucketName": {"type": "string"}, "isPublic": {"type": "boolean"}}, "required": ["bucketName"], "type": "object"}},
+        {"name": "list-buckets", "purpose": "List all storage buckets.", "input_schema": {"properties": {}, "type": "object"}},
+        {"name": "delete-bucket", "purpose": "Delete a storage bucket.", "input_schema": {"properties": {"bucketName": {"type": "string"}}, "required": ["bucketName"], "type": "object"}},
+        {"name": "create-function", "purpose": "Create a new edge function.", "input_schema": {"properties": {"slug": {"type": "string"}, "name": {"type": "string"}, "codeFile": {"type": "string"}, "code": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "get-function", "purpose": "Get details of a specific edge function.", "input_schema": {"properties": {"slug": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "update-function", "purpose": "Update an existing edge function.", "input_schema": {"properties": {"slug": {"type": "string"}, "name": {"type": "string"}, "codeFile": {"type": "string"}, "code": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "delete-function", "purpose": "Delete an edge function permanently.", "input_schema": {"properties": {"slug": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "create-deployment", "purpose": "Create or prepare a source-code deployment.", "input_schema": {"properties": {"sourceDirectory": {"type": "string"}, "envVars": {"additionalProperties": true, "type": "object"}}, "required": ["sourceDirectory"], "type": "object"}},
+        {"name": "start-deployment", "purpose": "Trigger a deployment build after uploading source code.", "input_schema": {"properties": {"deploymentId": {"type": "string"}, "envVars": {"additionalProperties": true, "type": "object"}}, "required": ["deploymentId"], "type": "object"}}
+      ]
+    },
+    {
+      "name": "source_tuned_insforge_mcp",
+      "tools": [
+        {"name": "fetch-docs", "purpose": "Fetch InsForge product documentation. Use instructions for essential backend setup before building against a new project.", "use_when": "Use when the agent needs setup instructions or product docs for database, auth, storage, functions, AI integration, or general InsForge behavior.", "avoid_when": "Avoid for live backend inventory, schema lookup, SQL execution, starter-template download, SDK syntax, logs, or mutation tasks.", "input_schema": {"properties": {"docType": {"type": "string"}}, "required": ["docType"], "type": "object"}, "quality_checks": ["Use docType instructions as the first documentation step for a new project."]},
+        {"name": "fetch-sdk-docs", "purpose": "Fetch SDK documentation for one InsForge feature and language pair.", "use_when": "Use when the user asks how to call database, auth, storage, functions, or AI integration from a specific SDK language.", "avoid_when": "Avoid for backend state, source deployment, container logs, or general setup instructions.", "input_schema": {"properties": {"sdkFeature": {"type": "string"}, "sdkLanguage": {"type": "string"}}, "required": ["sdkFeature", "sdkLanguage"], "type": "object"}},
+        {"name": "get-anon-key", "purpose": "Generate a public anonymous token for client-side applications from the admin backend.", "use_when": "Use when wiring browser/client app access that needs the InsForge anon token.", "avoid_when": "Avoid for admin credentials, server-side secrets, backend metadata, or OAuth setup.", "input_schema": {"properties": {"apiKey": {"type": "string"}}, "type": "object"}, "quality_checks": ["Do not print or store admin API keys in generated artifacts."]},
+        {"name": "get-container-logs", "purpose": "Read recent logs from an InsForge service container.", "use_when": "Use for runtime debugging of insforge.logs, postgREST.logs, postgres.logs, or function.logs.", "avoid_when": "Avoid for schema discovery, code retrieval, deployment status tables, or application-level data queries.", "input_schema": {"properties": {"source": {"type": "string"}, "limit": {"type": "integer"}}, "required": ["source"], "type": "object"}},
+        {"name": "get-table-schema", "purpose": "Return detailed schema, RLS, indexes, and constraints for one known table.", "use_when": "Use when the table name is known and the task asks about columns, policies, constraints, indexes, or table-specific metadata.", "avoid_when": "Avoid for whole-backend inventory, SQL execution, or unknown table discovery.", "input_schema": {"properties": {"tableName": {"type": "string"}}, "required": ["tableName"], "type": "object"}},
+        {"name": "get-backend-metadata", "purpose": "Index the full InsForge backend metadata across tables, storage, functions, and capabilities.", "use_when": "Use when the user asks what exists in the backend, asks for current structure, or when the relevant table/function/bucket is unknown.", "avoid_when": "Avoid when a specific table schema, SQL query, function body, bucket operation, or deployment action is requested.", "input_schema": {"properties": {}, "type": "object"}},
+        {"name": "run-raw-sql", "purpose": "Execute raw SQL with optional parameters against the InsForge database. It can read or modify data.", "use_when": "Use for explicit SQL execution, data queries, DDL, DML, or admin database operations after the user has asked for SQL to run.", "avoid_when": "Avoid for metadata discovery, table schema lookup, file import, storage buckets, or tasks that are unsafe or not yet authorized.", "input_schema": {"properties": {"query": {"type": "string"}, "params": {"items": {}, "type": "array"}}, "required": ["query"], "type": "object"}, "quality_checks": ["Prefer metadata tools before writing exploratory SQL.", "Confirm destructive SQL intent before calling in an interactive host."]},
+        {"name": "download-template", "purpose": "Bootstrap a pre-configured React or Next.js starter template for a new InsForge app.", "use_when": "Use as the first build step when the user asks to start a new InsForge-backed app or scaffold a starter template.", "avoid_when": "Avoid for existing backend inventory, SDK reference docs, deployment of an existing source tree, or non-React/Next.js projects.", "input_schema": {"properties": {"frame": {"type": "string"}, "projectName": {"type": "string"}}, "required": ["frame"], "type": "object"}, "quality_checks": ["Keep projectName to one safe directory name.", "Follow the returned copy/run instructions before editing generated code."]},
+        {"name": "bulk-upsert", "purpose": "Bulk insert or update CSV or JSON file rows into a table, optionally using an upsert key.", "use_when": "Use when the user names a local CSV or JSON file and target table for import or upsert.", "avoid_when": "Avoid for ordinary SQL, schema discovery, storage uploads, or when file path/table is missing.", "input_schema": {"properties": {"table": {"type": "string"}, "filePath": {"type": "string"}, "upsertKey": {"type": "string"}}, "required": ["table", "filePath"], "type": "object"}},
+        {"name": "create-bucket", "purpose": "Create a new InsForge storage bucket.", "use_when": "Use when the user asks to create a named bucket and optionally says whether it is public.", "avoid_when": "Avoid for listing, deleting, file uploads, database tables, or function code.", "input_schema": {"properties": {"bucketName": {"type": "string"}, "isPublic": {"type": "boolean"}}, "required": ["bucketName"], "type": "object"}},
+        {"name": "list-buckets", "purpose": "List all InsForge storage buckets.", "use_when": "Use when the user asks which buckets exist or needs bucket inventory.", "avoid_when": "Avoid for bucket creation, deletion, file import to database, or backend-wide metadata.", "input_schema": {"properties": {}, "type": "object"}},
+        {"name": "delete-bucket", "purpose": "Delete a named InsForge storage bucket.", "use_when": "Use only when the user explicitly asks to delete a specific bucket.", "avoid_when": "Avoid for listing, clearing files, deleting database data, or vague cleanup requests.", "input_schema": {"properties": {"bucketName": {"type": "string"}}, "required": ["bucketName"], "type": "object"}},
+        {"name": "create-function", "purpose": "Create a new Deno edge function from inline code in remote mode or a local code file in local mode.", "use_when": "Use when the user asks to create a new edge function and provides a slug plus function code or code file path.", "avoid_when": "Avoid for reading, updating, or deleting existing functions, and avoid before code is written to a file in local mode.", "input_schema": {"properties": {"slug": {"type": "string"}, "name": {"type": "string"}, "codeFile": {"type": "string"}, "code": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "get-function", "purpose": "Read details and code for one existing edge function.", "use_when": "Use when the user asks to inspect, retrieve, or review a known function slug.", "avoid_when": "Avoid for creating, updating, deleting, logs, or unknown function inventory.", "input_schema": {"properties": {"slug": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "update-function", "purpose": "Update code or metadata for an existing edge function.", "use_when": "Use when the user asks to change a known function slug and provides updated code, code file, metadata, or status.", "avoid_when": "Avoid for new functions, reading current code, deleting functions, or when the slug is unknown.", "input_schema": {"properties": {"slug": {"type": "string"}, "name": {"type": "string"}, "codeFile": {"type": "string"}, "code": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "delete-function", "purpose": "Permanently delete a known edge function.", "use_when": "Use only when the user explicitly asks to delete a specific function slug.", "avoid_when": "Avoid for disabling, reading, updating, or vague cleanup requests.", "input_schema": {"properties": {"slug": {"type": "string"}}, "required": ["slug"], "type": "object"}},
+        {"name": "create-deployment", "purpose": "Deploy or prepare upload for an existing source directory. Requires an absolute sourceDirectory path.", "use_when": "Use when the user asks to deploy a local source tree and provides an absolute source directory.", "avoid_when": "Avoid for relative paths, starter-template creation, deployment status lookup, or triggering a prepared deployment id in remote mode.", "input_schema": {"properties": {"sourceDirectory": {"type": "string"}, "envVars": {"additionalProperties": true, "type": "object"}}, "required": ["sourceDirectory"], "type": "object"}, "quality_checks": ["Reject relative paths before calling.", "Do not include secret env var values in public artifacts."]},
+        {"name": "start-deployment", "purpose": "Start a prepared deployment after source upload commands have completed.", "use_when": "Use after create-deployment returned a deployment id and the upload steps are complete.", "avoid_when": "Avoid before preparing/uploading a deployment, for local direct deploy flows, or when deploymentId is missing.", "input_schema": {"properties": {"deploymentId": {"type": "string"}, "envVars": {"additionalProperties": true, "type": "object"}}, "required": ["deploymentId"], "type": "object"}}
+      ]
+    }
+  ],
+  "cases": [
+    {"name": "new project setup reads instructions", "task": "I just connected a new InsForge project. Before building anything, fetch the mandatory setup instructions.", "expected_tools": ["fetch-docs"], "forbidden_tools": ["download-template", "get-backend-metadata", "run-raw-sql"]},
+    {"name": "new app bootstrap uses template", "task": "Create a new Next.js starter app for InsForge named founder-dashboard.", "expected_tools": ["download-template"], "forbidden_tools": ["fetch-docs", "create-deployment", "get-backend-metadata"]},
+    {"name": "backend inventory uses metadata", "task": "InsForge is my backend platform. What is my current backend structure across tables, buckets, and functions?", "expected_tools": ["get-backend-metadata"], "forbidden_tools": ["get-table-schema", "run-raw-sql", "list-buckets"]},
+    {"name": "known table details use schema", "task": "Show me the RLS policies, indexes, constraints, and columns for the known table accounts.", "expected_tools": ["get-table-schema"], "forbidden_tools": ["get-backend-metadata", "run-raw-sql"]},
+    {"name": "explicit sql uses raw sql", "task": "Run this SQL now: SELECT count(*) FROM accounts WHERE status = 'active'.", "expected_tools": ["run-raw-sql"], "forbidden_tools": ["get-table-schema", "get-backend-metadata"]},
+    {"name": "csv import uses bulk upsert", "task": "Bulk upsert /tmp/accounts.csv into the accounts table using account_id as the unique key.", "expected_tools": ["bulk-upsert"], "forbidden_tools": ["run-raw-sql", "create-bucket"]},
+    {"name": "storage inventory lists buckets", "task": "Which storage buckets exist in this InsForge project?", "expected_tools": ["list-buckets"], "forbidden_tools": ["get-backend-metadata", "create-bucket", "delete-bucket"]},
+    {"name": "create storage bucket uses create bucket", "task": "Create a public storage bucket named avatars.", "expected_tools": ["create-bucket"], "forbidden_tools": ["list-buckets", "delete-bucket"]},
+    {"name": "read function uses get function", "task": "Get the code and metadata for the existing edge function webhook-handler.", "expected_tools": ["get-function"], "forbidden_tools": ["create-function", "update-function", "delete-function"]},
+    {"name": "update function uses update function", "task": "Update existing edge function webhook-handler from local file /Users/me/app/functions/webhook-handler.js.", "expected_tools": ["update-function"], "forbidden_tools": ["create-function", "get-function", "delete-function"]},
+    {"name": "function logs use container logs", "task": "Show me the last 50 edge function runtime logs.", "expected_tools": ["get-container-logs"], "forbidden_tools": ["get-function", "run-raw-sql"]},
+    {"name": "sdk docs use sdk docs", "task": "Show the JavaScript SDK documentation for InsForge storage uploads.", "expected_tools": ["fetch-sdk-docs"], "forbidden_tools": ["fetch-docs", "list-buckets"]},
+    {"name": "client token uses anon key", "task": "Generate the public anonymous token my browser app should use for InsForge client-side access.", "expected_tools": ["get-anon-key"], "forbidden_tools": ["fetch-docs", "get-backend-metadata"]},
+    {"name": "absolute source deploy uses create deployment", "task": "Deploy the source tree at /Users/me/founder-dashboard to InsForge.", "expected_tools": ["create-deployment"], "forbidden_tools": ["download-template", "start-deployment"]},
+    {"name": "prepared remote upload starts deployment", "task": "The upload commands for deployment dep_123 are complete. Trigger the deployment build now.", "expected_tools": ["start-deployment"], "forbidden_tools": ["create-deployment", "download-template"]},
+    {"name": "relative deploy path avoids tool", "task": "Deploy my current directory . to InsForge now.", "allow_no_tool": true, "expected_tools": [], "forbidden_tools": ["create-deployment", "start-deployment", "download-template"]}
+  ]
+}

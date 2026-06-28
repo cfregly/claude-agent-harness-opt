@@ -17,11 +17,7 @@ operations and `execute_sql` for regular queries that do not change schema.
 
 ## Matrix
 
-The matrix lives at:
-
-```text
-evals/model_matrix/supabase_mcp_database_tool_selection.json
-```
+Matrix: [supabase_mcp_database_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/supabase_mcp_database_tool_selection.json)
 
 It compares:
 
@@ -32,7 +28,7 @@ It compares:
 The upstream version pin for this result is:
 
 - package: `@supabase/mcp-server-supabase` 0.8.2
-- repository: `https://github.com/supabase/mcp`
+- repository: [supabase/mcp](https://github.com/supabase/mcp)
 - commit: `100565f26d7eec6d314a08597ded22da63045923`
 - checked: 2026-06-25
 

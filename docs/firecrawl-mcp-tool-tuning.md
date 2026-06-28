@@ -17,11 +17,7 @@ known page, and reserve `extract` for multi-page or broader structured extractio
 
 ## Matrix
 
-The matrix lives at:
-
-```text
-evals/model_matrix/firecrawl_mcp_tool_selection.json
-```
+Matrix: [firecrawl_mcp_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/firecrawl_mcp_tool_selection.json)
 
 It compares:
 
@@ -31,7 +27,7 @@ It compares:
 The upstream version pin for this result is:
 
 - package: `firecrawl-mcp` 3.22.0
-- repository: `https://github.com/firecrawl/firecrawl-mcp-server`
+- repository: [firecrawl/firecrawl-mcp-server](https://github.com/firecrawl/firecrawl-mcp-server)
 - commit: `e744bba494c0e77086d66af838d7a64fab52f138`
 - checked: 2026-06-25
 

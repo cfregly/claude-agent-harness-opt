@@ -229,6 +229,26 @@ class ModelMatrixTests(unittest.TestCase):
                 "tuned_zymtrace_mcp_boundaries",
                 "zymtrace_host_and_skill_rules",
             ),
+            (
+                "screenpipe_mcp_tool_selection.json",
+                "source_tuned_screenpipe_mcp",
+                "screenpipe_host_rules",
+            ),
+            (
+                "humwork_mcp_tool_selection.json",
+                "skill_tuned_humwork_mcp",
+                "humwork_host_rules",
+            ),
+            (
+                "openwork_ui_mcp_tool_selection.json",
+                "source_tuned_openwork_ui_mcp",
+                "openwork_ui_host_rules",
+            ),
+            (
+                "insforge_mcp_tool_selection.json",
+                "source_tuned_insforge_mcp",
+                "insforge_host_rules",
+            ),
         ]
 
         for filename, variant, instruction_variant in cases:

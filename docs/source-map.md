@@ -155,6 +155,19 @@ Checked on 2026-06-25.
   - Used for the Zymtrace MCP and profiler setup context in the public MCP sweep.
 - [Zymtrace Model Context Protocol docs](https://docs.zymtrace.com/category/model-context-protocol-mcp/)
   - Used for the Zymtrace MCP tool-selection matrix and sweep source links.
+- [InsForge MCP repo](https://github.com/InsForge/insforge-mcp)
+  - Used for the InsForge backend-agent MCP tool catalog, version pin, and deployment-path
+    boundary.
+- [Humwork MCP repo](https://github.com/humworkai/humwork-mcp)
+  - Used for the Humwork expert-consultation MCP tool catalog and lifecycle guardrail.
+- [OpenWork repo](https://github.com/different-ai/openwork)
+  - Used for the OpenWork UI MCP tool catalog and desktop bridge guardrail.
+- [Screenpipe repo](https://github.com/screenpipe/screenpipe)
+  - Used for the Screenpipe local activity MCP tool catalog and exact keyword routing finding.
+- [Firecrawl MCP server](https://github.com/firecrawl/firecrawl-mcp-server)
+  - Used for the Firecrawl scrape-versus-extract public MCP finding.
+- [Supabase MCP repo](https://github.com/supabase/mcp)
+  - Used for the Supabase DDL-versus-SQL migration boundary finding.
 
 ## Local Screenshots
 

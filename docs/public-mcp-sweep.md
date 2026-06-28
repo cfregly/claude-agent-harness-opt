@@ -23,12 +23,24 @@ The current sweep covers:
 - Zymtrace MCP: MCP resources, project discovery, time-window normalization, top
   functions/entities, hot traces, flamegraphs, metrics discovery/query, recommendations, raw project
   event/stat APIs, and CPU/GPU optimization skill routing.
+- Screenpipe MCP: local screen/audio search, UI element lookup, frame context, meetings, memories,
+  and scheduled pipes.
+- InsForge MCP: backend metadata, table schema, raw SQL, starter templates, bulk import, storage
+  buckets, edge functions, deployments, logs, docs, and anon-token generation.
+- Humwork MCP: expert consultation start, active chat lifecycle, closure, rating, and no-tool
+  safety.
+- OpenWork UI MCP: desktop bridge status, UI snapshot, available semantic actions, action execution,
+  and no-tool boundaries.
+
+Founder-facing packets live under
+[Founder Findings](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings).
+Use those links when sending a result to a startup.
 
 ## What Cleared
 
-GitHub, Playwright, Slack, Filesystem, Postgres MCP Pro, Context7, and ClickHouse did not produce a
-confirmed tuning win on the current slices. Their stock descriptions either passed outright or the
-apparent miss was an unfair verifier/transient issue.
+GitHub, Playwright, Slack, Filesystem, Postgres MCP Pro, Context7, and ClickHouse did
+not produce a confirmed tuning win on the current slices. Their stock descriptions either passed
+outright or the apparent miss was an unfair verifier/transient issue.
 
 Firecrawl produced a confirmed improvement:
 
@@ -37,6 +49,7 @@ Firecrawl produced a confirmed improvement:
 - Rationale: current Firecrawl guidance says one known page with specific fields should use
   `firecrawl_scrape` with a focused JSON format. `firecrawl_extract` is better for multi-page or
   broader structured extraction jobs.
+- Packet: [Firecrawl finding](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/firecrawl).
 
 Supabase produced a confirmed improvement:
 
@@ -44,6 +57,7 @@ Supabase produced a confirmed improvement:
 - Tuned description: the same DDL and RLS policy tasks chose `apply_migration`.
 - Rationale: Supabase schema changes should be tracked as migrations. `execute_sql` is for regular
   SQL that does not change schema.
+- Packet: [Supabase finding](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/supabase).
 
 Zymtrace produced a confirmed improvement:
 
@@ -53,12 +67,37 @@ Zymtrace produced a confirmed improvement:
   GPU call-tree, and selected-trace drilldown cases across Anthropic, OpenAI, and Gemini prompt JSON.
 - Rationale: the live Zymtrace MCP server has resource-first/default-project rules, and the
   installed CPU/GPU skills add workflow constraints that must be present in the tool surface.
+- Packet: [Zymtrace finding](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/zymtrace).
+
+Screenpipe produced a confirmed improvement:
+
+- README-level description: exact keyword lookup chose `search-content`.
+- Source-level tuned description: the same task chose `keyword-search`.
+- Rationale: Screenpipe has a dedicated keyword search tool for literal terms and exact phrases.
+  Broader content search remains useful for transcript lines, screen text, speakers, windows, tags,
+  and memories.
+- Packet: [Screenpipe finding](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/screenpipe).
+
+InsForge produced a confirmed improvement:
+
+- README-level description: a relative source-directory deployment request chose
+  `create-deployment`.
+- Source-level tuned description: the same task chose `NO_TOOL`.
+- Rationale: InsForge deployment requires an absolute `sourceDirectory`. Relative paths should be
+  rejected before the deployment tool is called.
+- Packet: [InsForge finding](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/insforge).
+
+Humwork and OpenWork did not produce a confirmed tuning win on the current Anthropic slices. Their
+public descriptions already routed the tested expert-consultation and UI-control cases correctly.
+Packets: [Humwork guardrail](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/humwork)
+and [OpenWork guardrail](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/openwork).
 
 This is the useful pattern: do not broadly rewrite a tool catalog. Identify one ambiguous boundary,
 write a realistic prompt that isolates it, and prove the tuned wording changes the next tool call.
 
-The pinned improvement ledger lives in [confirmed-improvements.md](confirmed-improvements.md). Use
-that page when you need the exact upstream MCP version or commit attached to each result.
+The pinned improvement ledger lives in
+[Confirmed Improvements](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/confirmed-improvements.md).
+Use that page when you need the exact upstream MCP version or commit attached to each result.
 
 ## Live Results
 
@@ -96,6 +135,25 @@ Zymtrace held-out tool/skill boundary run:
 - Gemini prompt JSON: stock 2/5, tuned 5/5.
 - The stock failures were default project UUIDs on project metrics calls and missing
   `meta_only=false` on selected full-trace drilldown. Tuned descriptions passed all held-out cells.
+
+Screenpipe YC S26 local-activity run:
+
+- Anthropic prompt JSON: README-level 6/7, source-level tuned 7/7.
+- The tested slice covered broad activity recap, exact keyword lookup, speaker transcript search, UI
+  element lookup, known frame context, pipe creation, and pipe log verification.
+- The README-level miss chose `search-content` for exact keyword lookup. The source-level tuned
+  variant chose `keyword-search`.
+- Receipt: `evals/results/screenpipe_mcp_tool_selection_2026-06-28.md`.
+
+YC P2026 MCP run:
+
+- InsForge Anthropic prompt JSON: README-level 15/16, source-level tuned 16/16.
+- Humwork Anthropic prompt JSON: README-level 7/7, skill-tuned 7/7.
+- OpenWork Anthropic prompt JSON: docs-level 7/7, source-level tuned 7/7.
+- InsForge produced the confirmed delta. Humwork and OpenWork remain guardrails without promotion.
+- Receipts: `evals/results/insforge_mcp_tool_selection_2026-06-28.md`,
+  `evals/results/humwork_mcp_tool_selection_2026-06-28.md`, and
+  `evals/results/openwork_ui_mcp_tool_selection_2026-06-28.md`.
 
 Additional guardrail slices were added for the partial check families on 2026-06-25. These are
 not promoted as new upstream improvements by themselves. They are live tuned-variant regression
@@ -203,6 +261,28 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_
   --markdown
 ```
 
+Live Screenpipe YC S26 boundary check:
+
+```bash
+make optimize mcp=screenpipe
+make optimize url=https://github.com/screenpipe/screenpipe
+```
+
+Equivalent direct command:
+
+```bash
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/screenpipe_mcp_tool_selection.json \
+  --env-file .env \
+  --live \
+  --require-live \
+  --providers anthropic \
+  --harnesses prompt_json \
+  --variants readme_screenpipe_mcp,source_tuned_screenpipe_mcp \
+  --instruction-variants screenpipe_host_rules \
+  --concurrency 2 \
+  --markdown
+```
+
 Dry Zymtrace held-out skill boundary check:
 
 ```bash
@@ -298,3 +378,5 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/firecrawl_mcp
 - `zymtrace-mcp` 26.6.1 `initialize`, `resources/list`, `tools/list`, and `get_date_time` MCP
   responses from the inspected endpoint
 - Zymtrace skills plugin 26.6.0 `optimize-cpu-workloads` and `optimize-gpu-workloads`
+- `https://github.com/screenpipe/screenpipe`
+- `screenpipe-mcp` 0.18.14 source file `packages/screenpipe-mcp/src/index.ts`
