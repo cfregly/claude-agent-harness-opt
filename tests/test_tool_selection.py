@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.tool_selection import (
+from claude_agent_harness_opt.tool_selection import (
     render_tool_selection_markdown,
     review_tool_selection_bundle,
 )
@@ -118,7 +118,7 @@ class ToolSelectionTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "claude_agent_harness_optimization",
+                "claude_agent_harness_opt",
                 "optimize-tools",
                 "evals/examples/agent_audit_bundle.json",
                 "--markdown",
@@ -136,7 +136,7 @@ class ToolSelectionTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "claude_agent_harness_optimization",
+                "claude_agent_harness_opt",
                 "optimize-tools",
                 "evals/examples/tool_tuning_before_bundle.json",
                 "--markdown",

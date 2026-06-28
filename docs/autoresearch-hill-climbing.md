@@ -39,7 +39,7 @@ candidates. Held-out confirmation keeps the candidate from overfitting the exact
 Run the baseline on target cases:
 
 ```bash
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \

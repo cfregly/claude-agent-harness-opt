@@ -1,6 +1,6 @@
 import unittest
 
-from claude_agent_harness_optimization.value_bar import evaluate_value_bar
+from claude_agent_harness_opt.value_bar import evaluate_value_bar
 
 
 class ValueBarTests(unittest.TestCase):

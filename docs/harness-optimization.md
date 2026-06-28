@@ -44,7 +44,7 @@ access to hidden chain-of-thought.
 Use `model-matrix` when the question is tool choice:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -57,7 +57,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codi
 Use `grind-harness` when a baseline fails and you want a candidate tool-description variant:
 
 ```bash
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -99,25 +99,25 @@ The first adapter should be thin. Capture actual tool calls and outputs before w
 about the harness. Normalize the event export first:
 
 ```bash
-python -m claude_agent_harness_optimization normalize-runtime path/to/events.json > path/to/trace.json
-python -m claude_agent_harness_optimization import-run path/to/events.json --adapter cursor --out-dir /tmp/imported-run
-python -m claude_agent_harness_optimization import-run path/to/codex-events.jsonl --adapter codex_jsonl --out-dir /tmp/imported-codex-run
+python -m claude_agent_harness_opt normalize-runtime path/to/events.json > path/to/trace.json
+python -m claude_agent_harness_opt import-run path/to/events.json --adapter cursor --out-dir /tmp/imported-run
+python -m claude_agent_harness_opt import-run path/to/codex-events.jsonl --adapter codex_jsonl --out-dir /tmp/imported-codex-run
 ```
 
 Once a real trace exists, run:
 
 ```bash
-python -m claude_agent_harness_optimization review-trace path/to/trace.json --claude-judge
-python -m claude_agent_harness_optimization audit-agent /tmp/imported-run/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_optimization trace-suite path/to/suite.json --markdown
-python -m claude_agent_harness_optimization snapshot-surface --bundle /tmp/imported-run/agent_audit_bundle.json --out /tmp/surface.json
+python -m claude_agent_harness_opt review-trace path/to/trace.json --claude-judge
+python -m claude_agent_harness_opt audit-agent /tmp/imported-run/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt trace-suite path/to/suite.json --markdown
+python -m claude_agent_harness_opt snapshot-surface --bundle /tmp/imported-run/agent_audit_bundle.json --out /tmp/surface.json
 ```
 
 Then add the exported run as a named harness in a model matrix. The fixture provider is useful for
 testing adapters without spending live provider calls:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --live \
   --require-live \
   --providers trace_fixture \
@@ -125,7 +125,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harn
   --variants exported_trace_tools \
   --instruction-variants exported_trace \
   --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codex_harness_trace_adapter.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/codex_harness_trace_adapter.json \
   --live \
   --require-live \
   --providers trace_fixture \

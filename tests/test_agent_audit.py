@@ -3,7 +3,7 @@ import subprocess
 import sys
 import unittest
 
-from claude_agent_harness_optimization.agent_audit import review_agent_bundle
+from claude_agent_harness_opt.agent_audit import review_agent_bundle
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,7 +38,7 @@ class AgentAuditTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "claude_agent_harness_optimization",
+                "claude_agent_harness_opt",
                 "audit-agent",
                 "evals/examples/agent_audit_bundle.json",
                 "--markdown",

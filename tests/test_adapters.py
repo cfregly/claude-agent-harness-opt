@@ -3,7 +3,7 @@ import subprocess
 import sys
 import unittest
 
-from claude_agent_harness_optimization.adapters import (
+from claude_agent_harness_opt.adapters import (
     claude_messages_to_trace,
     load_json,
     load_run_export,
@@ -11,7 +11,7 @@ from claude_agent_harness_optimization.adapters import (
     runtime_events_to_trace,
     supported_adapters,
 )
-from claude_agent_harness_optimization.trace_review import review_trace
+from claude_agent_harness_opt.trace_review import review_trace
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,7 +32,7 @@ class AdapterTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "claude_agent_harness_optimization",
+                "claude_agent_harness_opt",
                 "normalize-claude",
                 "evals/examples/claude_messages.json",
             ],
@@ -221,7 +221,7 @@ class AdapterTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "claude_agent_harness_optimization",
+                "claude_agent_harness_opt",
                 "normalize-runtime",
                 "evals/examples/cursor_trace_review_events.json",
             ],

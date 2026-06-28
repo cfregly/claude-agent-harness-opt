@@ -1,7 +1,7 @@
 from pathlib import Path
 import unittest
 
-from claude_agent_harness_optimization.prompt_builder import lint_tools, load_recipe, render_prompt
+from claude_agent_harness_opt.prompt_builder import lint_tools, load_recipe, render_prompt
 
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -1,7 +1,7 @@
 from pathlib import Path
 import unittest
 
-from claude_agent_harness_optimization.evals import evaluate_case, load_eval_case
+from claude_agent_harness_opt.evals import evaluate_case, load_eval_case
 
 
 ROOT = Path(__file__).resolve().parents[1]

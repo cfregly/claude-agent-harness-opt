@@ -32,7 +32,7 @@ same trace contract used for Claude, Agent SDK, Cursor-style, LangGraph, and Lan
 Run the fixture matrix:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codex_harness_trace_adapter.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/codex_harness_trace_adapter.json \
   --live \
   --require-live \
   --providers trace_fixture \

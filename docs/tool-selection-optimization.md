@@ -63,10 +63,10 @@ baseline.
 ## Commands
 
 ```bash
-python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
+python -m claude_agent_harness_opt optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
 ```
 
 The before bundle is a deliberate negative control. It proves the gate catches a vague search tool

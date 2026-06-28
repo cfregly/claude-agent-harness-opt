@@ -1,7 +1,7 @@
 {
   "name": "latest SDK agent live smoke",
   "checked_at": "2026-06-25T16:07:22Z",
-  "command": "python -m claude_agent_harness_optimization live-harness evals/live_harnesses/sdk_agent_smoke.json --env-file .env --out-dir /tmp/aho-sdk-live-v2/artifacts --out /tmp/aho-sdk-live-v2/result.json",
+  "command": "python -m claude_agent_harness_opt live-harness evals/live_harnesses/sdk_agent_smoke.json --env-file .env --out-dir /tmp/aho-sdk-live-v2/artifacts --out /tmp/aho-sdk-live-v2/result.json",
   "raw_result_path": "/tmp/aho-sdk-live-v2/result.json",
   "raw_artifact_root": "/tmp/aho-sdk-live-v2/artifacts",
   "summary": {

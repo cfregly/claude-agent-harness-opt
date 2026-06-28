@@ -3,7 +3,7 @@ import json
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.e2e import run_e2e_spec
+from claude_agent_harness_opt.e2e import run_e2e_spec
 
 
 class E2ETests(unittest.TestCase):

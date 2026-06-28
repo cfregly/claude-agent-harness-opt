@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Conventions for any agent working on `claude-agent-harness-optimization`. Read this first.
+Conventions for any agent working on `claude-agent-harness-opt`. Read this first.
 
 ## What this is
 
@@ -13,10 +13,10 @@ harnesses, `CLAUDE.md` style instructions, and skills across model generations.
 ## Run it
 
     pip install -e .
-    python -m claude_agent_harness_optimization render recipes/agentic_search.json
-    python -m claude_agent_harness_optimization score recipes/agentic_search.json
-    python -m claude_agent_harness_optimization eval evals/examples/search_answer.json
-    python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json
+    python -m claude_agent_harness_opt render recipes/agentic_search.json
+    python -m claude_agent_harness_opt score recipes/agentic_search.json
+    python -m claude_agent_harness_opt eval evals/examples/search_answer.json
+    python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json
 
 ## Rules
 

@@ -151,7 +151,7 @@ the installed Zymtrace optimization skills:
 Dry contract checks:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
   --providers anthropic \
   --harnesses prompt_json \
   --variants legacy_firecrawl_mcp,tuned_firecrawl_mcp_boundaries \
@@ -163,7 +163,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/fire
 Live Supabase DDL boundary check:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/supabase_mcp_database_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/supabase_mcp_database_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -179,7 +179,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/supa
 Live ClickHouse read-only boundary check:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/clickhouse_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/clickhouse_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -194,7 +194,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/clic
 Dry Zymtrace boundary check:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
   --providers anthropic \
   --harnesses prompt_json \
   --variants tuned_zymtrace_mcp_boundaries \
@@ -206,7 +206,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymt
 Dry Zymtrace held-out skill boundary check:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
   --providers anthropic \
   --harnesses prompt_json \
   --variants tuned_zymtrace_mcp_boundaries \
@@ -218,7 +218,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymt
 Live Zymtrace cross-provider boundary check:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -235,7 +235,7 @@ This baseline-versus-candidate command is expected to exit nonzero while `stock_
 fails. Use it to confirm the delta. Use the tuned-only command as the passing merge gate:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -251,7 +251,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymt
 Live full Anthropic check:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -265,7 +265,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/fire
 Live cross-provider adversarial case:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \

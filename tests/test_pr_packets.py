@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.pr_packets import (
+from claude_agent_harness_opt.pr_packets import (
     PacketOptions,
     build_upstream_pr_packet,
     write_upstream_pr_packet,
@@ -52,8 +52,8 @@ class PrPacketTests(unittest.TestCase):
             self.assertIn("provider=anthropic", body)
             self.assertIn("passed=1", body)
             self.assertIn("single page extraction", body)
-            self.assertIn("python -m claude_agent_harness_optimization model-matrix", body)
-            self.assertIn("public harness repo: https://github.com/cfregly/claude-agent-harness-optimization", body)
+            self.assertIn("python -m claude_agent_harness_opt model-matrix", body)
+            self.assertIn("public harness repo: https://github.com/cfregly/claude-agent-harness-opt", body)
             self.assertIn("## What We Learned", body)
             self.assertIn("`tuned` beat `stock` by 1.000", body)
             self.assertIn("confusable alternatives checked: example_stock", body)
@@ -101,7 +101,7 @@ class PrPacketTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "claude_agent_harness_optimization",
+                    "claude_agent_harness_opt",
                     "upstream-pr-packet",
                     str(result_path),
                     "--target-name",

@@ -105,7 +105,7 @@ This change is backed by a harness matrix result, not a prose-only review. The b
 ## Reproduce
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/targets/gstack/gstack_skill_selection_matrix.json --env-file .env --live --require-live --cases browser-headless,qa-fix,qa-report-only,implemented-design-polish,design-plan-review,design-system,design-variants,product-brainstorm,spec-plus-browser-validation,ceo-scope-review,engineering-plan-review,auto-plan-review,pre-landing-review,root-cause-debug,security-audit,ship-pr,land-and-deploy,configure-deploy,post-deploy-monitor,performance-regression,docs-after-release,weekly-retro,real-chrome,auth-cookies,careful-mode,freeze-edits,full-guard-mode,unfreeze-edits,upgrade-gstack,no-tool-general-answer --variants gstack_stock_skill_descriptions,gstack_boundary_tuned_skill_descriptions
+python -m claude_agent_harness_opt model-matrix evals/targets/gstack/gstack_skill_selection_matrix.json --env-file .env --live --require-live --cases browser-headless,qa-fix,qa-report-only,implemented-design-polish,design-plan-review,design-system,design-variants,product-brainstorm,spec-plus-browser-validation,ceo-scope-review,engineering-plan-review,auto-plan-review,pre-landing-review,root-cause-debug,security-audit,ship-pr,land-and-deploy,configure-deploy,post-deploy-monitor,performance-regression,docs-after-release,weekly-retro,real-chrome,auth-cookies,careful-mode,freeze-edits,full-guard-mode,unfreeze-edits,upgrade-gstack,no-tool-general-answer --variants gstack_stock_skill_descriptions,gstack_boundary_tuned_skill_descriptions
 ```
 
 ## Examples used
@@ -143,7 +143,7 @@ python -m claude_agent_harness_optimization model-matrix evals/targets/gstack/gs
 
 ## Evidence
 
-- public harness repo: https://github.com/cfregly/claude-agent-harness-optimization
+- public harness repo: https://github.com/cfregly/claude-agent-harness-opt
 - `REPRODUCTION.md` contains the full local reproduction path.
 - `evidence.json` contains the matrix result, selected cases, comparison, and source pins.
-- reproducible result artifact: https://github.com/cfregly/claude-agent-harness-optimization/tree/main/evals/results/gstack_skill_matrix_live_2026-06-25.json
+- reproducible result artifact: https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/results/gstack_skill_matrix_live_2026-06-25.json

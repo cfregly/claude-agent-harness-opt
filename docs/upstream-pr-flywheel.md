@@ -24,7 +24,7 @@ an unfair verifier, or when the finding only works on one brittle prompt.
 Run the matrix first and save JSON:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -39,14 +39,14 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/fire
 Then generate the upstream packet:
 
 ```bash
-python -m claude_agent_harness_optimization upstream-pr-packet /tmp/firecrawl-matrix.json \
+python -m claude_agent_harness_opt upstream-pr-packet /tmp/firecrawl-matrix.json \
   --matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
   --target-name "Firecrawl MCP" \
   --target-repo https://github.com/firecrawl/firecrawl-mcp-server \
   --baseline-variant legacy_firecrawl_mcp \
   --candidate-variant tuned_firecrawl_mcp_boundaries \
   --change-summary "Clarify the single-page scrape versus extract boundary." \
-  --evidence-url https://github.com/cfregly/claude-agent-harness-optimization/blob/main/docs/confirmed-improvements.md \
+  --evidence-url https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/confirmed-improvements.md \
   --out-dir /tmp/firecrawl-upstream-pr
 ```
 
@@ -91,7 +91,7 @@ The pull request body should include:
 Use the check catalog to decide what failure class a pull request is proving:
 
 ```bash
-python -m claude_agent_harness_optimization harness-checks --markdown
+python -m claude_agent_harness_opt harness-checks --markdown
 ```
 
 The current catalog covers adjacent tool boundaries, no-tool safety, argument quality, error

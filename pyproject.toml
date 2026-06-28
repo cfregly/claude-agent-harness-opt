@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "claude-agent-harness-optimization"
+name = "claude-agent-harness-opt"
 version = "0.1.0"
 description = "Eval-driven harness optimizer for agent tools, traces, and model matrices"
 readme = "README.md"
@@ -13,4 +13,4 @@ authors = [{ name = "Contributors" }]
 dependencies = []
 
 [project.scripts]
-claude-agent-harness-optimization = "claude_agent_harness_optimization.cli:main"
+claude-agent-harness-opt = "claude_agent_harness_opt.cli:main"

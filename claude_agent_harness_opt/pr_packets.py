@@ -12,7 +12,7 @@ from typing import Any
 from .adapters import load_json
 
 
-PROJECT_EVIDENCE_REPO = "https://github.com/cfregly/claude-agent-harness-optimization"
+PROJECT_EVIDENCE_REPO = "https://github.com/cfregly/claude-agent-harness-opt"
 
 
 @dataclass(frozen=True)
@@ -406,7 +406,7 @@ def _reproduction_command(
     parts = [
         "python",
         "-m",
-        "claude_agent_harness_optimization",
+        "claude_agent_harness_opt",
         "model-matrix",
         path,
         "--env-file",

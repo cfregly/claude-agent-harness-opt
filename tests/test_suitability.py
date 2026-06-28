@@ -1,6 +1,6 @@
 import unittest
 
-from claude_agent_harness_optimization.suitability import score_use_case
+from claude_agent_harness_opt.suitability import score_use_case
 
 
 class SuitabilityTests(unittest.TestCase):

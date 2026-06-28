@@ -45,7 +45,7 @@ It compares:
 Commands run:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/github_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/github_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -57,7 +57,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/gith
 ```
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/github_mcp_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/github_mcp_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \

@@ -57,13 +57,13 @@ provider calls. It is also the smoke test for adapter changes.
 Dry run:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --markdown
 ```
 
 Smoke test one provider and a few cases:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -78,7 +78,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codi
 Full local sweep:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -89,19 +89,19 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codi
 Write JSON for review artifacts:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --providers trace_fixture \
   --harnesses agent_sdk_trace \
   --max-cases 1 \
   --out /tmp/harness-matrix.json
-python -m claude_agent_harness_optimization render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
-python -m claude_agent_harness_optimization pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
+python -m claude_agent_harness_opt render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
+python -m claude_agent_harness_opt pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
 ```
 
 Adapter smoke test:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --live \
   --require-live \
   --providers trace_fixture \
@@ -114,7 +114,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harn
 Hill-climb one hard boundary from a baseline:
 
 ```bash
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \

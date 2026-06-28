@@ -1,4 +1,4 @@
-$ python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
+$ python -m claude_agent_harness_opt optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
 # Tool Selection Optimizer
 
 Passed: no
@@ -12,7 +12,7 @@ Recommendations
 - Add quality_checks so the agent knows how to inspect results before the next call.
 - Add tool_metrics so runtime, tool-call count, tokens, and tool errors are visible.
 
-$ python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
+$ python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --markdown
 # Tool Selection Optimizer
 
 Passed: yes

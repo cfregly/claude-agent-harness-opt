@@ -10,7 +10,7 @@ arguments, drops tool results, blocks auth, or exports traces that cannot be rev
 ## Command
 
 ```bash
-python -m claude_agent_harness_optimization live-harness \
+python -m claude_agent_harness_opt live-harness \
   evals/live_harnesses/headless_cli_smoke.json \
   --env-file .env \
   --out-dir /tmp/aho-live-suite-v3/artifacts \

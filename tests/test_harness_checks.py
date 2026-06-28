@@ -2,7 +2,7 @@ import subprocess
 import sys
 import unittest
 
-from claude_agent_harness_optimization.harness_checks import (
+from claude_agent_harness_opt.harness_checks import (
     load_check_catalog,
     render_check_catalog_markdown,
 )
@@ -27,7 +27,7 @@ class HarnessCheckTests(unittest.TestCase):
             [
                 sys.executable,
                 "-m",
-                "claude_agent_harness_optimization",
+                "claude_agent_harness_opt",
                 "harness-checks",
                 "--markdown",
             ],

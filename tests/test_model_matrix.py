@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.model_matrix import (
+from claude_agent_harness_opt.model_matrix import (
     MatrixFilters,
     _first_openai_response_function_call,
     _openai_response_reasoning_summary,

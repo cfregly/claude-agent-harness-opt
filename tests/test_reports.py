@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.reports import render_html_report, render_pr_comment
+from claude_agent_harness_opt.reports import render_html_report, render_pr_comment
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,7 +43,7 @@ class ReportTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "claude_agent_harness_optimization",
+                    "claude_agent_harness_opt",
                     "model-matrix",
                     "evals/model_matrix/harness_trace_adapters.json",
                     "--providers",
@@ -63,7 +63,7 @@ class ReportTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "claude_agent_harness_optimization",
+                    "claude_agent_harness_opt",
                     "render-report",
                     str(matrix_out),
                     "--out",
@@ -78,7 +78,7 @@ class ReportTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "claude_agent_harness_optimization",
+                    "claude_agent_harness_opt",
                     "pr-comment",
                     str(matrix_out),
                     "--out",

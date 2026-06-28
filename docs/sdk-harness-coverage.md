@@ -25,7 +25,7 @@ The SDK live spec uses `uvx --refresh-package` for every run. That forces a fres
 instead of relying on a previously-created virtual environment.
 
 ```bash
-python -m claude_agent_harness_optimization live-harness \
+python -m claude_agent_harness_opt live-harness \
   evals/live_harnesses/sdk_agent_smoke.json \
   --env-file .env \
   --out-dir /tmp/aho-sdk-live-v2/artifacts \

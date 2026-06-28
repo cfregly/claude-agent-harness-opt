@@ -25,16 +25,16 @@ on the combined results.
 Run:
 
 ```bash
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_good.json
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_parallel_good.json
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_bad.json
-python -m claude_agent_harness_optimization trace-judge-prompt evals/examples/agent_trace_good.json
-python -m claude_agent_harness_optimization normalize-claude evals/examples/claude_messages.json
-python -m claude_agent_harness_optimization normalize-runtime evals/examples/cursor_trace_review_events.json
-python -m claude_agent_harness_optimization trace-suite evals/suites/agent_trace_suite.json
-python -m claude_agent_harness_optimization trace-suite evals/suites/agent_trace_suite.json --markdown
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_parallel_good.json
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_bad.json
+python -m claude_agent_harness_opt trace-judge-prompt evals/examples/agent_trace_good.json
+python -m claude_agent_harness_opt normalize-claude evals/examples/claude_messages.json
+python -m claude_agent_harness_opt normalize-runtime evals/examples/cursor_trace_review_events.json
+python -m claude_agent_harness_opt trace-suite evals/suites/agent_trace_suite.json
+python -m claude_agent_harness_opt trace-suite evals/suites/agent_trace_suite.json --markdown
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge
 ```
 
 ## What To Score
@@ -59,7 +59,7 @@ uses the tool outputs.
 
 ```bash
 export ANTHROPIC_API_KEY=...
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_good.json --claude-judge
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json --claude-judge
 ```
 
 The Claude judge receives the deterministic review plus the visible trace. It returns scores for
@@ -92,8 +92,8 @@ For Agent SDK loops, IDE agents, or Cursor-like runtimes, export the raw event s
 it before review:
 
 ```bash
-python -m claude_agent_harness_optimization normalize-runtime path/to/events.json > path/to/trace.json
-python -m claude_agent_harness_optimization review-trace path/to/trace.json --claude-judge
+python -m claude_agent_harness_opt normalize-runtime path/to/events.json > path/to/trace.json
+python -m claude_agent_harness_opt review-trace path/to/trace.json --claude-judge
 ```
 
 The runtime adapter accepts common event names such as `thinking`, `assistant_thinking`,
@@ -104,7 +104,7 @@ contract as provider-native tool calls.
 The included adapter matrix is a keyless smoke test for two exported harnesses:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --live \
   --require-live \
   --providers trace_fixture \
@@ -227,5 +227,5 @@ For real audits, require the Claude judge:
 
 ```bash
 export ANTHROPIC_API_KEY=...
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
 ```

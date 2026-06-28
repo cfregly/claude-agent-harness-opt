@@ -2,13 +2,13 @@ from copy import deepcopy
 from pathlib import Path
 import unittest
 
-from claude_agent_harness_optimization.harness_optimizer import (
+from claude_agent_harness_opt.harness_optimizer import (
     HarnessGrindOptions,
     _generate_candidate_variant,
     _heldout_non_regression,
     run_harness_grind,
 )
-from claude_agent_harness_optimization.model_matrix import MatrixFilters, load_matrix
+from claude_agent_harness_opt.model_matrix import MatrixFilters, load_matrix
 
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -43,7 +43,7 @@ It includes two relevant axes:
 Command:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix \
+python -m claude_agent_harness_opt model-matrix \
   evals/model_matrix/agent_audit_skill_selection.json \
   --env-file .env \
   --live \

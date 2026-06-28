@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import unittest
 
-from claude_agent_harness_optimization.claude_judge import (
+from claude_agent_harness_opt.claude_judge import (
     build_claude_trace_judge_prompt,
     build_claude_tool_selection_judge_prompt,
     call_claude_messages,
@@ -10,9 +10,9 @@ from claude_agent_harness_optimization.claude_judge import (
     judge_trace_with_claude,
     parse_judge_json,
 )
-from claude_agent_harness_optimization.agent_audit import load_agent_bundle
-from claude_agent_harness_optimization.tool_selection import review_tool_selection
-from claude_agent_harness_optimization.trace_review import load_trace, review_trace
+from claude_agent_harness_opt.agent_audit import load_agent_bundle
+from claude_agent_harness_opt.tool_selection import review_tool_selection
+from claude_agent_harness_opt.trace_review import load_trace, review_trace
 
 
 ROOT = Path(__file__).resolve().parents[1]

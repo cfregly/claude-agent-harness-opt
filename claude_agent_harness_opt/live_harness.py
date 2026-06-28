@@ -66,7 +66,7 @@ def run_live_harness_spec(
     redactions = _redaction_values(env_values)
     selected = _selected_runs(spec, filters or LiveHarnessFilters())
     timestamp = _timestamp()
-    artifact_root = Path(out_dir) if out_dir else Path("/tmp") / "claude-agent-harness-optimization" / f"live-harness-{timestamp}"
+    artifact_root = Path(out_dir) if out_dir else Path("/tmp") / "claude-agent-harness-opt" / f"live-harness-{timestamp}"
     artifact_root.mkdir(parents=True, exist_ok=True)
 
     results = []

@@ -23,23 +23,23 @@ python scripts/build_gstack_skill_target.py \
   --gstack-root /Users/admin/dev/gstack \
   --out-dir evals/targets/gstack
 
-python -m claude_agent_harness_optimization optimize-tools \
+python -m claude_agent_harness_opt optimize-tools \
   evals/targets/gstack/gstack_agent_audit_bundle.json --markdown
 
-python -m claude_agent_harness_optimization audit-agent \
+python -m claude_agent_harness_opt audit-agent \
   evals/targets/gstack/gstack_agent_audit_bundle.json --markdown
 
-python -m claude_agent_harness_optimization model-matrix \
+python -m claude_agent_harness_opt model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live --concurrency 8 \
   --out /tmp/gstack-skill-matrix-live-full.json
 
-python -m claude_agent_harness_optimization model-matrix \
+python -m claude_agent_harness_opt model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live --providers gemini --concurrency 6 \
   --out /tmp/gstack-skill-matrix-live-gemini-rerun.json
 
-python -m claude_agent_harness_optimization model-matrix \
+python -m claude_agent_harness_opt model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live \
   --providers anthropic-fable-frontier,anthropic-opus-high,openai-gpt55-frontier,openai-gpt54-high,gemini-31-pro-customtools-frontier,gemini-25-pro-high \
@@ -55,7 +55,7 @@ top-tier models.
 High-profile smoke run:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix \
+python -m claude_agent_harness_opt model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live \
   --providers anthropic-opus-high,openai-gpt54-high,gemini-25-pro-high \
@@ -74,7 +74,7 @@ it.
 Native high-profile smoke run:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix \
+python -m claude_agent_harness_opt model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live \
   --providers anthropic-opus-high,openai-gpt54-high,gemini-25-pro-high \

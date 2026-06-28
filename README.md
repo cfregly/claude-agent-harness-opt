@@ -1,6 +1,6 @@
-# claude-agent-harness-optimization
+# claude-agent-harness-opt
 
-[![ci](https://github.com/cfregly/claude-agent-harness-optimization/actions/workflows/ci.yml/badge.svg)](https://github.com/cfregly/claude-agent-harness-optimization/actions/workflows/ci.yml)
+[![ci](https://github.com/cfregly/claude-agent-harness-opt/actions/workflows/ci.yml/badge.svg)](https://github.com/cfregly/claude-agent-harness-opt/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A runnable prompt kit for Claude-style agents: decide whether a task deserves an agent, render a
@@ -29,34 +29,34 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 
-python -m claude_agent_harness_optimization render recipes/agentic_search.json
-python -m claude_agent_harness_optimization score recipes/agentic_search.json
-python -m claude_agent_harness_optimization lint-tools recipes/agentic_search.json
-python -m claude_agent_harness_optimization eval evals/examples/search_answer.json
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_good.json
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_parallel_good.json
-python -m claude_agent_harness_optimization normalize-claude evals/examples/claude_messages.json
-python -m claude_agent_harness_optimization normalize-runtime evals/examples/cursor_trace_review_events.json
-python -m claude_agent_harness_optimization import-run evals/examples/import_run_cursor_export.json --adapter cursor --out-dir /tmp/imported-run
-python -m claude_agent_harness_optimization snapshot-surface --matrix evals/model_matrix/harness_trace_adapters.json --skill .claude/skills/agent-audit/SKILL.md --out /tmp/surface-snapshot.json
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/github_readonly.json --dry-run
-python -m claude_agent_harness_optimization trace-suite evals/suites/agent_trace_suite.json
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --heldout-cases "find python files,read known file" --markdown
-python -m claude_agent_harness_optimization live-harness evals/live_harnesses/headless_cli_smoke.json --env-file .env --out-dir /tmp/aho-live --markdown
-python -m claude_agent_harness_optimization live-harness evals/live_harnesses/sdk_agent_smoke.json --env-file .env --out-dir /tmp/aho-sdk-live --markdown
+python -m claude_agent_harness_opt render recipes/agentic_search.json
+python -m claude_agent_harness_opt score recipes/agentic_search.json
+python -m claude_agent_harness_opt lint-tools recipes/agentic_search.json
+python -m claude_agent_harness_opt eval evals/examples/search_answer.json
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_parallel_good.json
+python -m claude_agent_harness_opt normalize-claude evals/examples/claude_messages.json
+python -m claude_agent_harness_opt normalize-runtime evals/examples/cursor_trace_review_events.json
+python -m claude_agent_harness_opt import-run evals/examples/import_run_cursor_export.json --adapter cursor --out-dir /tmp/imported-run
+python -m claude_agent_harness_opt snapshot-surface --matrix evals/model_matrix/harness_trace_adapters.json --skill .claude/skills/agent-audit/SKILL.md --out /tmp/surface-snapshot.json
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/github_readonly.json --dry-run
+python -m claude_agent_harness_opt trace-suite evals/suites/agent_trace_suite.json
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --heldout-cases "find python files,read known file" --markdown
+python -m claude_agent_harness_opt live-harness evals/live_harnesses/headless_cli_smoke.json --env-file .env --out-dir /tmp/aho-live --markdown
+python -m claude_agent_harness_opt live-harness evals/live_harnesses/sdk_agent_smoke.json --env-file .env --out-dir /tmp/aho-sdk-live --markdown
 uvx --with claude-agent-sdk --with openai-agents --with google-adk python scripts/sdk_surface_inventory.py
-python -m claude_agent_harness_optimization render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
-python -m claude_agent_harness_optimization pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
+python -m claude_agent_harness_opt render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
+python -m claude_agent_harness_opt pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
 python scripts/probe_service_keys.py --env-file .env --no-fail
-python -m claude_agent_harness_optimization judge-prompt evals/examples/search_answer.json
+python -m claude_agent_harness_opt judge-prompt evals/examples/search_answer.json
 ```
 
 ## What it implements
@@ -107,7 +107,7 @@ Claude prompt engineering docs:
 ## Layout
 
 ```
-claude_agent_harness_optimization/
+claude_agent_harness_opt/
   prompt_builder.py  # recipe validation and system prompt rendering
   suitability.py     # agent task-fit scoring
   evals.py           # offline answer, tool-use, and final-state evals
@@ -189,8 +189,8 @@ use, and final grounding:
 
 ```bash
 export ANTHROPIC_API_KEY=...
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_good.json --claude-judge
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json --claude-judge
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge --markdown
 ```
 
 The judge reviews only visible artifacts: reasoning summaries, provider-returned reasoning blocks
@@ -207,9 +207,9 @@ Use `optimize-tools` when the question is whether the agent has the right tool d
 and calibration cases to choose tools correctly:
 
 ```bash
-python -m claude_agent_harness_optimization optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --markdown
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt optimize-tools evals/examples/tool_tuning_before_bundle.json --markdown || true
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --markdown
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
 ```
 
 The first command is a deliberate before-state negative control. It should fail and recommend an
@@ -227,10 +227,10 @@ Use `model-matrix` when tuning tool descriptions or `CLAUDE.md` style instructio
 provider, reasoning mode, or harness:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/agent_audit_skill_selection.json --env-file .env --live --require-live --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants no_skill,agent_audit_skill --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/github_mcp_tool_selection.json --env-file .env --live --require-live --providers anthropic,openai,gemini --harnesses native_tools,prompt_json --variants stock_github_mcp,tuned_github_mcp_boundaries --instruction-variants github_mcp_host_rules --concurrency 4 --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json --env-file .env --live --concurrency 8 --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/agent_audit_skill_selection.json --env-file .env --live --require-live --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants no_skill,agent_audit_skill --markdown
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/github_mcp_tool_selection.json --env-file .env --live --require-live --providers anthropic,openai,gemini --harnesses native_tools,prompt_json --variants stock_github_mcp,tuned_github_mcp_boundaries --instruction-variants github_mcp_host_rules --concurrency 4 --markdown
 ```
 
 The included matrix tests Claude Code style `Task`, `Glob`, `Grep`, and `Read` tool selection across
@@ -248,7 +248,7 @@ checks held-out cells, and marks the value bar as passed only when the live cand
 baseline by the configured threshold without regressions:
 
 ```bash
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -273,8 +273,8 @@ To test an exported harness without an API key, normalize a runtime event file a
 matrix:
 
 ```bash
-python -m claude_agent_harness_optimization normalize-runtime evals/examples/agent_sdk_trace_review_events.json
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt normalize-runtime evals/examples/agent_sdk_trace_review_events.json
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --live \
   --require-live \
   --providers trace_fixture \
@@ -282,7 +282,7 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harn
   --variants exported_trace_tools \
   --instruction-variants exported_trace \
   --markdown
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codex_harness_trace_adapter.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/codex_harness_trace_adapter.json \
   --live \
   --require-live \
   --providers trace_fixture \
@@ -296,35 +296,35 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/code
 
 ```bash
 python scripts/deslop_check.py
-python -m compileall claude_agent_harness_optimization scripts
+python -m compileall claude_agent_harness_opt scripts
 python -m unittest discover -s tests -q
-python -m claude_agent_harness_optimization eval evals/examples/search_answer.json
-python -m claude_agent_harness_optimization review-trace evals/examples/agent_trace_good.json
-python -m claude_agent_harness_optimization normalize-claude evals/examples/claude_messages.json
-python -m claude_agent_harness_optimization normalize-runtime evals/examples/cursor_trace_review_events.json
-python -m claude_agent_harness_optimization import-run evals/examples/import_run_cursor_export.json --adapter cursor --out-dir /tmp/imported-run
-python -m claude_agent_harness_optimization audit-agent /tmp/imported-run/agent_audit_bundle.json
-python -m claude_agent_harness_optimization snapshot-surface --matrix evals/model_matrix/harness_trace_adapters.json --bundle evals/examples/agent_audit_bundle.json --skill .claude/skills/agent-audit/SKILL.md --out /tmp/surface-snapshot.json
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/github_readonly.json --dry-run --out /tmp/github-e2e.json
-python -m claude_agent_harness_optimization trace-suite evals/suites/agent_trace_suite.json
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json
-python -m claude_agent_harness_optimization audit-agent evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_optimization optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/coding_tool_selection.json
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/agent_audit_skill_selection.json --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants agent_audit_skill --max-cases 2
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/github_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants stock_github_mcp --instruction-variants github_mcp_host_rules --max-cases 2
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_firecrawl_mcp_boundaries --instruction-variants firecrawl_host_rules --max-cases 2
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/supabase_mcp_database_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_supabase_database_boundaries --instruction-variants supabase_database_host_rules --max-cases 2
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/clickhouse_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_clickhouse_readonly_boundaries --instruction-variants clickhouse_host_rules --max-cases 2
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_zymtrace_mcp_boundaries --instruction-variants zymtrace_host_and_skill_rules --max-cases 2
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/codex_harness_trace_adapter.json --live --require-live --providers trace_fixture
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json --providers trace_fixture --harnesses agent_sdk_trace --max-cases 1 --out /tmp/harness-matrix.json
-python -m claude_agent_harness_optimization render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
-python -m claude_agent_harness_optimization pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
-python -m claude_agent_harness_optimization harness-checks --markdown
-python -m claude_agent_harness_optimization upstream-pr-packet /tmp/harness-matrix.json --target-name "Example MCP" --baseline-variant stock --candidate-variant tuned --out-dir /tmp/upstream-pr
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json
+python -m claude_agent_harness_opt eval evals/examples/search_answer.json
+python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json
+python -m claude_agent_harness_opt normalize-claude evals/examples/claude_messages.json
+python -m claude_agent_harness_opt normalize-runtime evals/examples/cursor_trace_review_events.json
+python -m claude_agent_harness_opt import-run evals/examples/import_run_cursor_export.json --adapter cursor --out-dir /tmp/imported-run
+python -m claude_agent_harness_opt audit-agent /tmp/imported-run/agent_audit_bundle.json
+python -m claude_agent_harness_opt snapshot-surface --matrix evals/model_matrix/harness_trace_adapters.json --bundle evals/examples/agent_audit_bundle.json --skill .claude/skills/agent-audit/SKILL.md --out /tmp/surface-snapshot.json
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/github_readonly.json --dry-run --out /tmp/github-e2e.json
+python -m claude_agent_harness_opt trace-suite evals/suites/agent_trace_suite.json
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json
+python -m claude_agent_harness_opt audit-agent evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt optimize-tools evals/examples/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/coding_tool_selection.json
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/agent_audit_skill_selection.json --providers anthropic --harnesses prompt_json --variants thin_workflow_tools --instruction-variants agent_audit_skill --max-cases 2
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/github_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants stock_github_mcp --instruction-variants github_mcp_host_rules --max-cases 2
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/firecrawl_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_firecrawl_mcp_boundaries --instruction-variants firecrawl_host_rules --max-cases 2
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/supabase_mcp_database_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_supabase_database_boundaries --instruction-variants supabase_database_host_rules --max-cases 2
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/clickhouse_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_clickhouse_readonly_boundaries --instruction-variants clickhouse_host_rules --max-cases 2
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json --providers anthropic --harnesses prompt_json --variants tuned_zymtrace_mcp_boundaries --instruction-variants zymtrace_host_and_skill_rules --max-cases 2
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json --live --require-live --providers trace_fixture
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/codex_harness_trace_adapter.json --live --require-live --providers trace_fixture
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json --providers trace_fixture --harnesses agent_sdk_trace --max-cases 1 --out /tmp/harness-matrix.json
+python -m claude_agent_harness_opt render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
+python -m claude_agent_harness_opt pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
+python -m claude_agent_harness_opt harness-checks --markdown
+python -m claude_agent_harness_opt upstream-pr-packet /tmp/harness-matrix.json --target-name "Example MCP" --baseline-variant stock --candidate-variant tuned --out-dir /tmp/upstream-pr
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json
 python scripts/probe_service_keys.py --env-file .env --no-fail
 python scripts/check_value_bar.py
 ```

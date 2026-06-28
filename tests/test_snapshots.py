@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.snapshots import build_surface_snapshot
+from claude_agent_harness_opt.snapshots import build_surface_snapshot
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,7 +32,7 @@ class SnapshotTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "claude_agent_harness_optimization",
+                    "claude_agent_harness_opt",
                     "snapshot-surface",
                     "--matrix",
                     "evals/model_matrix/harness_trace_adapters.json",

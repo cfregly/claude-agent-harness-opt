@@ -13,7 +13,7 @@ baseline, metric, minimum improvement, and adversarial check before it should be
 Export the raw run from the harness, then normalize it:
 
 ```bash
-python -m claude_agent_harness_optimization import-run path/to/run.json \
+python -m claude_agent_harness_opt import-run path/to/run.json \
   --adapter cursor \
   --out-dir /tmp/imported-run
 ```
@@ -41,15 +41,15 @@ not invent a passing value proof.
 Run deterministic checks first:
 
 ```bash
-python -m claude_agent_harness_optimization review-trace /tmp/imported-run/*.trace.json
-python -m claude_agent_harness_optimization audit-agent /tmp/imported-run/agent_audit_bundle.json
-python -m claude_agent_harness_optimization optimize-tools /tmp/imported-run/agent_audit_bundle.json
+python -m claude_agent_harness_opt review-trace /tmp/imported-run/*.trace.json
+python -m claude_agent_harness_opt audit-agent /tmp/imported-run/agent_audit_bundle.json
+python -m claude_agent_harness_opt optimize-tools /tmp/imported-run/agent_audit_bundle.json
 ```
 
 For a real audit, call Claude:
 
 ```bash
-python -m claude_agent_harness_optimization audit-agent /tmp/imported-run/agent_audit_bundle.json --claude-judge
+python -m claude_agent_harness_opt audit-agent /tmp/imported-run/agent_audit_bundle.json --claude-judge
 ```
 
 The judge can review visible reasoning summaries, provider reasoning blocks when exposed, tool
@@ -60,7 +60,7 @@ calls, tool outputs, and final grounding. It does not claim hidden chain-of-thou
 Snapshot the exact files and tool catalogs under test:
 
 ```bash
-python -m claude_agent_harness_optimization snapshot-surface \
+python -m claude_agent_harness_opt snapshot-surface \
   --matrix evals/model_matrix/harness_trace_adapters.json \
   --bundle /tmp/imported-run/agent_audit_bundle.json \
   --skill .claude/skills/agent-audit/SKILL.md \
@@ -77,7 +77,7 @@ Once an adapter emits the trace contract, add it as a named harness through the 
 provider:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --live \
   --require-live \
   --providers trace_fixture \
@@ -95,12 +95,12 @@ For provider APIs, run the same matrix with `.env` and `--live`.
 Use `mcp-e2e` for read-oriented service checks:
 
 ```bash
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/github_readonly.json --env-file .env
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/firecrawl_readonly.json --env-file .env
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/cloudflare_readonly.json --env-file .env
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/cloudflare_r2_readonly.json --env-file .env
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/clickhouse_cloud_readonly.json --env-file .env
-python -m claude_agent_harness_optimization mcp-e2e evals/e2e/stripe_readonly.json --env-file .env
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/github_readonly.json --env-file .env
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/firecrawl_readonly.json --env-file .env
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/cloudflare_readonly.json --env-file .env
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/cloudflare_r2_readonly.json --env-file .env
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/clickhouse_cloud_readonly.json --env-file .env
+python -m claude_agent_harness_opt mcp-e2e evals/e2e/stripe_readonly.json --env-file .env
 ```
 
 CI runs these specs with `--dry-run`, so it validates shape without needing secrets. Local runs use
@@ -111,7 +111,7 @@ keys from `.env`. Specs should stay read-only unless the task explicitly require
 Write a JSON result first:
 
 ```bash
-python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harness_trace_adapters.json \
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/harness_trace_adapters.json \
   --providers trace_fixture \
   --harnesses agent_sdk_trace \
   --max-cases 1 \
@@ -121,8 +121,8 @@ python -m claude_agent_harness_optimization model-matrix evals/model_matrix/harn
 Then render review artifacts:
 
 ```bash
-python -m claude_agent_harness_optimization render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
-python -m claude_agent_harness_optimization pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
+python -m claude_agent_harness_opt render-report /tmp/harness-matrix.json --out /tmp/harness-matrix.html
+python -m claude_agent_harness_opt pr-comment /tmp/harness-matrix.json --out /tmp/harness-matrix.md
 ```
 
 Use the HTML report for local review. Use the PR comment output when another agent opens a pull
@@ -133,7 +133,7 @@ or artifact path used.
 For upstream projects, generate a reproducible pull request packet:
 
 ```bash
-python -m claude_agent_harness_optimization upstream-pr-packet /tmp/harness-matrix.json \
+python -m claude_agent_harness_opt upstream-pr-packet /tmp/harness-matrix.json \
   --matrix evals/model_matrix/firecrawl_mcp_tool_selection.json \
   --target-name "Firecrawl MCP" \
   --target-repo https://github.com/firecrawl/firecrawl-mcp-server \
@@ -162,7 +162,7 @@ Optimize the smallest surface that explains the failure:
 Run `grind-harness` only after the baseline failure is repeated and visible:
 
 ```bash
-python -m claude_agent_harness_optimization grind-harness evals/model_matrix/coding_tool_selection.json \
+python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json \
   --env-file .env \
   --live \
   --require-live \
@@ -178,7 +178,7 @@ Keep the candidate only when it clears the configured improvement threshold and 
 Use the check catalog when deciding what failure class a candidate proves:
 
 ```bash
-python -m claude_agent_harness_optimization harness-checks --markdown
+python -m claude_agent_harness_opt harness-checks --markdown
 ```
 
 The catalog covers adjacent tool boundaries, no-tool safety, argument quality, error recovery,

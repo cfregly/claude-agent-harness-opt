@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from claude_agent_harness_optimization.import_run import import_run_export
+from claude_agent_harness_opt.import_run import import_run_export
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,7 +36,7 @@ class ImportRunTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "claude_agent_harness_optimization",
+                    "claude_agent_harness_opt",
                     "import-run",
                     "evals/examples/import_run_cursor_export.json",
                     "--adapter",
