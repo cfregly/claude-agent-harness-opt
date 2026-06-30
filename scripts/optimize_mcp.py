@@ -160,7 +160,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("target", help="known MCP name, repo URL, or path to a matrix JSON file")
     parser.add_argument("--cases", help="comma-separated case names")
     parser.add_argument("--concurrency", type=int, default=1)
-    parser.add_argument("--env-file", type=Path, default=Path(".env"))
+    parser.add_argument("--env-file", type=Path, help="dotenv file with provider API keys")
     parser.add_argument("--grind", action="store_true", help="run grind-harness instead of the stored baseline/candidate comparison")
     parser.add_argument("--harnesses", help="comma-separated harness names")
     parser.add_argument("--instruction-variants", help="comma-separated instruction variant names")

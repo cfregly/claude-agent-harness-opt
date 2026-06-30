@@ -62,6 +62,33 @@ class OptimizeMcpScriptTests(unittest.TestCase):
 
         self.assertIn('"matrix": "screenpipe mcp tool-selection matrix"', report)
 
+    def test_dry_run_does_not_require_default_env_file(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            out_path = Path(temp_dir) / "screenpipe.json"
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "optimize_mcp.py"),
+                    "screenpipe",
+                    "--providers",
+                    "anthropic",
+                    "--harnesses",
+                    "prompt_json",
+                    "--max-cases",
+                    "1",
+                    "--out",
+                    str(out_path),
+                ],
+                cwd=temp_dir,
+                check=False,
+                text=True,
+                capture_output=True,
+            )
+
+            self.assertEqual(0, result.returncode, result.stderr)
+            self.assertTrue(out_path.exists())
+            self.assertFalse((Path(temp_dir) / ".env").exists())
+
     def test_yc_p2026_targets_resolve_to_stored_matrices(self):
         targets = [
             ("humwork", "humwork mcp tool-selection matrix"),
