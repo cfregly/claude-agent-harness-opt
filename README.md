@@ -142,6 +142,10 @@ GitHub links point at existing files or folders, every docs page is reachable fr
 README layout entries still exist, Makefile help covers public targets, and the package console
 script target imports cleanly from `pyproject.toml`.
 
+`scripts/check_source_map.py` protects source evidence. It requires `docs/source-map.md` to keep a
+checked date, source sections, README source links, and every external source URL cited by public
+docs outside fenced examples.
+
 `scripts/check_public_links.py` keeps README and docs links shareable. It rejects empty Markdown
 targets and local relative links in public docs, including image links, while ignoring examples
 inside fenced code blocks.
@@ -560,6 +564,7 @@ python scripts/check_skill_surfaces.py
 python scripts/check_command_surfaces.py
 python scripts/check_secret_hygiene.py
 python scripts/check_docs_navigation.py
+python scripts/check_source_map.py
 python scripts/check_public_links.py
 python scripts/check_artifact_surfaces.py
 python scripts/check_optimize_shortcuts.py

@@ -96,6 +96,10 @@ Checked on 2026-06-25.
 - [Claude Agent SDK Python reference](https://code.claude.com/docs/en/agent-sdk/python)
   - Used for `query`, `ClaudeAgentOptions`, custom tools, in-process MCP server coverage, hooks,
     permissions, skills, subagents, sessions, and thinking or budget surface inventory.
+- [Claude Agent SDK Python source](https://github.com/anthropics/claude-agent-sdk-python)
+  - Used for SDK source-surface checks, import smoke tests, and maintained API examples.
+- [Claude Agent SDK TypeScript source](https://github.com/anthropics/claude-agent-sdk-typescript)
+  - Used for cross-language SDK surface comparison and TypeScript harness inventory.
 - [Claude Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview)
   - Used for the Managed Agents distinction from Claude Agent SDK, including agents,
     environments, sessions, events, infrastructure, and beta status.
@@ -114,8 +118,14 @@ Checked on 2026-06-25.
 - [OpenAI Agents SDK Python reference](https://openai.github.io/openai-agents-python/agents/)
   - Used for `Agent`, `Runner`, function-tool smoke coverage, handoffs, guardrails, MCP, sessions,
     tracing, hosted tools, shell tools, and computer-tool surface inventory.
+- [OpenAI Agents Python docs](https://openai.github.io/openai-agents-python/)
+  - Used for top-level OpenAI Agents SDK navigation and docs-surface inventory.
 - [OpenAI Agents SDK JavaScript docs](https://openai.github.io/openai-agents-js/)
   - Used for TypeScript runner options, tool examples, sandbox agents, and session-state patterns.
+- [OpenAI Agents Python source](https://github.com/openai/openai-agents-python)
+  - Used for source-level OpenAI SDK surface checks and example parity.
+- [OpenAI Agents JS source](https://github.com/openai/openai-agents-js)
+  - Used for source-level TypeScript SDK surface checks and example parity.
 - [OpenAI models docs](https://platform.openai.com/docs/models)
   - Used for current GPT model profile names.
 - [OpenAI Responses API](https://developers.openai.com/api/docs/api-reference/responses/create)
@@ -132,6 +142,10 @@ Checked on 2026-06-25.
   - Used for Google ADK positioning as an enterprise-scale agent development framework.
 - [Gemini API model docs](https://ai.google.dev/gemini-api/docs/models)
   - Used for Gemini model profile names, including custom-tool oriented frontier profiles.
+- [Google ADK Python source](https://github.com/google/adk-python)
+  - Used for source-level ADK Python surface checks and package inventory.
+- [Google ADK JS source](https://github.com/google/adk-js)
+  - Used for source-level ADK JavaScript surface checks and package inventory.
 
 ## Anthropic Engineering
 
@@ -155,6 +169,22 @@ Checked on 2026-06-25.
   - Used for the Zymtrace MCP and profiler setup context in the public MCP sweep.
 - [Zymtrace Model Context Protocol docs](https://docs.zymtrace.com/category/model-context-protocol-mcp/)
   - Used for the Zymtrace MCP tool-selection matrix and sweep source links.
+- [GitHub MCP server](https://github.com/github/github-mcp-server)
+  - Used for the GitHub MCP baseline matrix and public MCP sweep.
+- [GitHub MCP practical guide](https://github.blog/ai-and-ml/generative-ai/a-practical-guide-on-how-to-use-the-github-mcp-server/)
+  - Used for GitHub MCP workflow and guardrail context.
+- [Postgres MCP repo](https://github.com/crystaldba/postgres-mcp)
+  - Used for public MCP sweep catalog context.
+- [Playwright MCP repo](https://github.com/microsoft/playwright-mcp)
+  - Used for public MCP sweep catalog context.
+- [Context7 MCP repo](https://github.com/upstash/context7)
+  - Used for Context7 library-resolution matrix context.
+- [Supabase MCP docs](https://supabase.com/docs/guides/ai-tools/mcp)
+  - Used for Supabase MCP setup and tool-boundary context.
+- [ClickHouse MCP repo](https://github.com/clickhouse/mcp-clickhouse)
+  - Used for ClickHouse read-only matrix context.
+- [ClickHouse MCP docs](https://clickhouse.com/docs/use-cases/AI/MCP)
+  - Used for ClickHouse MCP usage and guardrail context.
 - [InsForge MCP repo](https://github.com/InsForge/insforge-mcp)
   - Used for the InsForge backend-agent MCP tool catalog, version pin, and deployment-path
     boundary.
@@ -168,6 +198,12 @@ Checked on 2026-06-25.
   - Used for the Firecrawl scrape-versus-extract public MCP finding.
 - [Supabase MCP repo](https://github.com/supabase/mcp)
   - Used for the Supabase DDL-versus-SQL migration boundary finding.
+- [Mireye Earth MCP repo](https://github.com/Mireye-Labs/mireye-earth-mcp)
+  - Used for adjacent public MCP candidate notes in the YC P2026 sweep.
+- [Kinro MCP server](https://github.com/Guru6163/kinro-mcp-server)
+  - Used for adjacent public MCP candidate notes in the YC P2026 sweep.
+- [OptionsAhoy MCP repo](https://github.com/AlvisoOculus/optionsahoy-mcp)
+  - Used for adjacent public MCP candidate notes in the YC P2026 sweep.
 
 ## Local Screenshots
 
