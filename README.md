@@ -151,6 +151,10 @@ docs or PR packet text.
 `make optimize mcp=...` target in `scripts/optimize_mcp.py` against its stored matrix, variants,
 instruction rules, provider and harness defaults, public docs, Makefile help, and dry selected cells.
 
+`scripts/check_cli_coverage.py` protects the executable CLI surface in CI. It parses the public
+subcommands from `python -m claude_agent_harness_opt --help` and requires every one to have a direct
+smoke invocation in `.github/workflows/ci.yml`.
+
 | Target | Result | Packet |
 |---|---|---|
 | InsForge | Confirmed improvement | [InsForge](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/insforge) |
@@ -554,6 +558,7 @@ python scripts/check_secret_hygiene.py
 python scripts/check_docs_navigation.py
 python scripts/check_artifact_surfaces.py
 python scripts/check_optimize_shortcuts.py
+python scripts/check_cli_coverage.py
 python -m claude_agent_harness_opt judge-prompt evals/examples/search_answer.json > /tmp/judge-prompt.txt
 python -m claude_agent_harness_opt eval evals/examples/search_answer.json
 python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json
