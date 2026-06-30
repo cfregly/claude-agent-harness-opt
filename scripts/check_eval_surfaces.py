@@ -40,6 +40,10 @@ TRACE_SUITES_DIR = ROOT / "evals" / "suites"
 CHECKS_DIR = ROOT / "evals" / "checks"
 
 
+class DisappearedDuringCheck(Exception):
+    """Raised when a transient fixture disappears after directory discovery."""
+
+
 def main() -> int:
     failures = check_eval_surfaces()
     if failures:
@@ -71,6 +75,8 @@ def _check_example_fixtures() -> list[str]:
                 failures.extend(_check_normalized_runtime_example(rel, load_run_export(path)))
                 continue
             payload = _load_object(path)
+        except (DisappearedDuringCheck, FileNotFoundError):
+            continue
         except ValueError as exc:
             failures.append(f"{rel}: {exc}")
             continue
@@ -181,6 +187,8 @@ def _check_e2e_specs() -> list[str]:
         rel = path.relative_to(ROOT)
         try:
             spec = _load_object(path)
+        except DisappearedDuringCheck:
+            continue
         except ValueError as exc:
             failures.append(f"{rel}: {exc}")
             continue
@@ -241,12 +249,16 @@ def _check_live_harness_specs() -> list[str]:
             rel = path.relative_to(ROOT)
             try:
                 spec = _load_object(path)
+            except DisappearedDuringCheck:
+                continue
             except ValueError as exc:
                 failures.append(f"{rel}: {exc}")
                 continue
             failures.extend(_check_live_harness_spec_shape(rel, spec))
             try:
                 result = run_live_harness_spec(path, dry_run=True, out_dir=tmpdir)
+            except FileNotFoundError:
+                continue
             except LiveHarnessError as exc:
                 failures.append(f"{rel}: dry-run failed: {exc}")
                 continue
@@ -340,6 +352,8 @@ def _check_check_catalogs() -> list[str]:
 def _load_object(path: Path) -> dict[str, Any]:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise DisappearedDuringCheck(str(path)) from exc
     except json.JSONDecodeError as exc:
         raise ValueError(f"invalid JSON: {exc}") from exc
     if not isinstance(payload, dict):

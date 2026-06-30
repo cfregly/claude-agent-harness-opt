@@ -72,6 +72,7 @@ python scripts/check_artifact_surfaces.py
 python scripts/check_optimize_shortcuts.py
 python scripts/check_cli_coverage.py
 python scripts/check_project_instructions.py
+python scripts/check_package_surface.py
 python scripts/check_finding_packets.py
 python scripts/check_eval_surfaces.py
 python -m compileall claude_agent_harness_opt scripts

@@ -2,8 +2,10 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
+from unittest.mock import patch
 
 from scripts.check_eval_surfaces import (
+    DisappearedDuringCheck,
     ROOT,
     _check_e2e_specs,
     _check_example_fixtures,
@@ -93,6 +95,15 @@ class CheckEvalSurfacesScriptTests(unittest.TestCase):
         self.assertIn("value_bar.adversarial_check must be present", joined)
         self.assertIn("cases[0] missing prompt_template", joined)
         self.assertIn("harnesses[0] missing adapter", joined)
+
+    def test_live_harness_surface_skips_disappearing_glob_results(self):
+        with patch(
+            "scripts.check_eval_surfaces._load_object",
+            side_effect=DisappearedDuringCheck("gone"),
+        ):
+            failures = _check_live_harness_specs()
+
+        self.assertEqual([], failures)
 
 
 if __name__ == "__main__":
