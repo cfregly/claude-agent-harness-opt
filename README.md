@@ -98,6 +98,10 @@ These links are meant to be shared directly. A confirmed packet has a live basel
 A guardrail packet means the public catalog already passed the tested slice, so no change is
 promoted.
 
+`scripts/check_finding_packets.py` keeps these packet links honest. It verifies each packet has the
+required result, evidence, and reproduction sections, is listed in the index and confirmed ledger,
+and points only at local evidence artifacts that still exist.
+
 | Target | Result | Packet |
 |---|---|---|
 | InsForge | Confirmed improvement | [InsForge](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/insforge) |
@@ -511,6 +515,7 @@ python -m claude_agent_harness_opt harness-checks --markdown
 python -m claude_agent_harness_opt upstream-pr-packet /tmp/harness-matrix.json --target-name "Example MCP" --baseline-variant stock --candidate-variant tuned --out-dir /tmp/upstream-pr
 python -m claude_agent_harness_opt grind-harness evals/model_matrix/coding_tool_selection.json
 python scripts/probe_service_keys.py --env-file .env --no-fail
+python scripts/check_finding_packets.py
 python scripts/check_value_bar.py
 ```
 
