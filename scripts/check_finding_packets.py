@@ -12,6 +12,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 FINDINGS_DIR = ROOT / "docs" / "findings"
 PR_PACKETS_DIR = ROOT / "evals" / "pr_packets"
+RESULTS_DIR = ROOT / "evals" / "results"
 REPO_LINK_RE = re.compile(
     r"https://github\.com/cfregly/claude-agent-harness-opt/(?:blob|tree)/main/([^)\s]+)"
 )
@@ -66,6 +67,7 @@ def check_finding_packets() -> list[str]:
     failures.extend(_check_repo_links(FINDINGS_DIR / "README.md", index_text))
     failures.extend(_check_repo_links(ROOT / "docs" / "confirmed-improvements.md", ledger_text))
     failures.extend(_check_pr_packet_dirs())
+    failures.extend(_check_result_artifacts())
     return failures
 
 
@@ -241,6 +243,316 @@ def _check_pr_packet_evidence(path: Path, evidence: dict[str, Any]) -> list[str]
     if not isinstance(source, dict) or not source:
         failures.append(f"{rel}: source must be a nonempty object")
     return failures
+
+
+def _check_result_artifacts() -> list[str]:
+    failures: list[str] = []
+    if not RESULTS_DIR.exists():
+        return ["evals/results: missing"]
+    artifacts = sorted(path for path in RESULTS_DIR.iterdir() if path.is_file())
+    if not artifacts:
+        return ["evals/results: no result artifacts found"]
+    for path in artifacts:
+        if path.suffix == ".json":
+            failures.extend(_check_result_json(path))
+        elif path.suffix == ".md":
+            failures.extend(_check_result_markdown(path))
+        else:
+            failures.append(f"{path.relative_to(ROOT)}: unsupported result artifact type")
+    return failures
+
+
+def _check_result_json(path: Path) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{rel}: invalid JSON: {exc}"]
+    if not isinstance(payload, dict):
+        return [f"{rel}: JSON result must be an object"]
+
+    if {"results", "cells", "summary"}.issubset(payload):
+        failures.extend(_check_model_matrix_receipt(path, payload))
+    elif {"audits", "matrix_paths", "summary"}.issubset(payload):
+        failures.extend(_check_coverage_suite_receipt(path, payload))
+    elif {"tools", "cases", "boundary_pairs", "summary"}.issubset(payload):
+        failures.extend(_check_matrix_coverage_receipt(path, payload))
+    elif {"items", "hash", "snapshot_version"}.issubset(payload):
+        failures.extend(_check_surface_snapshot_receipt(path, payload))
+    elif {"packages", "passed", "value_bar"}.issubset(payload):
+        failures.extend(_check_surface_inventory_receipt(path, payload))
+    elif {"cells", "summary", "source_spec"}.issubset(payload):
+        failures.extend(_check_live_harness_receipt(path, payload))
+    else:
+        failures.append(f"{rel}: unknown JSON result shape")
+    return failures
+
+
+def _check_model_matrix_receipt(path: Path, payload: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    if payload.get("live") is not True:
+        failures.append(f"{rel}: model-matrix result.live must be true")
+    _require_bool(rel, payload, "passed", failures)
+    results = _require_nonempty_list(rel, payload, "results", failures)
+    cells = _require_nonempty_list(rel, payload, "cells", failures)
+    case_definitions = _require_nonempty_list(rel, payload, "case_definitions", failures)
+    summary = _require_object(rel, payload, "summary", failures)
+    if results and summary:
+        total = summary.get("total")
+        if not isinstance(total, int) or total <= 0:
+            failures.append(f"{rel}: summary.total must be a positive integer")
+        elif total != len(results):
+            failures.append(f"{rel}: summary.total must equal result count")
+        planned = summary.get("planned")
+        if isinstance(planned, int) and planned != len(results):
+            failures.append(f"{rel}: summary.planned must equal result count")
+    if case_definitions:
+        case_names = {str(item.get("name", "")) for item in case_definitions if isinstance(item, dict)}
+        result_case_names = {str(item.get("case", "")) for item in results if isinstance(item, dict)}
+        missing_case_defs = sorted(name for name in result_case_names if name and name not in case_names)
+        if missing_case_defs:
+            failures.append(f"{rel}: result cases missing from case_definitions: {', '.join(missing_case_defs)}")
+    if cells:
+        for idx, cell in enumerate(cells):
+            if not isinstance(cell, dict):
+                failures.append(f"{rel}: cells[{idx}] must be an object")
+                continue
+            for field in ("provider", "harness", "tool_variant", "instruction_variant"):
+                if not str(cell.get(field, "")).strip():
+                    failures.append(f"{rel}: cells[{idx}] missing {field}")
+    if results:
+        saw_failed = False
+        for idx, result in enumerate(results):
+            if not isinstance(result, dict):
+                failures.append(f"{rel}: results[{idx}] must be an object")
+                continue
+            for field in ("case", "provider", "harness", "tool_variant", "instruction_variant", "status"):
+                if not str(result.get(field, "")).strip():
+                    failures.append(f"{rel}: results[{idx}] missing {field}")
+            if not isinstance(result.get("passed"), bool):
+                failures.append(f"{rel}: results[{idx}].passed must be boolean")
+            if not isinstance(result.get("chosen_tools"), list):
+                failures.append(f"{rel}: results[{idx}].chosen_tools must be a list")
+            if result.get("passed") is False:
+                saw_failed = True
+        if payload.get("passed") is False and not saw_failed:
+            failures.append(f"{rel}: failed model-matrix receipt has no failed result rows")
+    matrix_path = str(payload.get("matrix_path", "")).strip()
+    if not matrix_path:
+        failures.append(f"{rel}: matrix_path must be present")
+    else:
+        failures.extend(_check_local_ref(rel, matrix_path))
+    matrix = payload.get("matrix")
+    if "matrix" in payload and not (
+        isinstance(matrix, dict) or str(matrix or "").strip()
+    ):
+        failures.append(f"{rel}: matrix must be an object or display name")
+    if not isinstance(payload.get("source"), dict) or not payload.get("source"):
+        failures.append(f"{rel}: source must be a nonempty object")
+    return failures
+
+
+def _check_coverage_suite_receipt(path: Path, payload: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    if payload.get("passed") is not True:
+        failures.append(f"{rel}: coverage-suite receipt must pass")
+    audits = _require_nonempty_list(rel, payload, "audits", failures)
+    matrix_paths = _require_nonempty_list(rel, payload, "matrix_paths", failures)
+    summary = _require_object(rel, payload, "summary", failures)
+    if summary:
+        if summary.get("failed_matrices") != 0:
+            failures.append(f"{rel}: summary.failed_matrices must be 0")
+        matrix_count = summary.get("matrix_count")
+        if audits and matrix_count != len(audits):
+            failures.append(f"{rel}: summary.matrix_count must equal audit count")
+        if matrix_paths and matrix_count != len(matrix_paths):
+            failures.append(f"{rel}: summary.matrix_count must equal matrix_paths count")
+    for matrix_path in matrix_paths:
+        if isinstance(matrix_path, str):
+            failures.extend(_check_local_ref(rel, matrix_path))
+        else:
+            failures.append(f"{rel}: matrix_paths entries must be strings")
+    return failures
+
+
+def _check_matrix_coverage_receipt(path: Path, payload: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    if payload.get("passed") is not True:
+        failures.append(f"{rel}: matrix-coverage receipt must pass")
+    tools = _require_nonempty_list(rel, payload, "tools", failures)
+    cases = _require_nonempty_list(rel, payload, "cases", failures)
+    boundary_pairs = _require_nonempty_list(rel, payload, "boundary_pairs", failures)
+    summary = _require_object(rel, payload, "summary", failures)
+    if summary:
+        _check_summary_count(rel, summary, "tool_count", tools, failures)
+        _check_summary_count(rel, summary, "case_count", cases, failures)
+        _check_summary_count(rel, summary, "boundary_pair_count", boundary_pairs, failures)
+    uncovered = payload.get("uncovered")
+    if isinstance(uncovered, dict):
+        for name, entries in sorted(uncovered.items()):
+            if entries:
+                failures.append(f"{rel}: uncovered.{name} must be empty")
+    else:
+        failures.append(f"{rel}: uncovered must be an object")
+    matrix_path = str(payload.get("matrix_path", "")).strip()
+    if matrix_path:
+        failures.extend(_check_local_ref(rel, matrix_path))
+    else:
+        failures.append(f"{rel}: matrix_path must be present")
+    return failures
+
+
+def _check_surface_snapshot_receipt(path: Path, payload: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    if not str(payload.get("hash", "")).strip():
+        failures.append(f"{rel}: hash must be present")
+    if not str(payload.get("snapshot_version", "")).strip():
+        failures.append(f"{rel}: snapshot_version must be present")
+    items = _require_nonempty_list(rel, payload, "items", failures)
+    for idx, item in enumerate(items):
+        if not isinstance(item, dict):
+            failures.append(f"{rel}: items[{idx}] must be an object")
+            continue
+        item_path = str(item.get("path", "")).strip()
+        if not item_path:
+            failures.append(f"{rel}: items[{idx}] missing path")
+        else:
+            failures.extend(_check_local_ref(rel, item_path))
+        if not str(item.get("hash", "")).strip():
+            failures.append(f"{rel}: items[{idx}] missing hash")
+    return failures
+
+
+def _check_surface_inventory_receipt(path: Path, payload: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    _require_bool(rel, payload, "passed", failures)
+    packages = _require_nonempty_list(rel, payload, "packages", failures)
+    if not isinstance(payload.get("value_bar"), dict):
+        failures.append(f"{rel}: value_bar must be an object")
+    for idx, package in enumerate(packages):
+        if not isinstance(package, dict):
+            failures.append(f"{rel}: packages[{idx}] must be an object")
+            continue
+        if not str(package.get("package", package.get("module", ""))).strip():
+            failures.append(f"{rel}: packages[{idx}] missing package or module")
+        _require_bool(rel, package, "passed", failures, prefix=f"packages[{idx}]")
+        checks = _require_nonempty_list(rel, package, "checks", failures, prefix=f"packages[{idx}]")
+        for check_idx, check in enumerate(checks):
+            if not isinstance(check, dict):
+                failures.append(f"{rel}: packages[{idx}].checks[{check_idx}] must be an object")
+                continue
+            if not str(check.get("name", "")).strip():
+                failures.append(f"{rel}: packages[{idx}].checks[{check_idx}] missing name")
+            _require_bool(rel, check, "passed", failures, prefix=f"packages[{idx}].checks[{check_idx}]")
+    return failures
+
+
+def _check_live_harness_receipt(path: Path, payload: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    _require_bool(rel, payload, "passed", failures)
+    cells = _require_nonempty_list(rel, payload, "cells", failures)
+    summary = _require_object(rel, payload, "summary", failures)
+    source_spec = str(payload.get("source_spec", "")).strip()
+    if source_spec:
+        failures.extend(_check_local_ref(rel, source_spec))
+    else:
+        failures.append(f"{rel}: source_spec must be present")
+    if summary and cells:
+        counted = sum(
+            int(summary.get(field, 0))
+            for field in ("passed", "failed", "errors", "not_installed")
+            if isinstance(summary.get(field, 0), int)
+        )
+        if counted and counted != len(cells):
+            failures.append(f"{rel}: summary cell counts must equal cells count")
+    for idx, cell in enumerate(cells):
+        if not isinstance(cell, dict):
+            failures.append(f"{rel}: cells[{idx}] must be an object")
+            continue
+        for field in ("harness", "case", "status"):
+            if not str(cell.get(field, "")).strip():
+                failures.append(f"{rel}: cells[{idx}] missing {field}")
+    return failures
+
+
+def _check_result_markdown(path: Path) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    text = path.read_text(encoding="utf-8")
+    if not text.strip():
+        return [f"{rel}: empty"]
+    if not text.lstrip().startswith("# "):
+        failures.append(f"{rel}: missing top-level title")
+    if "Passed:" not in text:
+        failures.append(f"{rel}: missing Passed summary")
+    if not any(section in text for section in ("## Raw Matrix", "## Matrix Summary", "## Gaps", "## Tool Coverage")):
+        failures.append(f"{rel}: missing review section")
+    return failures
+
+
+def _require_bool(
+    rel: Path,
+    payload: dict[str, Any],
+    field: str,
+    failures: list[str],
+    *,
+    prefix: str = "",
+) -> bool:
+    label = f"{prefix}.{field}" if prefix else field
+    if not isinstance(payload.get(field), bool):
+        failures.append(f"{rel}: {label} must be boolean")
+        return False
+    return True
+
+
+def _require_object(
+    rel: Path,
+    payload: dict[str, Any],
+    field: str,
+    failures: list[str],
+    *,
+    prefix: str = "",
+) -> dict[str, Any]:
+    label = f"{prefix}.{field}" if prefix else field
+    value = payload.get(field)
+    if not isinstance(value, dict):
+        failures.append(f"{rel}: {label} must be an object")
+        return {}
+    return value
+
+
+def _require_nonempty_list(
+    rel: Path,
+    payload: dict[str, Any],
+    field: str,
+    failures: list[str],
+    *,
+    prefix: str = "",
+) -> list[Any]:
+    label = f"{prefix}.{field}" if prefix else field
+    value = payload.get(field)
+    if not isinstance(value, list) or not value:
+        failures.append(f"{rel}: {label} must be a nonempty list")
+        return []
+    return value
+
+
+def _check_summary_count(
+    rel: Path,
+    summary: dict[str, Any],
+    field: str,
+    items: list[Any],
+    failures: list[str],
+) -> None:
+    if items and summary.get(field) != len(items):
+        failures.append(f"{rel}: summary.{field} must equal {field.removesuffix('_count')} count")
 
 
 def _read_required(path: Path, failures: list[str]) -> str:

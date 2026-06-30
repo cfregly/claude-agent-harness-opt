@@ -101,7 +101,9 @@ promoted.
 `scripts/check_finding_packets.py` keeps these packet links honest. It verifies each packet has the
 required result, evidence, and reproduction sections, is listed in the index and confirmed ledger,
 points only at local evidence artifacts that still exist, and validates committed PR packet
-`evidence.json` files against their promoted live matrix results.
+`evidence.json` files against their promoted live matrix results. It also validates committed
+`evals/results` receipts so JSON and Markdown evidence stays structured enough to rerun as eval
+fixtures later.
 
 | Target | Result | Packet |
 |---|---|---|
@@ -217,8 +219,8 @@ safety, correctness, or recoverability. Common boundaries are:
 
 Skills are one input, not the whole descent. They are useful because they encode expert workflow
 rules, but the descent also uses live MCP inventories, generated schemas, resource lists, upstream
-docs, source pins, trace failures, support reports, and smoke-call output. A case is stronger when
-at least two of those sources agree that a boundary matters.
+docs, source pins, trace failures, support reports, smoke-call output, and existing result
+receipts. A case is stronger when at least two of those sources agree that a boundary matters.
 
 The coverage target is the product of those inputs, not a single list of skills. For completeness,
 build cases across these axes:
@@ -270,7 +272,10 @@ tool reference, contradictory case expectation, partial value-bar evidence, or a
 identity. The `coverage.required_check_families` field is the edge-family contract for a matrix.
 `coverage.allow_variant_tool_delta` is reserved for matrices that intentionally compare different
 tool catalogs. Store the matrix, coverage report, live result, and PR packet together so the same
-cases can be rerun later as evals.
+cases can be rerun later as evals. These artifacts are not scratch notes: the repository checks
+validate result receipt shape, matrix paths, coverage summaries, baseline failure rows, promoted
+candidate evidence, and Markdown review sections so future agents can use them as regression
+fixtures.
 
 For the full repository, the current ledger is stored at
 `evals/results/model_matrix_coverage_suite_2026-06-30.md`: it audits 18 matrices, 152 tools, 199

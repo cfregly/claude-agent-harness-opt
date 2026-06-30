@@ -3,7 +3,12 @@ import subprocess
 import sys
 import unittest
 
-from scripts.check_finding_packets import ROOT, _check_pr_packet_evidence
+from scripts.check_finding_packets import (
+    ROOT,
+    _check_pr_packet_evidence,
+    _check_result_json,
+    _check_result_markdown,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -52,6 +57,79 @@ class CheckFindingPacketsScriptTests(unittest.TestCase):
         self.assertIn("comparison delta is below minimum_delta", joined)
         self.assertIn("result.live must be true", joined)
         self.assertIn("comparison variant missing from matrix: tuned", joined)
+
+    def test_result_json_rejects_unknown_receipt_shape(self):
+        path = ROOT / "evals" / "results" / "unknown_shape.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('{"notes": "not a receipt"}', encoding="utf-8")
+        try:
+            failures = _check_result_json(path)
+        finally:
+            path.unlink()
+
+        self.assertIn("unknown JSON result shape", "\n".join(failures))
+
+    def test_model_matrix_receipt_requires_live_and_consistent_rows(self):
+        path = ROOT / "evals" / "results" / "bad_model_matrix_receipt.json"
+        path.write_text(
+            """
+{
+  "live": false,
+  "passed": false,
+  "results": [
+    {
+      "case": "missing definition",
+      "provider": "anthropic",
+      "harness": "prompt_json",
+      "tool_variant": "stock",
+      "instruction_variant": "rules",
+      "status": "failed",
+      "passed": false,
+      "chosen_tools": []
+    }
+  ],
+  "cells": [
+    {
+      "provider": "anthropic",
+      "harness": "prompt_json",
+      "tool_variant": "stock",
+      "instruction_variant": "rules"
+    }
+  ],
+  "case_definitions": [
+    {"name": "defined case"}
+  ],
+  "summary": {"total": 2, "planned": 2},
+  "matrix_path": "evals/model_matrix/missing.json",
+  "matrix": {},
+  "source": {}
+}
+""",
+            encoding="utf-8",
+        )
+        try:
+            failures = _check_result_json(path)
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("model-matrix result.live must be true", joined)
+        self.assertIn("summary.total must equal result count", joined)
+        self.assertIn("result cases missing from case_definitions", joined)
+        self.assertIn("local evidence link missing: evals/model_matrix/missing.json", joined)
+        self.assertIn("source must be a nonempty object", joined)
+
+    def test_result_markdown_requires_summary_and_review_section(self):
+        path = ROOT / "evals" / "results" / "bad_receipt.md"
+        path.write_text("# Receipt\n\nNo structured result here.\n", encoding="utf-8")
+        try:
+            failures = _check_result_markdown(path)
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("missing Passed summary", joined)
+        self.assertIn("missing review section", joined)
 
 
 if __name__ == "__main__":
