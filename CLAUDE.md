@@ -54,7 +54,8 @@ Retain useful cases as eval material. Store reusable matrices under `evals/model
 or minimal transcripts under `evals/examples`, dated receipts under `evals/results`, upstream PR
 packets under `evals/pr_packets`, and promoted public findings under `docs/findings`. Run
 `matrix-coverage-suite` before claiming broad coverage, and use `grind-harness` when you need a
-bounded baseline-to-candidate climb.
+bounded baseline-to-candidate climb. Keep `docs/surface-inventory.md` current so every retained
+surface has an owner path, gate, and regression artifact.
 
 ## Verification Gates
 
@@ -69,6 +70,7 @@ python scripts/check_command_surfaces.py
 python scripts/check_ci_surface.py
 python scripts/check_secret_hygiene.py
 python scripts/check_local_config.py
+python scripts/check_surface_inventory.py
 python scripts/check_docs_navigation.py
 python scripts/check_source_map.py
 python scripts/check_public_links.py
@@ -79,6 +81,7 @@ python scripts/check_project_instructions.py
 python scripts/check_package_surface.py
 python scripts/check_finding_packets.py
 python scripts/check_eval_surfaces.py
+python -m claude_agent_harness_opt matrix-coverage-suite evals/model_matrix evals/targets/gstack/gstack_skill_selection_matrix.json --strict --out /tmp/model-matrix-coverage-suite.json
 python -m compileall claude_agent_harness_opt scripts
 python -m unittest discover -s tests -q
 ```

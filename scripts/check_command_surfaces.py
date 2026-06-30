@@ -172,6 +172,8 @@ def _extract_cli_invocations(source: Path, text: str) -> list[Invocation]:
 
 def _safe_split(raw: str) -> list[str]:
     command_text = raw
+    if "`" in command_text:
+        command_text = command_text.split("`", 1)[0]
     for separator in (" || ", " && ", "; then", "; fi"):
         command_text = command_text.split(separator, 1)[0]
     try:

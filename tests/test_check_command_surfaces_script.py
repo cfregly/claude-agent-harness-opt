@@ -69,6 +69,22 @@ class CheckCommandSurfacesScriptTests(unittest.TestCase):
         self.assertEqual("model-matrix", invocations[0].command)
         self.assertIn("evals/model_matrix/coding_tool_selection.json", invocations[0].tokens)
 
+    def test_extract_cli_invocations_stops_at_inline_code_span(self):
+        invocations = _extract_cli_invocations(
+            Path("docs/surface-inventory.md"),
+            "| Surface | Gate | Artifact |\n"
+            "|---|---|---|\n"
+            "| Matrix | `python -m claude_agent_harness_opt matrix-coverage-suite`, "
+            "`python scripts/check_finding_packets.py` | `tests/test_matrix_coverage.py` |\n",
+        )
+
+        self.assertEqual(1, len(invocations))
+        self.assertEqual("matrix-coverage-suite", invocations[0].command)
+        self.assertEqual(
+            ["python", "-m", "claude_agent_harness_opt", "matrix-coverage-suite"],
+            list(invocations[0].tokens),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

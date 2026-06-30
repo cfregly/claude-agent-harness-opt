@@ -99,6 +99,7 @@ scripts/             # prose gate for public artifacts
 | Learn the tool-writing standard | [Tool Writing Best Practices](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/tool-writing-best-practices.md) |
 | Decide whether a workflow is a skill or a tool | [Skills vs Tools](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/skills-vs-tools.md) |
 | Run the broader public MCP sweep | [Public MCP Sweep](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/public-mcp-sweep.md) |
+| Audit retained surfaces and gates | [Surface Inventory](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/surface-inventory.md) |
 
 ## Founder Packets
 
@@ -144,6 +145,11 @@ blank or placeholder-only.
 `scripts/check_local_config.py` protects local setup and credential docs. It derives required env
 keys from E2E specs, model matrices, and probe scripts, then checks `.env.example`,
 `docs/setup.md`, and `docs/credentialed-service-probes.md` stay synchronized.
+
+`scripts/check_surface_inventory.py` protects the full retained-surface crosswalk. It validates
+`docs/surface-inventory.md`, requires every surface family to name owned paths, gates, and
+regression material, checks every discovered gate script is listed, and fails when a new `evals/*`
+root is not represented.
 
 `scripts/check_docs_navigation.py` protects the public navigation surface. It verifies repo-local
 GitHub links point at existing files or folders, every docs page is reachable from the README,
@@ -202,6 +208,7 @@ smoke invocation in `.github/workflows/ci.yml`.
 | Service probes | [Credentialed Service Probes](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/credentialed-service-probes.md) |
 | gstack routing audit | [gstack Skill Routing Audit](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/gstack-skill-routing-audit.md) |
 | Model migration harnesses | [Codex and Model Migration Harnesses](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/codex-and-model-migration-harnesses.md) |
+| Surface inventory | [Surface Inventory](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/surface-inventory.md) |
 
 ## Claude Code Skill
 
@@ -573,6 +580,7 @@ python scripts/check_command_surfaces.py
 python scripts/check_ci_surface.py
 python scripts/check_secret_hygiene.py
 python scripts/check_local_config.py
+python scripts/check_surface_inventory.py
 python scripts/check_docs_navigation.py
 python scripts/check_source_map.py
 python scripts/check_public_links.py

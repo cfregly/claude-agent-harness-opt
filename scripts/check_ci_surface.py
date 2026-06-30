@@ -20,6 +20,7 @@ REQUIRED_SUBSTRINGS = (
     ("python version", 'python-version: "3.11"'),
     ("compile smoke", "python -m compileall claude_agent_harness_opt scripts"),
     ("unit test suite", "python -m unittest discover -s tests -q"),
+    ("surface inventory gate", "python scripts/check_surface_inventory.py"),
     (
         "strict matrix coverage suite",
         "python -m claude_agent_harness_opt matrix-coverage-suite "
