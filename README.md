@@ -152,8 +152,8 @@ regression material, checks every discovered gate script is listed, and fails wh
 root or tracked file family is not represented.
 
 `scripts/check_regression_ownership.py` protects source-to-test ownership. It requires every package
-module and script to have a direct regression test or a named wrapper-owner test, so new source files
-cannot rely only on broad test discovery.
+module and script to have a direct regression test or a named wrapper-owner test with import, path,
+or CLI evidence, so new source files cannot rely only on broad test discovery.
 
 `scripts/check_docs_navigation.py` protects the public navigation surface. It verifies repo-local
 GitHub links point at existing files or folders, every docs page is reachable from the README,

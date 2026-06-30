@@ -51,7 +51,7 @@ def _check_package_modules(root: Path) -> list[str]:
     for path in sorted(package_root.glob("*.py")):
         rel = path.relative_to(root).as_posix()
         owners = PACKAGE_OWNER_OVERRIDES.get(path.name, (f"tests/test_{path.stem}.py",))
-        failures.extend(_check_owner_paths(root, rel, owners))
+        failures.extend(_check_owner_paths(root, rel, owners, _package_evidence(path.name)))
     return failures
 
 
@@ -67,7 +67,7 @@ def _check_scripts(root: Path) -> list[str]:
         if owners is None:
             failures.append(f"{rel}: missing regression owner mapping")
             continue
-        failures.extend(_check_owner_paths(root, rel, owners))
+        failures.extend(_check_owner_paths(root, rel, owners, _script_evidence(path.name)))
     return failures
 
 
@@ -80,7 +80,12 @@ def _script_owners(filename: str) -> tuple[str, ...] | None:
     return None
 
 
-def _check_owner_paths(root: Path, source: str, owners: tuple[str, ...]) -> list[str]:
+def _check_owner_paths(
+    root: Path,
+    source: str,
+    owners: tuple[str, ...],
+    evidence: tuple[tuple[str, ...], ...],
+) -> list[str]:
     failures: list[str] = []
     for owner in owners:
         path = root / owner
@@ -89,7 +94,44 @@ def _check_owner_paths(root: Path, source: str, owners: tuple[str, ...]) -> list
             continue
         if path.stat().st_size == 0:
             failures.append(f"{source}: regression owner is empty: {owner}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        if not _has_evidence(text, evidence):
+            expected = " or ".join(_format_evidence_option(option) for option in evidence)
+            failures.append(f"{source}: regression owner {owner} lacks source evidence: {expected}")
     return failures
+
+
+def _package_evidence(filename: str) -> tuple[tuple[str, ...], ...]:
+    if filename == "__init__.py":
+        return (("__init__.py",), ("__init__",))
+    if filename == "__main__.py":
+        return (("__main__.py",), ("__main__",), ("-m", "claude_agent_harness_opt"))
+    stem = filename.removesuffix(".py")
+    if stem == "cli":
+        return (("claude_agent_harness_opt.cli",), ("-m", "claude_agent_harness_opt"), ("run_cli",))
+    return (
+        (f"from {PACKAGE_DIR}.{stem}",),
+        (f"import {PACKAGE_DIR}.{stem}",),
+        (f"{PACKAGE_DIR}.{stem}",),
+    )
+
+
+def _script_evidence(filename: str) -> tuple[tuple[str, ...], ...]:
+    stem = filename.removesuffix(".py")
+    return (
+        (f"scripts/{filename}",),
+        (f"scripts.{stem}",),
+        (stem,),
+    )
+
+
+def _has_evidence(text: str, evidence: tuple[tuple[str, ...], ...]) -> bool:
+    return any(all(term in text for term in option) for option in evidence)
+
+
+def _format_evidence_option(option: tuple[str, ...]) -> str:
+    return "+".join(repr(term) for term in option)
 
 
 if __name__ == "__main__":
