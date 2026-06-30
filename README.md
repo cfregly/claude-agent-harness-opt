@@ -100,7 +100,8 @@ promoted.
 
 `scripts/check_finding_packets.py` keeps these packet links honest. It verifies each packet has the
 required result, evidence, and reproduction sections, is listed in the index and confirmed ledger,
-and points only at local evidence artifacts that still exist.
+points only at local evidence artifacts that still exist, and validates committed PR packet
+`evidence.json` files against their promoted live matrix results.
 
 | Target | Result | Packet |
 |---|---|---|
