@@ -14,7 +14,7 @@
       "content": [
         {
           "signature": "sig_opaque",
-          "thinking": "I need a direct source for the cargo volume before answering.",
+          "thinking": "This is a simple fact lookup. Budget one web_search call, use a direct source for cargo volume, and stop when the result names the value.",
           "type": "thinking"
         },
         {

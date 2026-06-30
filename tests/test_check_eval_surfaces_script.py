@@ -6,6 +6,7 @@ import unittest
 from scripts.check_eval_surfaces import (
     ROOT,
     _check_e2e_specs,
+    _check_example_fixtures,
     _check_live_harness_specs,
 )
 
@@ -56,6 +57,18 @@ class CheckEvalSurfacesScriptTests(unittest.TestCase):
         self.assertIn("method must be GET or HEAD", joined)
         self.assertIn("read_only must be true", joined)
         self.assertIn("missing JSON expectation", joined)
+
+    def test_example_surface_check_rejects_unclassified_fixtures(self):
+        path = ROOT / "evals" / "examples" / "temporary_unclassified.json"
+        path.write_text('{"name": "unclassified"}\n', encoding="utf-8")
+        try:
+            failures = _check_example_fixtures()
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("temporary_unclassified.json", joined)
+        self.assertIn("unclassified example fixture shape", joined)
 
     def test_live_harness_surface_check_rejects_missing_prompt_and_adapter(self):
         path = ROOT / "evals" / "live_harnesses" / "temporary_bad_live.json"

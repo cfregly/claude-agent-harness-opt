@@ -106,9 +106,9 @@ points only at local evidence artifacts that still exist, and validates committe
 fixtures later, and audits every retained matrix surface under `evals/model_matrix` plus
 matrix-shaped targets under `evals/targets`.
 
-`scripts/check_eval_surfaces.py` keeps the other eval fixtures honest. It dry-runs every retained
-read-only E2E spec, dry-runs every live harness spec without credentials, runs every trace suite,
-and validates the harness-check catalogs.
+`scripts/check_eval_surfaces.py` keeps the other eval fixtures honest. It validates every retained
+example fixture, dry-runs every read-only E2E spec, dry-runs every live harness spec without
+credentials, runs every trace suite, and validates the harness-check catalogs.
 
 | Target | Result | Packet |
 |---|---|---|

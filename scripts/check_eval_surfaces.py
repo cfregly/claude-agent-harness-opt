@@ -14,15 +14,26 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from claude_agent_harness_opt.adapters import (  # noqa: E402
+    claude_messages_to_trace,
+    load_run_export,
+    normalize_run_export,
+)
+from claude_agent_harness_opt.agent_audit import review_agent_bundle  # noqa: E402
 from claude_agent_harness_opt.e2e import E2EError, run_e2e_spec  # noqa: E402
+from claude_agent_harness_opt.evals import evaluate_case  # noqa: E402
 from claude_agent_harness_opt.harness_checks import load_check_catalog  # noqa: E402
+from claude_agent_harness_opt.import_run import import_run_export  # noqa: E402
 from claude_agent_harness_opt.live_harness import (  # noqa: E402
     LiveHarnessError,
     run_live_harness_spec,
 )
+from claude_agent_harness_opt.tool_selection import review_tool_selection_bundle  # noqa: E402
+from claude_agent_harness_opt.trace_review import review_trace  # noqa: E402
 from claude_agent_harness_opt.trace_suite import run_trace_suite  # noqa: E402
 
 
+EXAMPLES_DIR = ROOT / "evals" / "examples"
 E2E_DIR = ROOT / "evals" / "e2e"
 LIVE_HARNESSES_DIR = ROOT / "evals" / "live_harnesses"
 TRACE_SUITES_DIR = ROOT / "evals" / "suites"
@@ -40,11 +51,125 @@ def main() -> int:
 
 def check_eval_surfaces() -> list[str]:
     failures: list[str] = []
+    failures.extend(_check_example_fixtures())
     failures.extend(_check_e2e_specs())
     failures.extend(_check_live_harness_specs())
     failures.extend(_check_trace_suites())
     failures.extend(_check_check_catalogs())
     return failures
+
+
+def _check_example_fixtures() -> list[str]:
+    failures: list[str] = []
+    paths = sorted(path for path in EXAMPLES_DIR.iterdir() if path.is_file())
+    if not paths:
+        return ["evals/examples: no example fixtures found"]
+    for path in paths:
+        rel = path.relative_to(ROOT)
+        try:
+            if path.suffix == ".jsonl":
+                failures.extend(_check_normalized_runtime_example(rel, load_run_export(path)))
+                continue
+            payload = _load_object(path)
+        except ValueError as exc:
+            failures.append(f"{rel}: {exc}")
+            continue
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"{rel}: failed to load fixture: {exc}")
+            continue
+
+        try:
+            handled = _check_json_example_fixture(path, rel, payload, failures)
+        except Exception as exc:  # noqa: BLE001 - example gates should report every fixture.
+            failures.append(f"{rel}: validation crashed: {exc}")
+            handled = True
+        if not handled:
+            failures.append(f"{rel}: unclassified example fixture shape")
+    return failures
+
+
+def _check_json_example_fixture(
+    path: Path,
+    rel: Path,
+    payload: dict[str, Any],
+    failures: list[str],
+) -> bool:
+    if payload.get("type") in {"answer_accuracy", "tool_use_accuracy", "final_state_accuracy"}:
+        result = evaluate_case(payload)
+        if not result.passed:
+            failures.append(f"{rel}: eval example did not pass")
+        return True
+
+    if isinstance(payload.get("steps"), list):
+        result = review_trace(payload)
+        if _is_negative_example(path):
+            if result.passed:
+                failures.append(f"{rel}: negative trace unexpectedly passed")
+        elif not result.passed:
+            failures.append(f"{rel}: trace review did not pass")
+        return True
+
+    if isinstance(payload.get("messages"), list):
+        failures.extend(_check_trace_result(rel, claude_messages_to_trace(payload)))
+        return True
+
+    if isinstance(payload.get("events"), list):
+        if isinstance(payload.get("tools"), list) or isinstance(payload.get("tool_selection_cases"), list):
+            with tempfile.TemporaryDirectory(prefix="aho-import-example-") as tmpdir:
+                imported = import_run_export(path, adapter=str(payload.get("adapter", "")) or None, out_dir=tmpdir)
+                audit = review_agent_bundle(imported["bundle"])
+                if not audit.get("passed"):
+                    failures.append(f"{rel}: imported audit bundle did not pass")
+                if not int(imported.get("trace_steps", 0)):
+                    failures.append(f"{rel}: imported trace had no steps")
+        else:
+            failures.extend(_check_normalized_runtime_example(rel, payload))
+        return True
+
+    if _looks_like_agent_audit_bundle(payload):
+        audit = review_agent_bundle(path)
+        if _is_negative_example(path):
+            if audit.get("passed") or audit.get("value_bar", {}).get("passed"):
+                failures.append(f"{rel}: negative audit bundle unexpectedly passed")
+        elif not audit.get("passed"):
+            failures.append(f"{rel}: audit bundle did not pass")
+        return True
+
+    if isinstance(payload.get("tools"), list) and isinstance(payload.get("tool_selection_cases"), list):
+        review = review_tool_selection_bundle(path)
+        if _is_negative_example(path):
+            if review.passed:
+                failures.append(f"{rel}: negative tool-selection bundle unexpectedly passed")
+        elif not review.passed:
+            failures.append(f"{rel}: tool-selection bundle did not pass")
+        return True
+
+    return False
+
+
+def _check_normalized_runtime_example(rel: Path, payload: Any) -> list[str]:
+    trace = normalize_run_export(payload)
+    return _check_trace_result(rel, trace)
+
+
+def _check_trace_result(rel: Path, trace: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    if not trace.get("steps"):
+        failures.append(f"{rel}: normalized trace has no steps")
+        return failures
+    result = review_trace(trace)
+    if not result.passed:
+        failures.append(f"{rel}: normalized trace did not pass review")
+    return failures
+
+
+def _looks_like_agent_audit_bundle(payload: dict[str, Any]) -> bool:
+    return isinstance(payload.get("tools"), list) and isinstance(payload.get("traces"), list)
+
+
+def _is_negative_example(path: Path) -> bool:
+    stem = path.stem
+    return any(marker in stem for marker in ("_bad", "missing_value_bar", "before_bundle"))
 
 
 def _check_e2e_specs() -> list[str]:
