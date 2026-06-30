@@ -119,6 +119,11 @@ templates unless they have an explicit surface contract.
 validates each `SKILL.md` frontmatter block, routing and reporting sections, referenced CLI
 commands, What-To-Look-For categories, and agent metadata under `.claude/skills/*/agents`.
 
+`scripts/check_command_surfaces.py` keeps the executable surface synchronized with the docs and CI.
+It verifies every check gate is run in CI and listed below, every check gate has a unit-test file,
+every documented `claude_agent_harness_opt` command names a real CLI subcommand, and command
+examples that point at repo fixtures still point at existing files.
+
 | Target | Result | Packet |
 |---|---|---|
 | InsForge | Confirmed improvement | [InsForge](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings/insforge) |
@@ -508,6 +513,8 @@ python -m compileall claude_agent_harness_opt scripts
 python -m unittest discover -s tests -q
 python scripts/check_prompt_recipe_surfaces.py
 python scripts/check_skill_surfaces.py
+python scripts/check_command_surfaces.py
+python -m claude_agent_harness_opt judge-prompt evals/examples/search_answer.json > /tmp/judge-prompt.txt
 python -m claude_agent_harness_opt eval evals/examples/search_answer.json
 python -m claude_agent_harness_opt review-trace evals/examples/agent_trace_good.json
 python -m claude_agent_harness_opt normalize-claude evals/examples/claude_messages.json
