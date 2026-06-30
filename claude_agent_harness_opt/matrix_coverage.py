@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .model_matrix import load_matrix
+from .value_bar import evaluate_value_bar
 
 
 SPECIAL_TOOLS = {"NO_TOOL"}
@@ -44,6 +45,8 @@ def audit_matrix_coverage_suite(paths: list[str | Path]) -> dict[str, Any]:
             ),
             "total_profiles": sum(audit["summary"]["profile_count"] for audit in audits),
             "total_tools": sum(audit["summary"]["tool_count"] for audit in audits),
+            "total_value_bar_gaps": sum(audit["summary"]["value_bar_gap_count"] for audit in audits),
+            "total_value_bars": sum(audit["summary"]["value_bar_count"] for audit in audits),
         },
     }
 
@@ -165,6 +168,7 @@ def audit_matrix_coverage_data(
         tool_variants=variants,
     )
     case_expectation_gaps = _case_expectation_gaps(cases, variants)
+    value_bar_gaps = _value_bar_gaps(matrix)
     source_tool_count_mismatch = _source_tool_count_mismatch(matrix.get("source", {}), operational_tools)
     warnings = []
     if never_expected:
@@ -193,6 +197,8 @@ def audit_matrix_coverage_data(
         warnings.append("some matrix identities or case definitions are ambiguous")
     if case_expectation_gaps:
         warnings.append("some case expectations are contradictory or impossible")
+    if value_bar_gaps:
+        warnings.append("some value_bar metadata does not clear the repo promotion bar")
     if source_tool_count_mismatch:
         warnings.append("source tool_count does not match matrix tool surface")
 
@@ -244,6 +250,8 @@ def audit_matrix_coverage_data(
                 len(operational_tools),
             ),
             "tool_variant_count": len(variants),
+            "value_bar_count": 1 if matrix.get("value_bar") else 0,
+            "value_bar_gap_count": len(value_bar_gaps),
         },
         "tool_variants": [
             {
@@ -267,6 +275,7 @@ def audit_matrix_coverage_data(
             "source_tool_count_mismatch": source_tool_count_mismatch,
             "unknown_expected_tools": sorted(unknown_expected),
             "unknown_forbidden_tools": sorted(unknown_forbidden),
+            "value_bar_gaps": value_bar_gaps,
             "variant_surface_mismatches": variant_surface_mismatches,
         },
         "warnings": warnings,
@@ -291,6 +300,8 @@ def render_matrix_coverage_markdown(audit: dict[str, Any]) -> str:
         f"Cases with check_family: {summary['case_count_with_check_family']}",
         f"Case expectation gaps: {summary['case_expectation_gap_count']}",
         f"Identity gaps: {summary['identity_gap_count']}",
+        f"Value bars: {summary['value_bar_count']}",
+        f"Value-bar gaps: {summary['value_bar_gap_count']}",
         f"Required check-family coverage: {summary['required_check_family_coverage']:.3f}",
         f"Variant surface parity: {summary['variant_surface_parity']:.3f}",
         "",
@@ -312,6 +323,7 @@ def render_matrix_coverage_markdown(audit: dict[str, Any]) -> str:
         ("Cases without check_family", "cases_without_check_family"),
         ("Unknown expected tools", "unknown_expected_tools"),
         ("Unknown forbidden tools", "unknown_forbidden_tools"),
+        ("Value-bar gaps", "value_bar_gaps"),
     ):
         values = uncovered.get(key, [])
         rendered = _render_gap_values(values) if values else "none"
@@ -370,6 +382,8 @@ def render_matrix_coverage_suite_markdown(suite: dict[str, Any]) -> str:
         f"Total boundary pairs: {summary['total_boundary_pairs']}",
         f"Total case expectation gaps: {summary['total_case_expectation_gaps']}",
         f"Total identity gaps: {summary['total_identity_gaps']}",
+        f"Total value bars: {summary['total_value_bars']}",
+        f"Total value-bar gaps: {summary['total_value_bar_gaps']}",
         "",
         "## Matrix Summary",
         "",
@@ -415,6 +429,7 @@ def render_matrix_coverage_suite_markdown(suite: dict[str, Any]) -> str:
                 ("Cases without check_family", "cases_without_check_family"),
                 ("Unknown expected tools", "unknown_expected_tools"),
                 ("Unknown forbidden tools", "unknown_forbidden_tools"),
+                ("Value-bar gaps", "value_bar_gaps"),
             ):
                 values = audit["uncovered"].get(key, [])
                 if values:
@@ -676,6 +691,21 @@ def _case_expectation_gaps(
                     }
                 )
     return gaps
+
+
+def _value_bar_gaps(matrix: dict[str, Any]) -> list[dict[str, Any]]:
+    value_bar = matrix.get("value_bar")
+    if not value_bar:
+        return []
+    result = evaluate_value_bar(value_bar if isinstance(value_bar, dict) else None)
+    if result.passed:
+        return []
+    return [
+        {
+            "details": result.details,
+            "score": result.score,
+        }
+    ]
 
 
 def _append_missing_or_duplicate_name_gaps(

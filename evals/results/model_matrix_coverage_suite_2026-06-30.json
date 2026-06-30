@@ -493,6 +493,8 @@
         "tool_count": 7,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -647,6 +649,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -927,6 +930,8 @@
         "tool_count": 3,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -1021,6 +1026,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -1108,6 +1114,8 @@
         "tool_count": 2,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 1,
+        "value_bar_count": 1,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -1158,6 +1166,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -1424,6 +1433,8 @@
         "tool_count": 4,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 1,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -1527,6 +1538,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -1759,6 +1771,8 @@
         "tool_count": 2,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -1834,6 +1848,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -2951,6 +2966,8 @@
         "tool_count": 11,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -3219,6 +3236,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -3851,6 +3869,8 @@
         "tool_count": 12,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -4074,6 +4094,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -5566,6 +5587,8 @@
         "tool_count": 12,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -5921,6 +5944,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -6024,6 +6048,8 @@
         "tool_count": 1,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 1,
+        "value_bar_count": 1,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -6061,6 +6087,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -6390,6 +6417,8 @@
         "tool_count": 5,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -6508,6 +6537,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -7283,6 +7313,8 @@
         "tool_count": 18,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -7575,6 +7607,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -7833,6 +7866,8 @@
         "tool_count": 4,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -7926,6 +7961,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -9451,6 +9487,8 @@
         "tool_count": 13,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -9791,6 +9829,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -10178,6 +10217,8 @@
         "tool_count": 9,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -10334,6 +10375,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -10911,6 +10953,8 @@
         "tool_count": 11,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -11113,6 +11157,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -11750,6 +11795,8 @@
         "tool_count": 8,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -11930,6 +11977,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -12335,6 +12383,8 @@
         "tool_count": 5,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -12468,6 +12518,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -13813,6 +13864,8 @@
         "tool_count": 25,
         "tool_expected_coverage": 1.0,
         "tool_variant_count": 2,
+        "value_bar_count": 0,
+        "value_bar_gap_count": 0,
         "variant_surface_parity": 1.0
       },
       "tool_variants": [
@@ -14262,6 +14315,7 @@
         "source_tool_count_mismatch": [],
         "unknown_expected_tools": [],
         "unknown_forbidden_tools": [],
+        "value_bar_gaps": [],
         "variant_surface_mismatches": []
       },
       "warnings": []
@@ -14299,6 +14353,8 @@
     "total_identity_gaps": 0,
     "total_instruction_variants": 21,
     "total_profiles": 49,
-    "total_tools": 152
+    "total_tools": 152,
+    "total_value_bar_gaps": 0,
+    "total_value_bars": 3
   }
 }

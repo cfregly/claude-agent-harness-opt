@@ -12,6 +12,8 @@ Total argument cases: 180
 Total boundary pairs: 805
 Total case expectation gaps: 0
 Total identity gaps: 0
+Total value bars: 3
+Total value-bar gaps: 0
 
 ## Matrix Summary
 

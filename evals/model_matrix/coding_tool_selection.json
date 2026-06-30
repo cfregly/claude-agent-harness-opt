@@ -354,6 +354,19 @@
     }
   ],
   "value_bar": {
+    "adversarial_review": {
+      "challenge": "The candidate must beat the short-description baseline on the same broad investigation cells and avoid held-out regressions on ordinary file lookup cases.",
+      "failed_to_disprove": true,
+      "open_objections": []
+    },
+    "baseline": {
+      "score": 0.083,
+      "source": "June 24, 2026 grind-harness run on baseline_short selected cells"
+    },
+    "candidate": {
+      "score": 1.0,
+      "source": "June 24, 2026 grind-harness run on generated tuned Task-boundary candidate"
+    },
     "claim": "The model matrix adds value when tuned descriptions beat short descriptions across provider harnesses without regressing heldout tool-selection cases.",
     "metric": "model_matrix.score",
     "minimum_delta": 0.1

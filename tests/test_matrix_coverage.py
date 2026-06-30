@@ -451,6 +451,54 @@ class MatrixCoverageTests(unittest.TestCase):
         self.assertIn("argument_not_in_expected_tool_schema", problems)
         self.assertGreater(audit["summary"]["case_expectation_gap_count"], 0)
 
+    def test_audit_reports_incomplete_value_bar_metadata(self):
+        audit = audit_matrix_coverage_data(
+            {
+                "cases": [
+                    {
+                        "check_family": "lookup",
+                        "expected_tools": ["lookup"],
+                        "forbidden_tools": ["fallback"],
+                        "name": "lookup case",
+                        "task": "Lookup a value.",
+                    },
+                    {
+                        "check_family": "fallback",
+                        "expected_tools": ["fallback"],
+                        "forbidden_tools": ["lookup"],
+                        "name": "fallback case",
+                        "task": "Fallback.",
+                    },
+                ],
+                "coverage": {"required_check_families": ["lookup", "fallback"]},
+                "name": "partial value bar matrix",
+                "profiles": [{"harnesses": ["prompt_json"], "provider": "trace_fixture"}],
+                "tool_variants": [
+                    {
+                        "name": "sample",
+                        "tools": [
+                            {"name": "lookup", "purpose": "Lookup.", "quality_checks": ["Check ids."]},
+                            {"name": "fallback", "purpose": "Fallback.", "quality_checks": ["Check fallback."]},
+                        ],
+                    }
+                ],
+                "value_bar": {
+                    "claim": "The tuned tool descriptions help.",
+                    "metric": "model_matrix.score",
+                    "minimum_delta": 0.1,
+                },
+            }
+        )
+
+        self.assertFalse(audit["passed"])
+        self.assertIn(
+            "some value_bar metadata does not clear the repo promotion bar",
+            audit["warnings"],
+        )
+        self.assertEqual(1, audit["summary"]["value_bar_count"])
+        self.assertEqual(1, audit["summary"]["value_bar_gap_count"])
+        self.assertIn("adversarial challenge missing", audit["uncovered"]["value_bar_gaps"][0]["details"])
+
     def test_suite_audit_summarizes_multiple_matrices(self):
         suite = audit_matrix_coverage_suite(
             [
@@ -542,6 +590,8 @@ class MatrixCoverageTests(unittest.TestCase):
                 "total_instruction_variants": 2,
                 "total_profiles": 2,
                 "total_tools": 3,
+                "total_value_bar_gaps": 0,
+                "total_value_bars": 0,
             },
         }
 

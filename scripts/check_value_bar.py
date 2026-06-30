@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from claude_agent_harness_opt.agent_audit import review_agent_bundle  # noqa: E402
+from claude_agent_harness_opt.value_bar import evaluate_value_bar  # noqa: E402
 
 
 VALUE_PHRASE = "adversarially-confirmed to add value"
@@ -54,6 +55,7 @@ def main() -> int:
     failures.extend(_check_required_text())
     failures.extend(_check_recipes())
     failures.extend(_check_agent_audit_bundles())
+    failures.extend(_check_model_matrix_value_bars())
 
     if failures:
         print("\n".join(sorted(failures)))
@@ -120,6 +122,26 @@ def _check_agent_audit_bundles() -> list[str]:
 
     if negative_controls == 0:
         failures.append("evals: missing negative control for absent value_bar")
+    return failures
+
+
+def _check_model_matrix_value_bars() -> list[str]:
+    failures: list[str] = []
+    matrix_paths = sorted((ROOT / "evals" / "model_matrix").glob("*.json"))
+    value_bar_count = 0
+    for path in matrix_paths:
+        data = _load_json(path)
+        value_bar = data.get("value_bar") if isinstance(data, dict) else None
+        if not value_bar:
+            continue
+        value_bar_count += 1
+        result = evaluate_value_bar(value_bar if isinstance(value_bar, dict) else None)
+        if not result.passed:
+            rel = path.relative_to(ROOT)
+            details = "; ".join(result.details)
+            failures.append(f"{rel}: matrix value_bar failed: {details}")
+    if value_bar_count == 0:
+        failures.append("evals/model_matrix: no matrix value_bar metadata found")
     return failures
 
 

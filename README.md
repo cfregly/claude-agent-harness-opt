@@ -257,22 +257,24 @@ python -m claude_agent_harness_opt matrix-coverage-suite evals/model_matrix --ma
   matrix variants
 - expected and forbidden tool fields have the shape the runner will evaluate
 - unknown expected or forbidden tool names fail the audit
+- any matrix `value_bar` metadata clears the same adversarial-confirmation gate used by the repo
 
 This does not replace live scoring. It prevents a clean live run from hiding an untested tool,
 untested negative, missing argument boundary, forgotten family, accidental tool-surface drift, typoed
-tool reference, contradictory case expectation, or ambiguous fixture identity. The
-`coverage.required_check_families` field is the edge-family contract for a matrix.
+tool reference, contradictory case expectation, partial value-bar evidence, or ambiguous fixture
+identity. The `coverage.required_check_families` field is the edge-family contract for a matrix.
 `coverage.allow_variant_tool_delta` is reserved for matrices that intentionally compare different
 tool catalogs. Store the matrix, coverage report, live result, and PR packet together so the same
 cases can be rerun later as evals.
 
 For the full repository, the current ledger is stored at
 `evals/results/model_matrix_coverage_suite_2026-06-30.md`: it audits 18 matrices, 152 tools, 199
-cases, 49 profile surfaces, 21 instruction variants, and 805 boundary pairs. All stored matrices now
-pass the strict structural coverage contract with zero case expectation gaps and zero identity gaps.
-That proves catalog coverage, negative coverage, argument assertions, quality checks, and family
-labels are present, that each matrix's required family contract is covered, that argument checks map
-to expected tool schemas, and that variant tool surfaces have parity. It does not prove every live
+cases, 49 profile surfaces, 21 instruction variants, 805 boundary pairs, and 3 value bars. All stored
+matrices now pass the strict structural coverage contract with zero case expectation gaps, zero
+identity gaps, and zero value-bar gaps. That proves catalog coverage, negative coverage, argument
+assertions, quality checks, and family labels are present, that each matrix's required family
+contract is covered, that argument checks map to expected tool schemas, that value-bar metadata is
+complete where present, and that variant tool surfaces have parity. It does not prove every live
 model will choose correctly, so promoted behavioral claims still need live `model-matrix` results.
 
 After baseline failures repeat, the "hill climb" part starts:
