@@ -132,6 +132,10 @@ It verifies every check gate is run in CI and listed below, every check gate has
 every documented `claude_agent_harness_opt` command names a real CLI subcommand, and command
 examples that point at repo fixtures still point at existing files.
 
+`scripts/check_ci_surface.py` protects the GitHub Actions contract. It requires push and PR
+triggers, read-only permissions, pinned actions, Python 3.11, compile and unit-test smoke checks,
+strict coverage jobs, the live Claude judge step, and the no-key negative assertions.
+
 `scripts/check_secret_hygiene.py` protects the public artifact set. It scans tracked files for
 private-key blocks and provider token patterns, verifies `.env` remains ignored, requires the masked
 `.env.example`, rejects duplicate sample keys, and requires credential-like sample values to stay
@@ -562,6 +566,7 @@ python -m unittest discover -s tests -q
 python scripts/check_prompt_recipe_surfaces.py
 python scripts/check_skill_surfaces.py
 python scripts/check_command_surfaces.py
+python scripts/check_ci_surface.py
 python scripts/check_secret_hygiene.py
 python scripts/check_docs_navigation.py
 python scripts/check_source_map.py

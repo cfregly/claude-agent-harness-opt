@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -17,6 +20,7 @@ jobs:
       - run: python scripts/check_prompt_recipe_surfaces.py
       - run: python scripts/check_skill_surfaces.py
       - run: python scripts/check_command_surfaces.py
+      - run: python scripts/check_ci_surface.py
       - run: python scripts/check_secret_hygiene.py
       - run: python scripts/check_docs_navigation.py
       - run: python scripts/check_source_map.py
