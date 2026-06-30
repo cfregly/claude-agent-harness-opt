@@ -28,7 +28,7 @@ least one owner or retained-material pattern.
 | Tracked Demo Artifact | `demo.gif`, `demo.tape`, `docs/tool_tuning_demo_sample.txt` | `python scripts/check_artifact_surfaces.py` | `demo.gif`, `tests/test_check_artifact_surfaces_script.py` |
 | Value Bar Ledger | `docs/confirmed-improvements.md`, `evals/examples/agent_audit_bundle.json`, `evals/examples/agent_audit_missing_value_bar.json` | `python scripts/check_value_bar.py` | `tests/test_check_value_bar_script.py`, `evals/examples/agent_audit_missing_value_bar.json` |
 | Surface Inventory | `docs/surface-inventory.md`, `scripts/check_surface_inventory.py` | `python scripts/check_surface_inventory.py` | `tests/test_check_surface_inventory_script.py` |
-| Gate Scripts And Utilities | `scripts/*.py` | `python -m compileall claude_agent_harness_opt scripts`, `python -m unittest discover -s tests -q` | `tests/test_check_command_surfaces_script.py`, `tests/test_optimize_mcp_script.py` |
+| Gate Scripts And Utilities | `scripts/*.py` | `python scripts/check_regression_ownership.py`, `python -m compileall claude_agent_harness_opt scripts`, `python -m unittest discover -s tests -q` | `tests/test_check_regression_ownership_script.py`, `tests/test_check_command_surfaces_script.py`, `tests/test_optimize_mcp_script.py` |
 | Test Suite | `tests/*.py` | `python -m unittest discover -s tests -q` | `tests/test_check_surface_inventory_script.py`, `tests/test_cli.py` |
 
 ## Hill Descent Inputs

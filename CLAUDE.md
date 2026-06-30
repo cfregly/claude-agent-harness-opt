@@ -71,6 +71,7 @@ python scripts/check_ci_surface.py
 python scripts/check_secret_hygiene.py
 python scripts/check_local_config.py
 python scripts/check_surface_inventory.py
+python scripts/check_regression_ownership.py
 python scripts/check_docs_navigation.py
 python scripts/check_source_map.py
 python scripts/check_public_links.py

@@ -151,6 +151,10 @@ keys from E2E specs, model matrices, and probe scripts, then checks `.env.exampl
 regression material, checks every discovered gate script is listed, and fails when a new `evals/*`
 root or tracked file family is not represented.
 
+`scripts/check_regression_ownership.py` protects source-to-test ownership. It requires every package
+module and script to have a direct regression test or a named wrapper-owner test, so new source files
+cannot rely only on broad test discovery.
+
 `scripts/check_docs_navigation.py` protects the public navigation surface. It verifies repo-local
 GitHub links point at existing files or folders, every docs page is reachable from the README,
 README layout entries still exist, Makefile help covers public targets, and the package console
@@ -581,6 +585,7 @@ python scripts/check_ci_surface.py
 python scripts/check_secret_hygiene.py
 python scripts/check_local_config.py
 python scripts/check_surface_inventory.py
+python scripts/check_regression_ownership.py
 python scripts/check_docs_navigation.py
 python scripts/check_source_map.py
 python scripts/check_public_links.py

@@ -147,8 +147,16 @@ REQUIRED_SURFACES = (
     SurfaceContract(
         name="Gate Scripts And Utilities",
         paths=("scripts/*.py",),
-        gates=("python -m compileall claude_agent_harness_opt scripts", "python -m unittest discover -s tests -q"),
-        artifacts=("tests/test_check_command_surfaces_script.py", "tests/test_optimize_mcp_script.py"),
+        gates=(
+            "python scripts/check_regression_ownership.py",
+            "python -m compileall claude_agent_harness_opt scripts",
+            "python -m unittest discover -s tests -q",
+        ),
+        artifacts=(
+            "tests/test_check_regression_ownership_script.py",
+            "tests/test_check_command_surfaces_script.py",
+            "tests/test_optimize_mcp_script.py",
+        ),
     ),
     SurfaceContract(
         name="Test Suite",
