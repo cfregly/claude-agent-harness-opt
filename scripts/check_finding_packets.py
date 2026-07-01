@@ -384,6 +384,8 @@ def _check_model_matrix_receipt(path: Path, payload: dict[str, Any]) -> list[str
             for field in ("case", "provider", "harness", "tool_variant", "instruction_variant", "status"):
                 if not str(result.get(field, "")).strip():
                     failures.append(f"{rel}: results[{idx}] missing {field}")
+            if str(result.get("status", "")).strip() not in {"planned", "passed", "failed", "error", "skipped"}:
+                failures.append(f"{rel}: results[{idx}].status is not a known model-matrix status")
             if not isinstance(result.get("passed"), bool):
                 failures.append(f"{rel}: results[{idx}].passed must be boolean")
             elif result.get("passed") is not (result.get("status") == "passed"):
