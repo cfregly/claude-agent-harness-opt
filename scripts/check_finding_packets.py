@@ -1003,10 +1003,12 @@ def _check_result_markdown(path: Path) -> list[str]:
 def _check_raw_matrix_markdown_counts(path: Path, text: str) -> list[str]:
     failures: list[str] = []
     rel = path.relative_to(ROOT)
+    raw_text = _markdown_section_text(text, "Raw Matrix") or text
     rows = _markdown_results_rows(text)
     if not rows:
         return [f"{rel}: Results table has no result rows"]
     statuses = Counter(row[6].casefold() for row in rows if len(row) > 6)
+    live = _markdown_summary_value(raw_text, "Live").casefold() == "yes"
     expected_counts = {
         "Planned": len(rows),
         "Passed cases": statuses["passed"],
@@ -1015,7 +1017,7 @@ def _check_raw_matrix_markdown_counts(path: Path, text: str) -> list[str]:
         "Skipped": statuses["skipped"] + statuses["skip"],
     }
     for label, expected in expected_counts.items():
-        value = _markdown_summary_value(text, label)
+        value = _markdown_summary_value(raw_text, label)
         if not value:
             failures.append(f"{rel}: missing {label} summary")
             continue
@@ -1026,7 +1028,42 @@ def _check_raw_matrix_markdown_counts(path: Path, text: str) -> list[str]:
             continue
         if parsed != expected:
             failures.append(f"{rel}: {label} summary does not match Results table")
+    value = _markdown_summary_value(raw_text, "Passed")
+    expected_passed = _raw_matrix_passed(statuses, live=live)
+    if not value:
+        failures.append(f"{rel}: missing raw matrix Passed summary")
+    elif value.casefold() not in {"yes", "no"}:
+        failures.append(f"{rel}: raw matrix Passed summary must be yes or no")
+    elif (value.casefold() == "yes") != expected_passed:
+        failures.append(f"{rel}: raw matrix Passed summary does not match Results table")
+    value = _markdown_summary_value(raw_text, "Score")
+    expected_score = _raw_matrix_score(statuses, live=live)
+    if not value:
+        failures.append(f"{rel}: missing Score summary")
+    else:
+        try:
+            parsed = float(value)
+        except ValueError:
+            failures.append(f"{rel}: Score summary is not numeric")
+        else:
+            if round(parsed, 3) != expected_score:
+                failures.append(f"{rel}: Score summary does not match Results table")
     return failures
+
+
+def _raw_matrix_passed(statuses: Counter[str], *, live: bool) -> bool:
+    if not live:
+        return sum(statuses.values()) > 0
+    executed = statuses["passed"] + statuses["failed"] + statuses["error"] + statuses["errored"]
+    return executed > 0 and statuses["failed"] == 0 and statuses["error"] == 0 and statuses["errored"] == 0
+
+
+def _raw_matrix_score(statuses: Counter[str], *, live: bool) -> float:
+    if not live:
+        return 1.0 if statuses["planned"] else 0.0
+    passed = statuses["passed"]
+    denominator = passed + statuses["failed"] + statuses["error"] + statuses["errored"]
+    return round(passed / denominator, 3) if denominator else 0.0
 
 
 def _markdown_results_rows(text: str) -> list[list[str]]:
