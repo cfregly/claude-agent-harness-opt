@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import contextlib
+from collections import Counter
 import io
 import json
 import re
@@ -921,9 +922,59 @@ def _check_result_markdown(path: Path) -> list[str]:
         failures.append(f"{rel}: missing Passed summary")
     if not any(section in text for section in ("## Raw Matrix", "## Matrix Summary", "## Gaps", "## Tool Coverage")):
         failures.append(f"{rel}: missing review section")
+    if "## Raw Matrix" in text and "## Results" in text:
+        failures.extend(_check_raw_matrix_markdown_counts(path, text))
     if "coverage" in path.stem:
         failures.extend(_check_coverage_markdown_json_pair(path, text))
     return failures
+
+
+def _check_raw_matrix_markdown_counts(path: Path, text: str) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    rows = _markdown_results_rows(text)
+    if not rows:
+        return [f"{rel}: Results table has no result rows"]
+    statuses = Counter(row[6].casefold() for row in rows if len(row) > 6)
+    expected_counts = {
+        "Planned": len(rows),
+        "Passed cases": statuses["passed"],
+        "Failed cases": statuses["failed"],
+        "Errors": statuses["error"] + statuses["errored"],
+        "Skipped": statuses["skipped"] + statuses["skip"],
+    }
+    for label, expected in expected_counts.items():
+        value = _markdown_summary_value(text, label)
+        if not value:
+            failures.append(f"{rel}: missing {label} summary")
+            continue
+        try:
+            parsed = int(value)
+        except ValueError:
+            failures.append(f"{rel}: {label} summary is not an integer")
+            continue
+        if parsed != expected:
+            failures.append(f"{rel}: {label} summary does not match Results table")
+    return failures
+
+
+def _markdown_results_rows(text: str) -> list[list[str]]:
+    in_results = False
+    rows: list[list[str]] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped == "## Results":
+            in_results = True
+            continue
+        if in_results and stripped.startswith("## "):
+            break
+        if not in_results or not stripped.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if not cells or cells[0] == "Provider" or set(cells[0]) <= {"-", ":"}:
+            continue
+        rows.append(cells)
+    return rows
 
 
 def _check_coverage_markdown_json_pair(path: Path, text: str) -> list[str]:
