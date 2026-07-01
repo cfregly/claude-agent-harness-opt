@@ -700,7 +700,7 @@
         "project_events_raw"
       ],
       "name": "first trace discovery is meta only",
-      "task": "Find the hottest stack traces for python workers in the last hour, but do not dump full stacks yet."
+      "task": "Find the hottest stack traces for python workers between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00, but do not dump full stacks yet."
     },
     {
       "allow_no_tool": false,
@@ -734,7 +734,7 @@
         "topfunctions"
       ],
       "name": "discover metrics before query",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, what metric names and attributes are active?"
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, what metric names and attributes are active between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00?"
     },
     {
       "allow_no_tool": false,
@@ -751,7 +751,7 @@
         "topfunctions"
       ],
       "name": "known metric query",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, query the known request_latency histogram for service api over this time window."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, query the known request_latency histogram for service api between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -785,7 +785,7 @@
         "recommendations"
       ],
       "name": "raw events are explicit",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, fetch a small raw event sample for debugging the event payload shape."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, fetch a small raw event sample between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 for debugging the event payload shape."
     },
     {
       "allow_no_tool": false,
@@ -803,7 +803,7 @@
         "topfunctions"
       ],
       "name": "discover common filter fields",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, show the most common available filter field values across profiling events."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, show the most common available filter field values across profiling events between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -820,7 +820,7 @@
         "topfunctions"
       ],
       "name": "project top pods endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the hottest Kubernetes pods."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the hottest Kubernetes pods between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1011,7 +1011,7 @@
         "topfunctions"
       ],
       "name": "project event aggregate counts",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate profiling event counts by kind for the selected time window."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate profiling event counts by kind between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1028,7 +1028,7 @@
         "topfunctions"
       ],
       "name": "host metadata aggregation",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate host metadata to see OS, GPU, and architecture attributes."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate host metadata between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 to see OS, GPU, and architecture attributes."
     },
     {
       "allow_no_tool": false,
@@ -1045,7 +1045,7 @@
         "topfunctions"
       ],
       "name": "project top architectures endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the CPU architectures present in the profiling data."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the CPU architectures present in the profiling data between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1062,7 +1062,7 @@
         "projects_stats_aggregate_top_pods"
       ],
       "name": "project top clusters endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the Kubernetes clusters contributing the most profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the Kubernetes clusters contributing the most profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1079,7 +1079,7 @@
         "topentities"
       ],
       "name": "project top containers endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, use the generated project stats endpoint to rank containers by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, use the generated project stats endpoint to rank containers by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1096,7 +1096,7 @@
         "projects_stats_aggregate_top_pods"
       ],
       "name": "project top deployments endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes deployments by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes deployments by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1113,7 +1113,7 @@
         "topfunctions"
       ],
       "name": "project top hosts endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank hosts by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank hosts by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1130,7 +1130,7 @@
         "topfunctions"
       ],
       "name": "project top executables endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank main executable names by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank main executable names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1147,7 +1147,7 @@
         "projects_stats_aggregate_top_pods"
       ],
       "name": "project top namespaces endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes namespaces by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes namespaces by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1164,7 +1164,7 @@
         "topfunctions"
       ],
       "name": "project top scripts endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank script names by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank script names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1181,7 +1181,7 @@
         "topfunctions"
       ],
       "name": "project top threads endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank thread names by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank thread names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "allow_no_tool": false,
@@ -1198,7 +1198,7 @@
         "projects_stats_aggregate_top_hosts"
       ],
       "name": "project top user tags endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank custom user tags by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank custom user tags by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     }
   ],
   "check_families": {
@@ -1333,7 +1333,7 @@
     "identity_gap_count": 0,
     "instruction_variant_count": 2,
     "no_tool_case_count": 0,
-    "profile_count": 3,
+    "profile_count": 6,
     "required_check_family_count": 19,
     "required_check_family_coverage": 1.0,
     "tool_count": 25,

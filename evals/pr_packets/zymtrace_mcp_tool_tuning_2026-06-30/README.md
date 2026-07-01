@@ -6,7 +6,9 @@ Share link: [Zymtrace full PR/evidence bundle](https://github.com/cfregly/claude
 
 Send this packet to Zymtrace as the full upstream review bundle. It contains the matrix, live result,
 coverage receipt, reproduction command, and PR body for the tuned MCP routing rules that moved the
-selected held-out cells from 14/24 stock passes to 24/24 tuned passes.
+selected held-out cells from 14/24 stock passes to 24/24 tuned passes. It also includes the
+2026-07-01 frontier stress/descent receipt for OpenAI `gpt-5.5` and Gemini
+`gemini-3.1-pro-preview-customtools`.
 
 ## Full Bundle
 
@@ -20,6 +22,9 @@ Bundle folder: [zymtrace_mcp_tool_tuning_2026-06-30](https://github.com/cfregly/
 - Matrix: [zymtrace_mcp_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/zymtrace_mcp_tool_selection.json)
 - Live result: [zymtrace_mcp_matrix_live_2026-06-30.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_matrix_live_2026-06-30.json)
 - Coverage audit: [zymtrace_mcp_coverage_2026-06-30.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_coverage_2026-06-30.md)
+- Frontier stress result: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- Frontier JSON receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
+- All-provider frontier attempt: [zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md)
 
 ## Result
 
@@ -27,6 +32,20 @@ Confirmed improvement. This clears the adversarially-confirmed to add value bar.
 
 The tuned Zymtrace MCP boundary rules moved the selected held-out prompt JSON cells from 14/24
 stock passes to 24/24 tuned passes across Anthropic, OpenAI, and Gemini.
+
+## Frontier Stress Result
+
+The current frontier sweep was run after adding named frontier profiles to the Zymtrace matrix and
+hardening the prompt-JSON parser for fenced, wrapped, and array-shaped model outputs.
+
+OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools` completed 272 live cells with
+233 passed, 27 failed, and 12 errors. Treat this as hill-descending evidence for the next tuning
+round, not as a replacement for the confirmed 24/24 held-out improvement.
+
+Anthropic `claude-fable-5` was not available to the provided key, and the accessible
+`claude-opus-4-8` frontier run was blocked by Anthropic API credit exhaustion during the full sweep.
+The all-provider attempt is retained here:
+[zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md).
 
 ## Reproduce
 

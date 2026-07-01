@@ -7,7 +7,8 @@ Share link: [Zymtrace packet](https://github.com/cfregly/claude-agent-harness-op
 Send this to Zymtrace maintainers when discussing MCP tool and skill routing. The confirmed changes
 clarify default project usage, metrics discovery, resource-first analysis, GPU investigation, and
 bounded hot-trace drilldown enough to move the retained live matrix from 14/24 stock passes to 24/24
-tuned passes.
+tuned passes. A 2026-07-01 frontier stress run is also retained so maintainers can see the next
+failure frontier.
 
 ## Full Bundle
 
@@ -17,6 +18,9 @@ Bundle folder: [Zymtrace full PR/evidence bundle](https://github.com/cfregly/cla
 - Matrix: [zymtrace_mcp_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/zymtrace_mcp_tool_selection.json)
 - Coverage: [zymtrace_mcp_coverage_2026-06-30.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_coverage_2026-06-30.md)
 - Live result: [zymtrace_mcp_matrix_live_2026-06-30.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_matrix_live_2026-06-30.json)
+- Frontier stress result: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- Frontier JSON receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
+- All-provider frontier attempt: [zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md)
 - PR body: [PR_BODY.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30/PR_BODY.md)
 - Reproduction doc: [REPRODUCTION.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30/REPRODUCTION.md)
 - Evidence JSON: [evidence.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30/evidence.json)
@@ -32,6 +36,8 @@ The new result is packaged here:
 
 - Matrix result: [zymtrace_mcp_matrix_live_2026-06-30.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_matrix_live_2026-06-30.json)
 - Coverage audit: [zymtrace_mcp_coverage_2026-06-30.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_coverage_2026-06-30.md)
+- Frontier stress result: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- All-provider frontier attempt: [zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md)
 - Upstream PR packet: [zymtrace_mcp_tool_tuning_2026-06-30](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30)
 - Generated title: `Tighten Zymtrace MCP retrieval routing with live evals`
 
@@ -39,6 +45,20 @@ After the first live result, `matrix-coverage` exposed untested generated REST h
 matrix now has 34 cases, 25 of 25 expected-tool coverage, 25 of 25 forbidden-tool coverage, 85
 boundary pairs, argument checks for every argument-taking expected tool, and `check_family` labels
 for every case.
+
+## Frontier Stress Result
+
+The 2026-07-01 frontier stress run used OpenAI `gpt-5.5` and Gemini
+`gemini-3.1-pro-preview-customtools` across the full 34-case Zymtrace matrix, both tool variants,
+and both instruction variants. It completed 272 live cells with 233 passed, 27 failed, and 12 errors.
+
+This is descent evidence for the next tuning pass. It shows the latest frontier models still expose
+edge cases around generated stats endpoints, JSON flamegraph-vs-rendered flamegraph boundaries, and
+prompt-JSON output robustness.
+
+Anthropic frontier coverage is not complete in this packet: `claude-fable-5` was unavailable to the
+provided key, and the accessible `claude-opus-4-8` run was blocked by Anthropic API credit
+exhaustion during the all-provider sweep.
 
 ## GPU Verification
 
@@ -120,6 +140,8 @@ Consider these MCP behavior changes:
 - Matrix: [zymtrace_mcp_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/zymtrace_mcp_tool_selection.json)
 - Coverage: [zymtrace_mcp_coverage_2026-06-30.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_coverage_2026-06-30.md)
 - Result: [zymtrace_mcp_matrix_live_2026-06-30.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_matrix_live_2026-06-30.json)
+- Frontier stress result: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- All-provider frontier attempt: [zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md)
 - PR packet: [zymtrace_mcp_tool_tuning_2026-06-30](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30)
 - Ledger: [Confirmed Improvements](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/confirmed-improvements.md)
 - Sweep: [Public MCP Sweep](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/public-mcp-sweep.md)

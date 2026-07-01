@@ -512,18 +512,25 @@ def _check_model_matrix_receipt(path: Path, payload: dict[str, Any]) -> list[str
             for field in ("case", "provider", "harness", "tool_variant", "instruction_variant", "status"):
                 if not str(result.get(field, "")).strip():
                     failures.append(f"{rel}: results[{idx}] missing {field}")
-            if str(result.get("status", "")).strip() not in {"planned", "passed", "failed", "error", "skipped"}:
+            status = str(result.get("status", "")).strip()
+            if status not in {"planned", "passed", "failed", "error", "skipped"}:
                 failures.append(f"{rel}: results[{idx}].status is not a known model-matrix status")
-            if not isinstance(result.get("passed"), bool):
-                failures.append(f"{rel}: results[{idx}].passed must be boolean")
-            elif result.get("passed") is not (result.get("status") == "passed"):
-                failures.append(f"{rel}: results[{idx}].passed must match status")
-            if not isinstance(result.get("chosen_tools"), list):
-                failures.append(f"{rel}: results[{idx}].chosen_tools must be a list")
+            if status == "error":
+                if not str(result.get("error", "")).strip():
+                    failures.append(f"{rel}: results[{idx}].error must explain error status")
+            else:
+                if not isinstance(result.get("passed"), bool):
+                    failures.append(f"{rel}: results[{idx}].passed must be boolean")
+                elif result.get("passed") is not (status == "passed"):
+                    failures.append(f"{rel}: results[{idx}].passed must match status")
+                if not isinstance(result.get("chosen_tools"), list):
+                    failures.append(f"{rel}: results[{idx}].chosen_tools must be a list")
             if result.get("passed") is False:
                 saw_failed = True
         if payload.get("passed") is False and not saw_failed:
-            failures.append(f"{rel}: failed model-matrix receipt has no failed result rows")
+            saw_error = any(isinstance(item, dict) and item.get("status") == "error" for item in results)
+            if not saw_error:
+                failures.append(f"{rel}: failed model-matrix receipt has no failed or error result rows")
     matrix_path = str(payload.get("matrix_path", "")).strip()
     if not matrix_path:
         failures.append(f"{rel}: matrix_path must be present")

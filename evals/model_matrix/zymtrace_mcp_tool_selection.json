@@ -29,6 +29,44 @@
       "harnesses": [
         "prompt_json"
       ],
+      "max_tokens": 1024,
+      "model": "claude-opus-4-8",
+      "model_env": "ANTHROPIC_FRONTIER_MATRIX_MODEL",
+      "name": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "tier": "frontier"
+    },
+    {
+      "api_family": "responses",
+      "api_key_env": "OPENAI_API_KEY",
+      "harnesses": [
+        "prompt_json"
+      ],
+      "max_tokens": 2048,
+      "model": "gpt-5.5",
+      "model_env": "OPENAI_FRONTIER_MATRIX_MODEL",
+      "name": "openai-gpt55-frontier",
+      "provider": "openai",
+      "reasoning_effort": "high",
+      "tier": "frontier"
+    },
+    {
+      "api_key_env": "GEMINI_API_KEY",
+      "harnesses": [
+        "prompt_json"
+      ],
+      "max_tokens": 8192,
+      "model": "gemini-3.1-pro-preview-customtools",
+      "model_env": "GEMINI_FRONTIER_MATRIX_MODEL",
+      "name": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "tier": "frontier"
+    },
+    {
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "harnesses": [
+        "prompt_json"
+      ],
       "model": "claude-sonnet-4-5",
       "model_env": "ANTHROPIC_MATRIX_MODEL",
       "name": "anthropic-sonnet",
@@ -62,7 +100,7 @@
       "name": "zymtrace_host_rules"
     },
     {
-      "instructions": "Apply the Zymtrace MCP server rules plus the Zymtrace optimization skills. CPU-only or entity-only investigations default to CPU. Rank-first CPU requests such as what is eating CPU, which app/container/pod/process is hottest, or biggest ROI should start with topentities or topfunctions, then drill into the selected user-owned entry with hot_traces. GPU, CUDA, inference, vLLM, SGLang, Triton, training, or accelerator requests use the GPU workflow: discover matching GPU/framework/CPU metrics first with project_metrics_activity_aggr, then query metric values when names are known, then pull the GPU hot_traces view and the matching CPU hot_traces view with the same filters. For call-tree or flamegraph analysis on CPU, GPU, or ALLOC, prefer hot_traces when available; use flamegraph only as a fallback or when the user explicitly wants rendered flamegraph data. First hot_traces calls must use meta_only=true and limit<=5; full trace fetches require a selected prefix_hash and should use limit=1. For allocation or memory-profile requests use profile_type ALLOC. Exclude zymtrace-profiler from ranking targets.",
+      "instructions": "Apply the Zymtrace MCP server rules plus the Zymtrace optimization skills. CPU-only or entity-only investigations default to CPU. Rank-first CPU requests such as what is eating CPU, which app/container/pod/process is hottest, or biggest ROI should start with topentities or topfunctions, then drill into the selected user-owned entry with hot_traces. GPU, CUDA, inference, vLLM, SGLang, Triton, training, or accelerator requests use the GPU workflow: discover matching GPU/framework/CPU metrics first with project_metrics_activity_aggr, then query metric values when names are known, then pull the GPU hot_traces view and the matching CPU hot_traces view with the same filters. For call-tree, stack-trace, or hot-trace analysis on CPU, GPU, or ALLOC, prefer hot_traces when available; when the user explicitly asks for a rendered flamegraph or flamegraph data, choose flamegraph. First hot_traces calls must use meta_only=true and limit<=5; full trace fetches require a selected prefix_hash and should use limit=1. For allocation or memory-profile requests use profile_type ALLOC. Exclude zymtrace-profiler from ranking targets.",
       "name": "zymtrace_host_and_skill_rules"
     }
   ],
@@ -1107,7 +1145,7 @@
         "project_events_raw"
       ],
       "name": "first trace discovery is meta only",
-      "task": "Find the hottest stack traces for python workers in the last hour, but do not dump full stacks yet."
+      "task": "Find the hottest stack traces for python workers between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00, but do not dump full stacks yet."
     },
     {
       "check_family": "resource_vs_tool",
@@ -1139,7 +1177,7 @@
         "topfunctions"
       ],
       "name": "discover metrics before query",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, what metric names and attributes are active?"
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, what metric names and attributes are active between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00?"
     },
     {
       "check_family": "metric_query",
@@ -1155,7 +1193,7 @@
         "topfunctions"
       ],
       "name": "known metric query",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, query the known request_latency histogram for service api over this time window."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, query the known request_latency histogram for service api between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "recommendation",
@@ -1187,7 +1225,7 @@
         "recommendations"
       ],
       "name": "raw events are explicit",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, fetch a small raw event sample for debugging the event payload shape."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, fetch a small raw event sample between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 for debugging the event payload shape."
     },
     {
       "check_family": "filter_discovery",
@@ -1204,7 +1242,7 @@
         "topfunctions"
       ],
       "name": "discover common filter fields",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, show the most common available filter field values across profiling events."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, show the most common available filter field values across profiling events between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1220,7 +1258,7 @@
         "topfunctions"
       ],
       "name": "project top pods endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the hottest Kubernetes pods."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the hottest Kubernetes pods between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "default_project",
@@ -1400,7 +1438,7 @@
         "topfunctions"
       ],
       "name": "project event aggregate counts",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate profiling event counts by kind for the selected time window."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate profiling event counts by kind between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "host_metadata",
@@ -1416,7 +1454,7 @@
         "topfunctions"
       ],
       "name": "host metadata aggregation",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate host metadata to see OS, GPU, and architecture attributes."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate host metadata between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 to see OS, GPU, and architecture attributes."
     },
     {
       "check_family": "dimension_ranking",
@@ -1432,7 +1470,7 @@
         "topfunctions"
       ],
       "name": "project top architectures endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the CPU architectures present in the profiling data."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the CPU architectures present in the profiling data between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1448,7 +1486,7 @@
         "projects_stats_aggregate_top_pods"
       ],
       "name": "project top clusters endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the Kubernetes clusters contributing the most profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the Kubernetes clusters contributing the most profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1464,7 +1502,7 @@
         "topentities"
       ],
       "name": "project top containers endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, use the generated project stats endpoint to rank containers by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, use the generated project stats endpoint to rank containers by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1480,7 +1518,7 @@
         "projects_stats_aggregate_top_pods"
       ],
       "name": "project top deployments endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes deployments by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes deployments by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1496,7 +1534,7 @@
         "topfunctions"
       ],
       "name": "project top hosts endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank hosts by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank hosts by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1512,7 +1550,7 @@
         "topfunctions"
       ],
       "name": "project top executables endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank main executable names by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank main executable names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1528,7 +1566,7 @@
         "projects_stats_aggregate_top_pods"
       ],
       "name": "project top namespaces endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes namespaces by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes namespaces by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1544,7 +1582,7 @@
         "topfunctions"
       ],
       "name": "project top scripts endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank script names by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank script names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1560,7 +1598,7 @@
         "topfunctions"
       ],
       "name": "project top threads endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank thread names by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank thread names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     },
     {
       "check_family": "dimension_ranking",
@@ -1576,7 +1614,7 @@
         "projects_stats_aggregate_top_hosts"
       ],
       "name": "project top user tags endpoint",
-      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank custom user tags by profiling activity."
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank custom user tags by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
     }
   ],
   "coverage": {

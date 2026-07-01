@@ -713,22 +713,88 @@ def _normalize_schema(tool: dict[str, Any]) -> dict[str, Any]:
 
 def _parse_choice_json(text: str) -> dict[str, Any]:
     stripped = text.strip()
+    for candidate in _json_candidates(stripped):
+        try:
+            data = json.loads(candidate)
+        except json.JSONDecodeError:
+            continue
+        choice = _normalize_choice_json(data)
+        if choice is not None:
+            return choice
+    snippet = stripped[:300].replace("\n", " ")
+    if "{" in stripped or "[" in stripped:
+        raise ModelMatrixError(f"model did not return a parseable JSON tool choice: {snippet}") from None
+    raise ModelMatrixError(f"model did not return a JSON tool choice: {snippet}") from None
+
+
+def _json_candidates(text: str) -> list[str]:
+    candidates: list[str] = []
+    stripped = text.strip()
+    if stripped:
+        candidates.append(stripped)
     if stripped.startswith("```"):
-        stripped = stripped.strip("`")
-        if stripped.lower().startswith("json"):
-            stripped = stripped[4:].strip()
-    try:
-        data = json.loads(stripped)
-    except json.JSONDecodeError:
-        start = stripped.find("{")
-        end = stripped.rfind("}")
-        if start == -1 or end == -1 or end <= start:
-            snippet = stripped[:300].replace("\n", " ")
-            raise ModelMatrixError(f"model did not return a JSON tool choice: {snippet}") from None
-        data = json.loads(stripped[start : end + 1])
+        fenced = stripped.strip("`").strip()
+        if fenced.casefold().startswith("json"):
+            fenced = fenced[4:].strip()
+        if fenced:
+            candidates.append(fenced)
+    candidates.extend(_balanced_json_fragments(stripped))
+    return candidates
+
+
+def _balanced_json_fragments(text: str) -> list[str]:
+    fragments: list[str] = []
+    pairs = {"{": "}", "[": "]"}
+    for start, char in enumerate(text):
+        if char not in pairs:
+            continue
+        stack = [pairs[char]]
+        in_string = False
+        escaped = False
+        for idx in range(start + 1, len(text)):
+            current = text[idx]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif current == "\\":
+                    escaped = True
+                elif current == '"':
+                    in_string = False
+                continue
+            if current == '"':
+                in_string = True
+            elif current in pairs:
+                stack.append(pairs[current])
+            elif stack and current == stack[-1]:
+                stack.pop()
+                if not stack:
+                    fragments.append(text[start : idx + 1])
+                    break
+    return fragments
+
+
+def _normalize_choice_json(data: Any) -> dict[str, Any] | None:
+    if isinstance(data, list):
+        for item in data:
+            choice = _normalize_choice_json(item)
+            if choice is not None:
+                return choice
+        return None
     if not isinstance(data, dict):
-        raise ModelMatrixError("model JSON choice must be an object")
-    return data
+        return None
+    for key in ("choice", "tool_choice", "selected_tool", "selection"):
+        nested = data.get(key)
+        if isinstance(nested, (dict, list)):
+            choice = _normalize_choice_json(nested)
+            if choice is not None:
+                return choice
+    normalized = dict(data)
+    if "tool_name" not in normalized:
+        for key in ("name", "tool", "selected_tool", "function_name"):
+            if isinstance(normalized.get(key), str) and normalized[key].strip():
+                normalized["tool_name"] = normalized[key]
+                break
+    return normalized
 
 
 def _first_openai_response_function_call(response: dict[str, Any]) -> dict[str, Any] | None:

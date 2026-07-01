@@ -3,7 +3,7 @@
 Passed: yes
 Tools: 25
 Cases: 34
-Profiles: 3
+Profiles: 6
 Instruction variants: 2
 Expected tool coverage: 1.000
 Forbidden tool coverage: 1.000

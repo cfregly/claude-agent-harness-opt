@@ -17,6 +17,15 @@
 python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json --env-file .env --live --require-live --providers anthropic,gemini,openai --harnesses prompt_json --instruction-variants zymtrace_host_and_skill_rules --cases 'cpu rank first containerized apps,default project metrics discovery skips search,full trace error recovers to discovery,gpu call tree uses hot traces,gpu inference workflow starts with metrics,hot trace discovery is bounded,resource fallback hot functions,selected trace drilldown is bounded' --variants stock_zymtrace_mcp,tuned_zymtrace_mcp_boundaries
 ```
 
+## Frontier Stress Command
+
+```bash
+python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json --env-file .env --live --require-live --providers openai-gpt55-frontier,gemini-31-pro-customtools-frontier --harnesses prompt_json --variants stock_zymtrace_mcp,tuned_zymtrace_mcp_boundaries --out evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json --concurrency 8
+```
+
+Anthropic frontier was attempted separately. `claude-fable-5` was unavailable to the provided key,
+and the accessible `claude-opus-4-8` all-provider sweep hit Anthropic API credit exhaustion.
+
 ## Value Bar
 
 - baseline: stock_zymtrace_mcp at 0.583

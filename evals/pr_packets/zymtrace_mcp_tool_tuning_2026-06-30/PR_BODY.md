@@ -30,9 +30,10 @@ Suggested title: Tighten Zymtrace MCP retrieval routing with live evals
 
 ## Current Frontier Coverage
 
-- No current frontier profile metadata is present in this result.
-- Treat this packet as historical or compatibility evidence until rerun on current latest/frontier models and harness versions.
-- Older-model wins should not be the headline if the ambiguity is fixed by newer model or harness behavior.
+- The packet now includes a 2026-07-01 frontier stress/descent run for OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`.
+- The frontier run completed 272 live cells with 233 passed, 27 failed, and 12 errors across both stock/tuned tool variants and both instruction variants.
+- Treat the 24/24 held-out default-profile result as the confirmed improvement, and treat the frontier receipt as the next failure-discovery surface.
+- Anthropic frontier coverage is incomplete because `claude-fable-5` was unavailable to the provided key and the accessible `claude-opus-4-8` run hit Anthropic API credit exhaustion during the full sweep.
 
 ## Downside If Not Changed
 
@@ -137,5 +138,8 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_
 - Evidence JSON: [evidence.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30/evidence.json)
 - Matrix: [zymtrace_mcp_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/zymtrace_mcp_tool_selection.json)
 - Result artifact: [zymtrace_mcp_matrix_live_2026-06-30.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_matrix_live_2026-06-30.json)
+- Frontier stress result: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- Frontier JSON receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
+- All-provider frontier attempt: [zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md)
 
 </details>

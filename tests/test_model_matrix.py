@@ -9,6 +9,7 @@ from claude_agent_harness_opt.model_matrix import (
     _first_openai_response_function_call,
     _openai_response_reasoning_summary,
     _openai_response_text,
+    _parse_choice_json,
     _tools_for_case,
     evaluate_model_choice,
     load_env_file,
@@ -116,6 +117,26 @@ class ModelMatrixTests(unittest.TestCase):
         self.assertEqual("gstack_browse", function_call["name"])
         self.assertEqual('{"tool_name": "gstack_browse"}', _openai_response_text(response))
         self.assertEqual("Checked the boundary.", _openai_response_reasoning_summary(response))
+
+    def test_parse_choice_json_accepts_frontier_output_wrappers(self):
+        self.assertEqual(
+            "topfunctions",
+            _parse_choice_json(
+                '```json\n{"tool_name": "topfunctions", "arguments": {}}\n```\nDone.'
+            )["tool_name"],
+        )
+        self.assertEqual(
+            "hot_traces",
+            _parse_choice_json(
+                '[{"tool_name": "hot_traces", "arguments": {"meta_only": true}}]'
+            )["tool_name"],
+        )
+        self.assertEqual(
+            "flamegraph",
+            _parse_choice_json(
+                'Choice:\n{"name": "flamegraph", "arguments": {"profile_type": "CPU"}}\nReason: explicit request.'
+            )["tool_name"],
+        )
 
     def test_dry_run_model_matrix_plans_selected_cells(self):
         result = run_model_matrix(
@@ -345,10 +366,11 @@ class ModelMatrixTests(unittest.TestCase):
 
         for filename, variant, instruction_variant in cases:
             with self.subTest(filename=filename):
+                provider_filter = {"anthropic-sonnet"} if filename == "zymtrace_mcp_tool_selection.json" else {"anthropic"}
                 result = run_model_matrix(
                     ROOT / "evals" / "model_matrix" / filename,
                     filters=MatrixFilters(
-                        providers={"anthropic"},
+                        providers=provider_filter,
                         harnesses={"prompt_json"},
                         variants={variant},
                         instruction_variants={instruction_variant},
@@ -365,7 +387,7 @@ class ModelMatrixTests(unittest.TestCase):
         result = run_model_matrix(
             ROOT / "evals" / "model_matrix" / "zymtrace_mcp_tool_selection.json",
             filters=MatrixFilters(
-                providers={"anthropic"},
+                providers={"anthropic-sonnet"},
                 harnesses={"prompt_json"},
                 variants={"tuned_zymtrace_mcp_boundaries"},
                 instruction_variants={"zymtrace_host_and_skill_rules"},
