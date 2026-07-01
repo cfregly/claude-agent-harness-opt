@@ -58,7 +58,7 @@ from .trace_suite import render_suite_markdown, run_trace_suite
 from .trace_review import build_trace_judge_prompt, load_trace, review_trace
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="claude-agent-harness-opt")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -303,6 +303,11 @@ def main(argv: list[str] | None = None) -> int:
     live_harness_parser.add_argument("--out-dir", type=Path, help="directory for redacted raw outputs and traces")
     live_harness_parser.add_argument("--out", type=Path, help="write the JSON or Markdown report to a file")
 
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
     args = parser.parse_args(argv)
 
     if args.command == "render":

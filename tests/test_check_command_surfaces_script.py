@@ -5,9 +5,12 @@ import tempfile
 import unittest
 
 from scripts.check_command_surfaces import (
+    Invocation,
+    _check_cli_parse_contract,
     _extract_cli_invocations,
     _extract_script_options,
     _extract_script_invocations,
+    _parse_only_args,
     check_command_surfaces,
 )
 
@@ -89,6 +92,71 @@ class CheckCommandSurfacesScriptTests(unittest.TestCase):
         self.assertEqual(1, len(invocations))
         self.assertEqual("model-matrix", invocations[0].command)
         self.assertIn("evals/model_matrix/coding_tool_selection.json", invocations[0].tokens)
+
+    def test_cli_parse_contract_rejects_missing_required_arguments(self):
+        invocations = [
+            Invocation(
+                source=Path("README.md"),
+                line=1,
+                raw="python -m claude_agent_harness_opt render recipes/agentic_search.json",
+                command="render",
+                tokens=(
+                    "python",
+                    "-m",
+                    "claude_agent_harness_opt",
+                    "render",
+                    "recipes/agentic_search.json",
+                ),
+            ),
+            Invocation(
+                source=Path("README.md"),
+                line=2,
+                raw="python -m claude_agent_harness_opt upstream-pr-packet result.json",
+                command="upstream-pr-packet",
+                tokens=(
+                    "python",
+                    "-m",
+                    "claude_agent_harness_opt",
+                    "upstream-pr-packet",
+                    "result.json",
+                ),
+            ),
+        ]
+
+        failures = _check_cli_parse_contract(invocations)
+
+        self.assertEqual(1, len(failures))
+        self.assertIn("README.md:2", failures[0])
+        self.assertIn("does not parse", failures[0])
+
+    def test_cli_parse_contract_ignores_inline_reference_tokens(self):
+        invocations = [
+            Invocation(
+                source=Path("docs/surface-inventory.md"),
+                line=21,
+                raw="python -m claude_agent_harness_opt matrix-coverage-suite`, `python scripts/check.py`",
+                command="matrix-coverage-suite",
+                tokens=("python", "-m", "claude_agent_harness_opt", "matrix-coverage-suite"),
+            )
+        ]
+
+        self.assertEqual([], _check_cli_parse_contract(invocations))
+
+    def test_parse_only_args_strip_shell_redirects(self):
+        args = _parse_only_args(
+            (
+                "python",
+                "-m",
+                "claude_agent_harness_opt",
+                "judge-prompt",
+                "evals/examples/search_answer.json",
+                ">",
+                "/tmp/judge-prompt.txt",
+            ),
+            argument_start=3,
+        )
+
+        self.assertEqual(["judge-prompt", "evals/examples/search_answer.json"], args)
 
     def test_extract_script_invocations_handles_multiline_commands(self):
         invocations = _extract_script_invocations(

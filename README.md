@@ -132,7 +132,9 @@ commands, What-To-Look-For categories, and agent metadata under `.claude/skills/
 It verifies every check gate is run in CI and listed below, every check gate has a unit-test file,
 every documented `claude_agent_harness_opt` command names a real CLI subcommand, and command
 examples that point at repo fixtures still point at existing files. It derives each subcommand's
-valid flags from `--help`, so documented options cannot drift from the executable parser. It also
+valid flags from `--help`, so documented options cannot drift from the executable parser. Runnable
+CLI examples are parse-checked against the real argparse parser, so required arguments and required
+options cannot silently disappear from docs. It also
 validates documented `python scripts/...` helper invocations so utility-script examples cannot point
 at missing scripts, stale helper options, or stale repo paths.
 

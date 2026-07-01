@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import ast
+import contextlib
 from dataclasses import dataclass
+import io
 from pathlib import Path
 import re
 import shlex
@@ -15,6 +17,10 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 CI_WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from claude_agent_harness_opt.cli import build_parser  # noqa: E402
 
 CLI_COMMAND_RE = re.compile(r"python\s+-m\s+claude_agent_harness_opt\s+([a-z0-9][a-z0-9-]*)")
 SCRIPT_COMMAND_RE = re.compile(r"python\s+(scripts/[A-Za-z0-9_./-]+\.py)")
@@ -97,6 +103,8 @@ def check_command_surfaces(
 
     invocations = _collect_invocations(root)
     failures.extend(_check_cli_invocations(root, invocations, commands, options))
+    if cli_commands is None:
+        failures.extend(_check_cli_parse_contract(invocations))
     failures.extend(_check_cli_command_documentation(commands, invocations))
     failures.extend(_check_script_invocations(root, _collect_script_invocations(root), helper_options))
     return failures
@@ -292,6 +300,38 @@ def _check_cli_options(prefix: str, invocation: Invocation, known_options: set[s
         label=f"CLI command {invocation.command!r}",
         argument_start=4,
     )
+
+
+def _check_cli_parse_contract(invocations: list[Invocation]) -> list[str]:
+    parser = build_parser()
+    failures: list[str] = []
+    for invocation in invocations:
+        if _is_inline_reference(invocation.raw):
+            continue
+        prefix = f"{_rel(invocation.source)}:{invocation.line}"
+        args = _parse_only_args(invocation.tokens, argument_start=3)
+        try:
+            with contextlib.redirect_stderr(io.StringIO()):
+                parser.parse_args(args)
+        except SystemExit as exc:
+            failures.append(
+                f"{prefix}: documented CLI invocation does not parse: "
+                f"{invocation.raw!r} exited with {exc.code}"
+            )
+    return failures
+
+
+def _is_inline_reference(raw: str) -> bool:
+    return "`" in raw
+
+
+def _parse_only_args(tokens: tuple[str, ...], *, argument_start: int) -> list[str]:
+    args: list[str] = []
+    for token in tokens[argument_start:]:
+        if token in {">", "1>", "2>", "|"}:
+            break
+        args.append(token)
+    return args
 
 
 def _check_known_options(
