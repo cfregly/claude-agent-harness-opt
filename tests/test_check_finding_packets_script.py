@@ -70,6 +70,31 @@ class CheckFindingPacketsScriptTests(unittest.TestCase):
 
         self.assertIn("unknown JSON result shape", "\n".join(failures))
 
+    def test_live_harness_receipt_requires_command_to_match_source_spec(self):
+        path = ROOT / "evals" / "results" / "bad_live_harness_receipt.json"
+        path.write_text(
+            """
+{
+  "passed": true,
+  "cells": [
+    {"harness": "sample", "case": "case", "status": "passed"}
+  ],
+  "summary": {"passed": 1, "failed": 0, "errors": 0, "not_installed": 0},
+  "source_spec": "evals/live_harnesses/sdk_agent_smoke.json",
+  "command": "python -m claude_agent_harness_opt live-harness evals/live_harnesses/headless_cli_smoke.json"
+}
+""",
+            encoding="utf-8",
+        )
+        try:
+            failures = _check_result_json(path)
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("command spec 'evals/live_harnesses/headless_cli_smoke.json'", joined)
+        self.assertIn("does not match source_spec 'evals/live_harnesses/sdk_agent_smoke.json'", joined)
+
     def test_model_matrix_receipt_requires_live_and_consistent_rows(self):
         path = ROOT / "evals" / "results" / "bad_model_matrix_receipt.json"
         path.write_text(

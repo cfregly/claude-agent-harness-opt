@@ -3,8 +3,11 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import re
+import shlex
 import sys
 from pathlib import Path
 from typing import Any
@@ -15,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from claude_agent_harness_opt.matrix_coverage import audit_matrix_coverage  # noqa: E402
+from claude_agent_harness_opt.cli import build_parser  # noqa: E402
 
 FINDINGS_DIR = ROOT / "docs" / "findings"
 PR_PACKETS_DIR = ROOT / "evals" / "pr_packets"
@@ -514,6 +518,11 @@ def _check_live_harness_receipt(path: Path, payload: dict[str, Any]) -> list[str
         failures.extend(_check_local_ref(rel, source_spec))
     else:
         failures.append(f"{rel}: source_spec must be present")
+    command = str(payload.get("command", "")).strip()
+    if not command:
+        failures.append(f"{rel}: command must be present")
+    else:
+        failures.extend(_check_live_harness_receipt_command(rel, command, source_spec))
     if summary and cells:
         counted = sum(
             int(summary.get(field, 0))
@@ -529,6 +538,31 @@ def _check_live_harness_receipt(path: Path, payload: dict[str, Any]) -> list[str
         for field in ("harness", "case", "status"):
             if not str(cell.get(field, "")).strip():
                 failures.append(f"{rel}: cells[{idx}] missing {field}")
+    return failures
+
+
+def _check_live_harness_receipt_command(rel: Path, command: str, source_spec: str) -> list[str]:
+    failures: list[str] = []
+    try:
+        tokens = shlex.split(command)
+    except ValueError as exc:
+        return [f"{rel}: command is not shell-parseable: {exc}"]
+    expected_prefix = ["python", "-m", "claude_agent_harness_opt", "live-harness"]
+    if tokens[:4] != expected_prefix:
+        failures.append(f"{rel}: command must start with {' '.join(expected_prefix)!r}")
+        return failures
+    parser = build_parser()
+    try:
+        with contextlib.redirect_stderr(io.StringIO()):
+            args = parser.parse_args(tokens[3:])
+    except SystemExit as exc:
+        failures.append(f"{rel}: command does not parse: exited with {exc.code}")
+        return failures
+    command_spec = str(args.spec)
+    if source_spec and command_spec != source_spec:
+        failures.append(f"{rel}: command spec {command_spec!r} does not match source_spec {source_spec!r}")
+    if command_spec and not (ROOT / command_spec).exists():
+        failures.append(f"{rel}: command spec missing locally: {command_spec}")
     return failures
 
 

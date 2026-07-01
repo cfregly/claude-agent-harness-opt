@@ -112,7 +112,8 @@ required result, evidence, and reproduction sections, is listed in the index and
 points only at local evidence artifacts that still exist, and validates committed PR packet
 `evidence.json` files against their promoted live matrix results. It also validates committed
 `evals/results` receipts so JSON and Markdown evidence stays structured enough to rerun as eval
-fixtures later, and audits every retained matrix surface under `evals/model_matrix` plus
+fixtures later, checks retained live-harness receipt reproduction commands against their claimed
+source specs, and audits every retained matrix surface under `evals/model_matrix` plus
 matrix-shaped targets under `evals/targets`.
 
 `scripts/check_eval_surfaces.py` keeps the other eval fixtures honest. It validates every retained
