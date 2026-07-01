@@ -729,6 +729,46 @@ class CheckFindingPacketsScriptTests(unittest.TestCase):
         self.assertIn("raw matrix Passed summary does not match Results table", joined)
         self.assertIn("Score summary does not match Results table", joined)
 
+    def test_model_matrix_markdown_cell_summary_must_match_results_table(self):
+        path = ROOT / "evals" / "results" / "bad_cell_summary_report.md"
+        path.write_text(
+            "# Matrix Report\n\n"
+            "Passed: no\n\n"
+            "## Raw Matrix\n\n"
+            "Live: yes\n"
+            "Passed: no\n"
+            "Planned: 3\n"
+            "Passed cases: 1\n"
+            "Failed cases: 1\n"
+            "Errors: 0\n"
+            "Skipped: 1\n"
+            "Score: 0.500\n\n"
+            "## Results\n\n"
+            "| Provider | Model | Harness | Tool Variant | Instruction Variant | Case | Status | Chosen |\n"
+            "|---|---|---|---|---|---|---|---|\n"
+            "| anthropic | model | prompt_json | stock | rules | first | passed | tool |\n"
+            "| anthropic | model | prompt_json | stock | rules | second | failed | tool |\n"
+            "| anthropic | model | prompt_json | tuned | rules | third | skipped |  |\n\n"
+            "## Cell Summary\n\n"
+            "| Provider | Harness | Tool Variant | Instruction Variant | Passed | Failed | Errors | Skipped | Score |\n"
+            "|---|---|---|---|---:|---:|---:|---:|---:|\n"
+            "| anthropic | prompt_json | stock | rules | 2 | 0 | 0 | 1 | 1.000 |\n"
+            "| anthropic | prompt_json | stale | rules | 0 | 0 | 0 | 0 | 0.000 |\n",
+            encoding="utf-8",
+        )
+        try:
+            failures = _check_result_markdown(path)
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("Cell Summary 'anthropic'/'prompt_json'/'stock'/'rules' passed does not match Results table", joined)
+        self.assertIn("Cell Summary 'anthropic'/'prompt_json'/'stock'/'rules' failed does not match Results table", joined)
+        self.assertIn("Cell Summary 'anthropic'/'prompt_json'/'stock'/'rules' skipped does not match Results table", joined)
+        self.assertIn("Cell Summary 'anthropic'/'prompt_json'/'stock'/'rules' score does not match Results table", joined)
+        self.assertIn("Cell Summary table has stale cell 'anthropic'/'prompt_json'/'stale'/'rules'", joined)
+        self.assertIn("Cell Summary table missing current cell 'anthropic'/'prompt_json'/'tuned'/'rules'", joined)
+
     def test_optimization_gate_markdown_counts_must_match_results_table(self):
         path = ROOT / "evals" / "results" / "bad_optimization_gate_report.md"
         path.write_text(

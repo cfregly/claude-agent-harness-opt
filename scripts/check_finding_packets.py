@@ -1060,6 +1060,8 @@ def _check_result_markdown(path: Path) -> list[str]:
         failures.append(f"{rel}: missing review section")
     if "## Raw Matrix" in text and "## Results" in text:
         failures.extend(_check_raw_matrix_markdown_counts(path, text))
+    if "## Cell Summary" in text and "## Results" in text:
+        failures.extend(_check_model_matrix_markdown_cell_summary(path, text))
     if "## Optimization Gate" in text and "## Results" in text:
         failures.extend(_check_optimization_gate_markdown_counts(path, text))
     if "coverage" in path.stem:
@@ -1131,6 +1133,89 @@ def _raw_matrix_score(statuses: Counter[str], *, live: bool) -> float:
     passed = statuses["passed"]
     denominator = passed + statuses["failed"] + statuses["error"] + statuses["errored"]
     return round(passed / denominator, 3) if denominator else 0.0
+
+
+def _check_model_matrix_markdown_cell_summary(path: Path, text: str) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    result_rows = _markdown_results_rows(text)
+    if not result_rows:
+        return [f"{rel}: Cell Summary has no result rows"]
+    expected = _markdown_cell_summaries(result_rows)
+    rows = _markdown_table_rows(_markdown_section_text(text, "Cell Summary"))
+    if not rows:
+        return [f"{rel}: Cell Summary table has no cell rows"]
+    seen: set[tuple[str, str, str, str]] = set()
+    for row in rows:
+        if len(row) < 8:
+            failures.append(f"{rel}: Cell Summary row has too few columns")
+            continue
+        key = tuple(row[:4])
+        cell = expected.get(key)
+        if cell is None:
+            failures.append(f"{rel}: Cell Summary table has stale cell {_cell_key_label(key)}")
+            continue
+        if key in seen:
+            failures.append(f"{rel}: Cell Summary table has duplicate cell {_cell_key_label(key)}")
+        seen.add(key)
+        for offset, field in ((4, "passed"), (5, "failed"), (6, "errors")):
+            try:
+                parsed = int(row[offset])
+            except ValueError:
+                failures.append(f"{rel}: Cell Summary {_cell_key_label(key)} {field} is not an integer")
+                continue
+            if parsed != cell[field]:
+                failures.append(f"{rel}: Cell Summary {_cell_key_label(key)} {field} does not match Results table")
+        score_offset = 7
+        if len(row) >= 9:
+            try:
+                skipped = int(row[7])
+            except ValueError:
+                failures.append(f"{rel}: Cell Summary {_cell_key_label(key)} skipped is not an integer")
+            else:
+                if skipped != cell["skipped"]:
+                    failures.append(f"{rel}: Cell Summary {_cell_key_label(key)} skipped does not match Results table")
+            score_offset = 8
+        try:
+            score = float(row[score_offset])
+        except ValueError:
+            failures.append(f"{rel}: Cell Summary {_cell_key_label(key)} score is not numeric")
+            continue
+        if round(score, 3) != cell["score"]:
+            failures.append(f"{rel}: Cell Summary {_cell_key_label(key)} score does not match Results table")
+    for key in sorted(set(expected) - seen):
+        failures.append(f"{rel}: Cell Summary table missing current cell {_cell_key_label(key)}")
+    return failures
+
+
+def _markdown_cell_summaries(rows: list[list[str]]) -> dict[tuple[str, str, str, str], dict[str, int | float]]:
+    groups: dict[tuple[str, str, str, str], list[list[str]]] = {}
+    for row in rows:
+        if len(row) <= 6:
+            continue
+        key = (row[0], row[2], row[3], row[4])
+        groups.setdefault(key, []).append(row)
+    summaries: dict[tuple[str, str, str, str], dict[str, int | float]] = {}
+    for key, items in groups.items():
+        statuses = Counter(row[6].casefold() for row in items if len(row) > 6)
+        passed = statuses["passed"]
+        failed = statuses["failed"]
+        errors = statuses["error"] + statuses["errored"]
+        skipped = statuses["skipped"] + statuses["skip"]
+        denominator = passed + failed + errors
+        score = round(passed / denominator, 3) if denominator else 0.0
+        summaries[key] = {
+            "errors": errors,
+            "failed": failed,
+            "passed": passed,
+            "score": score,
+            "skipped": skipped,
+        }
+    return summaries
+
+
+def _cell_key_label(key: tuple[str, str, str, str]) -> str:
+    return f"{key[0]!r}/{key[1]!r}/{key[2]!r}/{key[3]!r}"
 
 
 def _markdown_results_rows(text: str) -> list[list[str]]:
