@@ -1364,6 +1364,7 @@ def _check_coverage_markdown_json_pair(path: Path, text: str) -> list[str]:
             continue
         if round(float(summary.get(field, 0.0)), 3) != round(parsed, 3):
             failures.append(f"{rel}: {label} summary does not match sibling JSON receipt")
+    failures.extend(_check_coverage_markdown_gaps(path, text, payload))
     failures.extend(_check_coverage_markdown_tool_table(path, text, payload))
     failures.extend(_check_coverage_markdown_check_family_table(path, text, payload))
     return failures
@@ -1400,6 +1401,61 @@ def _markdown_table_rows(section_text: str) -> list[list[str]]:
             continue
         rows.append(cells)
     return rows[1:] if rows else []
+
+
+def _check_coverage_markdown_gaps(
+    path: Path,
+    text: str,
+    payload: dict[str, Any],
+) -> list[str]:
+    section_text = _markdown_section_text(text, "Gaps")
+    if not section_text:
+        return []
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    uncovered = payload.get("uncovered")
+    if not isinstance(uncovered, dict):
+        return [f"{rel}: Gaps section present but sibling JSON receipt has no uncovered object"]
+    label_map = {
+        "Never expected": "never_expected",
+        "Never forbidden": "never_forbidden",
+        "Case expectation gaps": "case_expectation_gaps",
+        "Expected without argument checks": "expected_without_argument_check",
+        "Duplicate tool names": "duplicate_tool_names",
+        "Identity gaps": "identity_gaps",
+        "Missing quality checks": "missing_quality_checks",
+        "Missing required check families": "missing_required_check_families",
+        "Variant surface mismatches": "variant_surface_mismatches",
+        "Source tool count mismatch": "source_tool_count_mismatch",
+        "Cases without forbidden tools": "cases_without_forbidden",
+        "Cases without check_family": "cases_without_check_family",
+        "Unknown expected tools": "unknown_expected_tools",
+        "Unknown forbidden tools": "unknown_forbidden_tools",
+        "Value-bar gaps": "value_bar_gaps",
+    }
+    for line in section_text.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("- ") or ":" not in stripped:
+            continue
+        label, value = stripped[2:].split(":", 1)
+        key = label_map.get(label.strip())
+        if not key:
+            continue
+        values = uncovered.get(key, [])
+        expected = _coverage_gap_values(values) if isinstance(values, list) and values else "none"
+        if value.strip() != expected:
+            failures.append(f"{rel}: Gaps {label.strip()!r} does not match sibling JSON receipt")
+    return failures
+
+
+def _coverage_gap_values(values: list[Any]) -> str:
+    rendered = []
+    for value in values:
+        if isinstance(value, dict):
+            rendered.append(json.dumps(value, sort_keys=True))
+        else:
+            rendered.append(str(value))
+    return ", ".join(rendered)
 
 
 def _check_coverage_markdown_tool_table(

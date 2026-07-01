@@ -569,6 +569,50 @@ class CheckFindingPacketsScriptTests(unittest.TestCase):
         self.assertIn("Check Families 'lookup' count does not match sibling JSON receipt", joined)
         self.assertIn("Check Families table has stale family 'stale_family'", joined)
 
+    def test_coverage_markdown_gaps_must_match_sibling_json(self):
+        path = ROOT / "evals" / "results" / "bad_coverage_gap_receipt.md"
+        json_path = path.with_suffix(".json")
+        path.write_text(
+            "# Matrix Coverage\n\n"
+            "Passed: no\n"
+            "Tools: 1\n"
+            "Cases: 1\n\n"
+            "## Gaps\n\n"
+            "- Never expected: none\n"
+            "- Missing quality checks: stale_tool\n"
+            "- Duplicate tool names: none\n",
+            encoding="utf-8",
+        )
+        json_path.write_text(
+            """
+{
+  "passed": false,
+  "summary": {
+    "tool_count": 1,
+    "case_count": 1
+  },
+  "uncovered": {
+    "never_expected": ["write_file"],
+    "missing_quality_checks": [],
+    "duplicate_tool_names": [
+      {"variant": "baseline", "duplicate_tools": ["lookup"]}
+    ]
+  }
+}
+""",
+            encoding="utf-8",
+        )
+        try:
+            failures = _check_result_markdown(path)
+        finally:
+            path.unlink()
+            json_path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("Gaps 'Never expected' does not match sibling JSON receipt", joined)
+        self.assertIn("Gaps 'Missing quality checks' does not match sibling JSON receipt", joined)
+        self.assertIn("Gaps 'Duplicate tool names' does not match sibling JSON receipt", joined)
+
     def test_raw_matrix_markdown_counts_must_match_results_table(self):
         path = ROOT / "evals" / "results" / "bad_matrix_report.md"
         path.write_text(
