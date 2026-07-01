@@ -359,14 +359,8 @@ def _check_model_matrix_receipt(path: Path, payload: dict[str, Any]) -> list[str
     case_definitions = _require_nonempty_list(rel, payload, "case_definitions", failures)
     summary = _require_object(rel, payload, "summary", failures)
     if results and summary:
-        total = summary.get("total")
-        if not isinstance(total, int) or total <= 0:
-            failures.append(f"{rel}: summary.total must be a positive integer")
-        elif total != len(results):
-            failures.append(f"{rel}: summary.total must equal result count")
-        planned = summary.get("planned")
-        if isinstance(planned, int) and planned != len(results):
-            failures.append(f"{rel}: summary.planned must equal result count")
+        failures.extend(_check_model_matrix_summary(rel, summary, results))
+        failures.extend(_check_model_matrix_passed(rel, payload, results))
     if case_definitions:
         case_names = {str(item.get("name", "")) for item in case_definitions if isinstance(item, dict)}
         result_case_names = {str(item.get("case", "")) for item in results if isinstance(item, dict)}
@@ -421,6 +415,79 @@ def _check_model_matrix_receipt(path: Path, payload: dict[str, Any]) -> list[str
     if not isinstance(payload.get("source"), dict) or not payload.get("source"):
         failures.append(f"{rel}: source must be a nonempty object")
     return failures
+
+
+def _check_model_matrix_summary(
+    rel: Path,
+    summary: dict[str, Any],
+    results: list[Any],
+) -> list[str]:
+    failures: list[str] = []
+    statuses = _model_matrix_status_counts(results)
+    expected_counts = {
+        "errors": statuses["error"],
+        "failed_cases": statuses["failed"],
+        "passed_cases": statuses["passed"],
+        "planned": len(results),
+        "skipped": statuses["skipped"],
+        "total": len(results),
+    }
+    for field, expected in expected_counts.items():
+        value = summary.get(field)
+        if field == "total" and (not isinstance(value, int) or value <= 0):
+            failures.append(f"{rel}: summary.total must be a positive integer")
+            continue
+        if not isinstance(value, int):
+            failures.append(f"{rel}: summary.{field} must be an integer")
+            continue
+        if value != expected:
+            if field in {"planned", "total"}:
+                failures.append(f"{rel}: summary.{field} must equal result count")
+            else:
+                failures.append(f"{rel}: summary.{field} must match result rows")
+    expected_score = _raw_matrix_score(statuses, live=True)
+    if "score" not in summary:
+        failures.append(f"{rel}: summary.score must be present")
+    else:
+        try:
+            value = float(summary["score"])
+        except (TypeError, ValueError):
+            failures.append(f"{rel}: summary.score must be numeric")
+        else:
+            if round(value, 3) != expected_score:
+                failures.append(f"{rel}: summary.score must match result rows")
+    return failures
+
+
+def _check_model_matrix_passed(
+    rel: Path,
+    payload: dict[str, Any],
+    results: list[Any],
+) -> list[str]:
+    expected = _model_matrix_passed_from_results(results)
+    if expected is None:
+        return []
+    if payload.get("passed") is not expected:
+        return [f"{rel}: passed must match result rows"]
+    return []
+
+
+def _model_matrix_status_counts(results: list[Any]) -> Counter[str]:
+    return Counter(
+        str(result.get("status", "")).casefold()
+        for result in results
+        if isinstance(result, dict)
+    )
+
+
+def _model_matrix_passed_from_results(results: list[Any]) -> bool | None:
+    statuses = _model_matrix_status_counts(results)
+    executed = statuses["passed"] + statuses["failed"] + statuses["error"]
+    if executed == 0 or statuses["failed"] or statuses["error"]:
+        return False
+    if statuses["skipped"]:
+        return None
+    return True
 
 
 def _check_model_matrix_receipt_against_matrix(

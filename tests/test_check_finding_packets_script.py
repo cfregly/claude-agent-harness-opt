@@ -287,6 +287,92 @@ class CheckFindingPacketsScriptTests(unittest.TestCase):
         self.assertIn("cells[0].skipped does not match result rows", joined)
         self.assertIn("cells[0].score does not match result rows", joined)
 
+    def test_model_matrix_receipt_summary_must_match_rows(self):
+        path = ROOT / "evals" / "results" / "bad_model_matrix_summary_receipt.json"
+        path.write_text(
+            """
+{
+  "live": true,
+  "passed": true,
+  "results": [
+    {
+      "case": "default project metrics discovery skips search",
+      "provider": "anthropic",
+      "harness": "prompt_json",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "status": "passed",
+      "passed": true,
+      "chosen_tools": ["project_metrics_activity_aggr"]
+    },
+    {
+      "case": "cpu rank first containerized apps",
+      "provider": "anthropic",
+      "harness": "prompt_json",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "status": "failed",
+      "passed": false,
+      "chosen_tools": ["flamegraph"]
+    },
+    {
+      "case": "gpu inference workflow starts with metrics",
+      "provider": "anthropic",
+      "harness": "prompt_json",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "status": "skipped",
+      "passed": false,
+      "chosen_tools": []
+    }
+  ],
+  "cells": [
+    {
+      "provider": "anthropic",
+      "harness": "prompt_json",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "passed": 1,
+      "failed": 1,
+      "errors": 0,
+      "skipped": 1,
+      "score": 0.5
+    }
+  ],
+  "case_definitions": [
+    {"name": "default project metrics discovery skips search"},
+    {"name": "cpu rank first containerized apps"},
+    {"name": "gpu inference workflow starts with metrics"}
+  ],
+  "summary": {
+    "errors": 1,
+    "failed_cases": 0,
+    "passed_cases": 3,
+    "planned": 3,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 3
+  },
+  "matrix_path": "evals/model_matrix/zymtrace_mcp_tool_selection.json",
+  "matrix": "zymtrace mcp tool-selection matrix",
+  "source": {"commit": "sample"}
+}
+""",
+            encoding="utf-8",
+        )
+        try:
+            failures = _check_result_json(path)
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("summary.errors must match result rows", joined)
+        self.assertIn("summary.failed_cases must match result rows", joined)
+        self.assertIn("summary.passed_cases must match result rows", joined)
+        self.assertIn("summary.skipped must match result rows", joined)
+        self.assertIn("summary.score must match result rows", joined)
+        self.assertIn("passed must match result rows", joined)
+
     def test_coverage_suite_receipt_audits_must_match_summary_and_paths(self):
         path = ROOT / "evals" / "results" / "bad_coverage_suite_receipt.json"
         path.write_text(
