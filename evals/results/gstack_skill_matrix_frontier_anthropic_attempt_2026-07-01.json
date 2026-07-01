@@ -1,0 +1,3633 @@
+{
+  "case_definitions": [
+    {
+      "allow_no_tool": false,
+      "check_family": "compat_alias",
+      "expected_args_contains": {
+        "request": "Use the legacy gstack workflow alias"
+      },
+      "expected_tools": [
+        "gstack_gstack"
+      ],
+      "forbidden_tools": [
+        "gstack_browse",
+        "gstack_connect_chrome"
+      ],
+      "name": "browser-compat-alias",
+      "task": "Use the legacy gstack workflow alias for a quick headless browser dogfood run against http://localhost:3000."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "browser_boundary",
+      "expected_args_contains": {
+        "request": "Open http://localhost:3000, click through the signup"
+      },
+      "expected_tools": [
+        "gstack_browse"
+      ],
+      "forbidden_tools": [
+        "gstack_gstack",
+        "gstack_connect_chrome",
+        "gstack_qa"
+      ],
+      "name": "browser-headless",
+      "task": "Open http://localhost:3000, click through the signup flow, and capture screenshots of any bug evidence."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "qa_boundary",
+      "expected_args_contains": {
+        "request": "QA this staging site, fix the"
+      },
+      "expected_tools": [
+        "gstack_qa"
+      ],
+      "forbidden_tools": [
+        "gstack_qa_only",
+        "gstack_browse"
+      ],
+      "name": "qa-fix",
+      "task": "QA this staging site, fix the bugs you find, add regression tests, and commit each fix atomically."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "qa_boundary",
+      "expected_args_contains": {
+        "request": "Test this app and give me"
+      },
+      "expected_tools": [
+        "gstack_qa_only"
+      ],
+      "forbidden_tools": [
+        "gstack_qa",
+        "gstack_browse"
+      ],
+      "name": "qa-report-only",
+      "task": "Test this app and give me a bug report with repro steps, but do not edit any files."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "design_boundary",
+      "expected_args_contains": {
+        "request": "Audit the implemented dashboard UI for"
+      },
+      "expected_tools": [
+        "gstack_design_review"
+      ],
+      "forbidden_tools": [
+        "gstack_plan_design_review",
+        "gstack_design_consultation"
+      ],
+      "name": "implemented-design-polish",
+      "task": "Audit the implemented dashboard UI for spacing, hierarchy, and visual slop, then fix the issues."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "design_boundary",
+      "expected_args_contains": {
+        "request": "Review this UI plan before implementation"
+      },
+      "expected_tools": [
+        "gstack_plan_design_review"
+      ],
+      "forbidden_tools": [
+        "gstack_design_review",
+        "gstack_plan_eng_review"
+      ],
+      "name": "design-plan-review",
+      "task": "Review this UI plan before implementation and score the design dimensions with recommendations."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "design_boundary",
+      "expected_args_contains": {
+        "request": "Create a design system and DESIGN.md"
+      },
+      "expected_tools": [
+        "gstack_design_consultation"
+      ],
+      "forbidden_tools": [
+        "gstack_design_shotgun",
+        "gstack_plan_design_review"
+      ],
+      "name": "design-system",
+      "task": "Create a design system and DESIGN.md for a new B2B workflow product."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "design_boundary",
+      "expected_args_contains": {
+        "request": "Show me several visual directions for"
+      },
+      "expected_tools": [
+        "gstack_design_shotgun"
+      ],
+      "forbidden_tools": [
+        "gstack_design_consultation",
+        "gstack_design_review"
+      ],
+      "name": "design-variants",
+      "task": "Show me several visual directions for this feature and let me compare options before choosing."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "product_planning",
+      "expected_args_contains": {
+        "request": "I have an idea for a"
+      },
+      "expected_tools": [
+        "gstack_office_hours"
+      ],
+      "forbidden_tools": [
+        "gstack_spec_qa",
+        "gstack_plan_ceo_review"
+      ],
+      "name": "product-brainstorm",
+      "task": "I have an idea for a restaurant waitlist tool. Help me pressure-test whether it is worth building."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "product_planning",
+      "expected_args_contains": {
+        "request": "Turn this rough feature request into"
+      },
+      "expected_tools": [
+        "gstack_spec_qa"
+      ],
+      "forbidden_tools": [
+        "gstack_office_hours",
+        "gstack_qa"
+      ],
+      "name": "spec-plus-browser-validation",
+      "task": "Turn this rough feature request into a spec, pressure-test it, then validate the critical path in the browser."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "plan_review_boundary",
+      "expected_args_contains": {
+        "request": "Rethink this plan from a founder"
+      },
+      "expected_tools": [
+        "gstack_plan_ceo_review"
+      ],
+      "forbidden_tools": [
+        "gstack_plan_eng_review",
+        "gstack_autoplan"
+      ],
+      "name": "ceo-scope-review",
+      "task": "Rethink this plan from a founder perspective and tell me whether the scope is ambitious enough."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "plan_review_boundary",
+      "expected_args_contains": {
+        "request": "Review the architecture, data flow, edge"
+      },
+      "expected_tools": [
+        "gstack_plan_eng_review"
+      ],
+      "forbidden_tools": [
+        "gstack_plan_ceo_review",
+        "gstack_review"
+      ],
+      "name": "engineering-plan-review",
+      "task": "Review the architecture, data flow, edge cases, and test plan before implementation."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "plan_review_boundary",
+      "expected_args_contains": {
+        "request": "Run CEO, design, and engineering plan"
+      },
+      "expected_tools": [
+        "gstack_autoplan"
+      ],
+      "forbidden_tools": [
+        "gstack_plan_ceo_review",
+        "gstack_plan_eng_review"
+      ],
+      "name": "auto-plan-review",
+      "task": "Run CEO, design, and engineering plan reviews automatically and surface only the key decisions."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "code_review_boundary",
+      "expected_args_contains": {
+        "request": "Review this PR before merge for"
+      },
+      "expected_tools": [
+        "gstack_review"
+      ],
+      "forbidden_tools": [
+        "gstack_cso",
+        "gstack_investigate"
+      ],
+      "name": "pre-landing-review",
+      "task": "Review this PR before merge for SQL safety, trust boundaries, and production bugs."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "code_review_boundary",
+      "expected_args_contains": {
+        "request": "Debug why this job started failing"
+      },
+      "expected_tools": [
+        "gstack_investigate"
+      ],
+      "forbidden_tools": [
+        "gstack_review",
+        "gstack_cso"
+      ],
+      "name": "root-cause-debug",
+      "task": "Debug why this job started failing and do not patch anything until you find the root cause."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "security_boundary",
+      "expected_args_contains": {
+        "request": "Run an infrastructure-first security audit with"
+      },
+      "expected_tools": [
+        "gstack_cso"
+      ],
+      "forbidden_tools": [
+        "gstack_review",
+        "gstack_careful"
+      ],
+      "name": "security-audit",
+      "task": "Run an infrastructure-first security audit with secrets, dependency supply chain, OWASP, and STRIDE coverage."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "release_ops",
+      "expected_args_contains": {
+        "request": "Sync main, run tests, update changelog,"
+      },
+      "expected_tools": [
+        "gstack_ship"
+      ],
+      "forbidden_tools": [
+        "gstack_land_and_deploy",
+        "gstack_setup_deploy"
+      ],
+      "name": "ship-pr",
+      "task": "Sync main, run tests, update changelog, push this branch, and create a PR."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "release_ops",
+      "expected_args_contains": {
+        "request": "Merge the approved PR, wait for"
+      },
+      "expected_tools": [
+        "gstack_land_and_deploy"
+      ],
+      "forbidden_tools": [
+        "gstack_ship",
+        "gstack_canary"
+      ],
+      "name": "land-and-deploy",
+      "task": "Merge the approved PR, wait for CI and deploy, then verify production health."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "release_ops",
+      "expected_args_contains": {
+        "request": "Detect our deploy platform and write"
+      },
+      "expected_tools": [
+        "gstack_setup_deploy"
+      ],
+      "forbidden_tools": [
+        "gstack_land_and_deploy",
+        "gstack_ship"
+      ],
+      "name": "configure-deploy",
+      "task": "Detect our deploy platform and write the production URL, health checks, and deploy commands into project docs."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "runtime_monitoring",
+      "expected_args_contains": {
+        "request": "Watch the live app after deploy"
+      },
+      "expected_tools": [
+        "gstack_canary"
+      ],
+      "forbidden_tools": [
+        "gstack_benchmark",
+        "gstack_qa"
+      ],
+      "name": "post-deploy-monitor",
+      "task": "Watch the live app after deploy for console errors, page failures, and regressions."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "runtime_monitoring",
+      "expected_args_contains": {
+        "request": "Establish a page-load and Core Web"
+      },
+      "expected_tools": [
+        "gstack_benchmark"
+      ],
+      "forbidden_tools": [
+        "gstack_canary",
+        "gstack_qa"
+      ],
+      "name": "performance-regression",
+      "task": "Establish a page-load and Core Web Vitals baseline and compare this PR against it."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "documentation_boundary",
+      "expected_args_contains": {
+        "request": "Update README, architecture docs, and changelog"
+      },
+      "expected_tools": [
+        "gstack_document_release"
+      ],
+      "forbidden_tools": [
+        "gstack_retro",
+        "gstack_ship"
+      ],
+      "name": "docs-after-release",
+      "task": "Update README, architecture docs, and changelog to match what just shipped."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "documentation_boundary",
+      "expected_args_contains": {
+        "request": "Summarize what shipped this week across"
+      },
+      "expected_tools": [
+        "gstack_retro"
+      ],
+      "forbidden_tools": [
+        "gstack_document_release",
+        "gstack_review"
+      ],
+      "name": "weekly-retro",
+      "task": "Summarize what shipped this week across commits, tests, and team work patterns."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "environment_setup",
+      "expected_args_contains": {
+        "request": "Launch my real Chrome with the"
+      },
+      "expected_tools": [
+        "gstack_connect_chrome"
+      ],
+      "forbidden_tools": [
+        "gstack_browse",
+        "gstack_setup_browser_cookies"
+      ],
+      "name": "real-chrome",
+      "task": "Launch my real Chrome with the side panel so I can watch the agent operate in the browser."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "environment_setup",
+      "expected_args_contains": {
+        "request": "Import cookies from my real browser"
+      },
+      "expected_tools": [
+        "gstack_setup_browser_cookies"
+      ],
+      "forbidden_tools": [
+        "gstack_connect_chrome",
+        "gstack_browse"
+      ],
+      "name": "auth-cookies",
+      "task": "Import cookies from my real browser so the headless browser can test authenticated pages."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "safety_guardrail",
+      "expected_args_contains": {
+        "request": "Be careful while touching production and"
+      },
+      "expected_tools": [
+        "gstack_careful"
+      ],
+      "forbidden_tools": [
+        "gstack_freeze",
+        "gstack_guard"
+      ],
+      "name": "careful-mode",
+      "task": "Be careful while touching production and warn me before destructive shell commands."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "safety_guardrail",
+      "expected_args_contains": {
+        "request": "Only edit files under packages/api while"
+      },
+      "expected_tools": [
+        "gstack_freeze"
+      ],
+      "forbidden_tools": [
+        "gstack_careful",
+        "gstack_guard"
+      ],
+      "name": "freeze-edits",
+      "task": "Only edit files under packages/api while debugging this issue."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "safety_guardrail",
+      "expected_args_contains": {
+        "request": "Lock edits to this directory and"
+      },
+      "expected_tools": [
+        "gstack_guard"
+      ],
+      "forbidden_tools": [
+        "gstack_careful",
+        "gstack_freeze"
+      ],
+      "name": "full-guard-mode",
+      "task": "Lock edits to this directory and warn before destructive commands."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "safety_guardrail",
+      "expected_args_contains": {
+        "request": "Remove the edit restriction so changes"
+      },
+      "expected_tools": [
+        "gstack_unfreeze"
+      ],
+      "forbidden_tools": [
+        "gstack_freeze",
+        "gstack_guard"
+      ],
+      "name": "unfreeze-edits",
+      "task": "Remove the edit restriction so changes can touch the whole repo again."
+    },
+    {
+      "allow_no_tool": false,
+      "check_family": "maintenance",
+      "expected_args_contains": {
+        "request": "Upgrade gstack to the latest version"
+      },
+      "expected_tools": [
+        "gstack_upgrade"
+      ],
+      "forbidden_tools": [
+        "gstack_ship",
+        "gstack_setup_deploy"
+      ],
+      "name": "upgrade-gstack",
+      "task": "Upgrade gstack to the latest version and show me what changed."
+    },
+    {
+      "allow_no_tool": true,
+      "check_family": "no_tool_safety",
+      "expected_tools": [],
+      "forbidden_tools": [
+        "gstack_gstack",
+        "gstack_autoplan",
+        "gstack_benchmark",
+        "gstack_browse",
+        "gstack_canary",
+        "gstack_careful",
+        "gstack_connect_chrome",
+        "gstack_cso",
+        "gstack_design_consultation",
+        "gstack_design_review",
+        "gstack_design_shotgun",
+        "gstack_document_release",
+        "gstack_freeze",
+        "gstack_guard",
+        "gstack_investigate",
+        "gstack_land_and_deploy",
+        "gstack_office_hours",
+        "gstack_plan_ceo_review",
+        "gstack_plan_design_review",
+        "gstack_plan_eng_review",
+        "gstack_qa",
+        "gstack_qa_only",
+        "gstack_retro",
+        "gstack_review",
+        "gstack_setup_browser_cookies",
+        "gstack_setup_deploy",
+        "gstack_ship",
+        "gstack_spec_qa",
+        "gstack_unfreeze",
+        "gstack_upgrade"
+      ],
+      "name": "no-tool-general-answer",
+      "task": "Explain what a monorepo is in two paragraphs. Do not run a workflow."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "errors": 31,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "gstack_stock_skill_descriptions"
+    }
+  ],
+  "description": "Cross-provider skill-routing matrix for the pinned gstack Codex-compatible skill catalog.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "native_tools",
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus-high"
+    ],
+    "variants": [
+      "gstack_boundary_tuned_skill_descriptions",
+      "gstack_stock_skill_descriptions"
+    ]
+  },
+  "live": true,
+  "matrix": "gstack skill-routing matrix",
+  "matrix_path": "evals/targets/gstack/gstack_skill_selection_matrix.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuAHPcu3fspYHLRko\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuLCg4n4f1b93NWE7\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuUPLZUZWbaFnZfVY\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzv9pPvLCycLgnMjS5\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuKxL3YDaopsjiqdS\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuPg3QTpZ1oGaUCMz\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuEzstSywcFbbFp8C\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzuQAoTvGYAz7jWx4P\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzvTfu1Uv6cFrogVKE\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzvVA53ekrdcXVDnow\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzvbbjnRCS2jFh4aH5\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzve5nhxSb5cpEyWzH\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzveL96h3KW4bLaex9\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzvoFkKW2Y12RAWHgh\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzvuTaTmhC9WF9pyWs\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzwcd7yHH16ZUWeHWJ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzwkZDdsqWE2XB18oG\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzwsVxWERRtnsYczmy\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzwvySyTgogMeB8VkF\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1AYk6uAGYT7uvZxgX\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzwyT7qcVTGxMhtxZ2\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzxMX5B5XUdqueXfLP\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzxAN3XbgBU2kUYB7m\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzxzDoxMdrqRA1FH2J\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzyAe5p2tSooErd7eC\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzyXiTiLjHwzsy75kd\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzyWyPZmTqrPmu5skW\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzyErXb7swJAdUSukp\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzySkjf5ds7gusfJqs\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzyfu6w79vikedAyJS\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzzEdcGgo1eBLWwexW\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzzPoZbxrXLqAd2wqY\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzzUGPVSPEbNs6yE6x\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPzznNWbNMNaraPiq2D\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ11ZFmaXqhqeMQSykb\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ11ZzsVYEVjFQo2D3S\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ11eDVKwyu4sr78ZEU\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ11n9oAKV8PzPADzrz\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ11ivUS4R7wd2a62RQ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ124WyX93xbWcY89L3\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ12HQodv9taJ12UXfG\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ12wqqdck8QNZeXXGk\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ13mhtG8VZ6hhK5Gw8\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ12t8Njr7eXd8zyyhC\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ13AFH6femkUsEC7vT\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ13ogqbuThbs9BWY5H\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ13QsWk537UDnV7bFQ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ13d2M4hEBptKVV2rz\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ147YSs3J1dTZJyoqE\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ14DjpcrfcMBwEohX4\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ14T8cPKvGfMZ64LZd\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ14eY5tTQKfd49mjuP\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15GzaLy7RVv2ad9dt\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15DGxUsg1ZtoTY4PA\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15Wsp2rue1R8PJYMb\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15TA7PAhUoHQ9VFuE\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15e4xLSyZFTfodbTM\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15iHcVz2wKf8EiHxj\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ15tT6hJoU9swePPK5\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ16VAb2XUbcNacvVnn\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ16XeeKYasdry16oSV\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ16sF3eu7xCi8kZbXZ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ16zgQUJAX5Y8x5hKr\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ17EZmPS7VoDmTbsp1\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ17J39peoh9brNx9sm\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ17RyGs4WyfddY1fao\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ17sGMt2HAmqbJToap\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ185RGVZVJT8amwx5a\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ18cfWYiNtc69UTaki\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ18aS4AxTGPqBvhPZb\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ18gdbtpRzbkXb353a\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ18icWVpnGe77RF8YH\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ19gu7G6pq3JZTuGnV\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ19K5b5NMCRrVRJUsY\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ19bwpNYbsukXFupQU\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1A6xcHKwwbv8fTDqr\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1AD9prpbnSKLzj26C\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1A5UEgBnqWoziBH5T\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1AbyP8gxqBoF7MGZP\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1B6Et6KbUHzmZP5iY\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1B6EePJQsahGwd88e\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1BXXj82nJ929XNPYe\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1BTouUF3t38fw75em\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1C7zupc7Nd22oFyjH\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1C7Fn8whGsspsuPd4\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1CHAy9cxHH7uiH4we\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1CVKkowtUepXBv4KC\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1CXZ8Mujufa663rz6\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1D15nzrMpGVPoF9Uo\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1DFDUmXWQFGbXR5em\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1DZKKjuZmeeaKBKpX\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1DfXHfv5AFD4thd1c\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1DsfzfPp1FA52V3JF\"}",
+      "harness": "native_tools",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1DuALBUbK79XueQyJ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1EStz7xSkGTeFX2FM\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1EMC9AmGazPJKG2RH\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1EojKXM6bD2EwtLwe\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1FGFxoqqFcchFiskZ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1UdS5Nr9sLLKaLo4B\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1FMTzggB7XPZYgD4M\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1FHFZQQ7GcDWoJkC1\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1FiJB2TxP9mp4VnUa\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Fpzd7AewpiJPXpdG\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1G7cBMCWziWJ3eS1U\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1GEZ1nCMr6ZEbNZ3M\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1GhL8LC794T47DUiT\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1GjKVXGg6R4WCTipc\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1GnnXpVanpvC1Auqp\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1H7PL9v8EX2XjLgXc\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Hkaade5czAWta4ZK\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1HbQV1b4L3d61kwap\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1HkajooenRfSsPtm8\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1JAtPC7gadmqoUJdD\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1JDN4D2kyW4FMoYVj\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1JEMUkHKWcYQn7kCR\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1JWUbqMQmXjCzB1RF\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1KEskNcbs7mAXmdxh\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1KYjJCT66kD8S19MZ\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1KdwbNcEuPNi8FYwE\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Kay2SwYnET9cKVhd\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1KprW6VMb5w1U6SNH\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Ky2m3SWYMMRkmFHV\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1LMbcJWDVLeSqAMFz\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1LfxD42y2UNUP3Ugf\"}",
+      "harness": "native_tools",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1M4WmvGV4YPinKoXe\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1LzYcthmWsqZoQzU6\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1M1noyySMetLqJNZm\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1MJu3vqAvpPubFeDA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1MofXzPxjWjj33BSE\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1N72KWAzYHwGexxcn\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1N9W2rRfGTPAUhqg5\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1NQ8RQVC3K3Ly1ELP\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1NbYNFLDD1BCMefu7\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Nd2im5u1WHataR9j\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1PRQEDM2bM5UcwnKK\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1disoeaXmfF4iZLx3\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Pdo59V8SBeuHssVD\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1PsBtR4SJLQyBaS4t\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Q1NUp4ohFozxYcKG\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1QXNjHQxGYwzoYm7M\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1R1eYMhsNYVtaf1jZ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1R5rzXfXCtt8F1Z9a\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1RJ1daFYPJ7iMx6kZ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1RXemN7kqFzn9TRVP\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1S68bFc4EbkM1TBzM\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1SYfgxnXQgKzkf4Vx\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1SZuQs57D392nu6N3\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Ska3Vozo9bANKcyr\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1T1hYt2XCyDqi7yq8\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1TtHRyScb5xLLVs5y\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1TyFFGk8qguzKbkmW\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1UB9DctX51Ta7mNCS\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1UYUYMgvphcQ1BvhK\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Ujt6DPtPKamo8wGz\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1VJNCzTaBo6V2fbu1\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1VTYJfPD1tqcr8y7Y\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1VbUVJbb1FDhxjeEo\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Vv5FCDqm838TPS63\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1W8UMi4WLuAyE5G5r\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1WBwhDWYpSZGayd4p\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1WhCZfB8Am4xomKxv\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1WuMe22FjBwvbpNsF\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1XHBLT3vW8sAgcqVW\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1XNdhVpHYZ7QYpM9v\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1XX4eMFFHZDPRtArD\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Xc24rM2bK3v8rZHo\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Y5YdRk6YTNwpjYQW\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1YKBcwsnNERHLEH8Y\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1Ygm4rSCHGZrToYRX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1ZDWHeoGsBZukXamG\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1YwtSC8cZEPU6iC2Q\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1YysFQtJuoronHkrS\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1aLj8J46zSgP2YL3k\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1ZxQmoTUXCMJrb7L7\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1a7qFWJpkAzUEeScx\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1aLETDzpnUDPPG37u\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1aKyw9SMpQZhy2fSw\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1acrA4MFsU7oxVPDH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1bSTDCtWaspqawiMw\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1bYQZ1e3xR5nVftEr\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1bhab8V2vXYBbi4fD\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1bpXeYffLtJLNcFW5\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1cHoLBWT8t2jk1cwm\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1bzSmvDZ9ZjndXPH6\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1cvkdXB5odVoHAE3L\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1doLYPtGiJUTdhh9A\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_stock_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1eMaLT2QXWsW6oFWU\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1dD7xkfJcFxZMyLSL\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1dYxKRoVgx4taF6SM\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1dqpJrwMgTPfqtUbH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1eWFqnn1RvmjM39RA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1eqbbykYhL53EdS9k\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1f3VqBT8aGHM2uMCL\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1fsrdFEGFBJbds4gT\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1huPn62NoEW8G2Wen\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1hcXdetSRJh1hrBkN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1fqsLtXTxp46rwt5K\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1fx59DsaCKp1QyWv2\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1gYY5YHqbFDn7xVrW\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1hdXNEzUEeF4Qhgqb\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1hCEVv7nRjBg81Bz4\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1hJvYBLFfTog5xhbt\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1hhzKDhN8e1gvDNy1\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1i2qD19KYWPQL3SC3\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1idJHPZB8ys2VXgTk\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1ii1aJV2dVoK3SbEF\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1kTSNKzFRXJ3wWY8F\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1j84qqEQ5SNbyJP2e\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1j84qtpVHgUjRy81j\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1jc5t5kvstzGQWWMe\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1jPCCwgo8kxH5dn3J\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1jda8hgRvNrTksdrd\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1k1QAWM53GFMnueEN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1kB4u3y3SLHyCoCLi\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1kXepWo9qHqvVa28a\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1kpm5wvwHGm9nTSLD\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1kiKGnPqNKh3sF21H\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "baseline_skill_routing",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-compat-alias",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1kzvdmrBM5d4Lyvcw\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "browser-headless",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1m59AzCHrXGuNAVba\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-fix",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1mNkUu8Ppx7zPTc9x\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "qa-report-only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1miqDmrK6NPDJJErC\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "implemented-design-polish",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1mt1TXaKGyzgBhnNQ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1oMovapssEykpwX2R\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-system",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1nDbw92xvDmBrPfbh\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "design-variants",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1nPWxW9kTiFEzyffy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "product-brainstorm",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1nUUgYb9ntkUCkhuw\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "spec-plus-browser-validation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1nnaq3UQGWySaK1Pj\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ceo-scope-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1oHqh5cSJuVdGWjHf\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "engineering-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1oSXQbjNb8oPN7gSa\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auto-plan-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1oXjCPEhMZTJRaeny\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "pre-landing-review",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1ok89qPw4rjQFqoGV\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "root-cause-debug",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1p4j7zgPzjQLGqt16\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "security-audit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1pBfrpB3G28eff74p\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "ship-pr",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1pSYaNYxzgY51RXkj\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "land-and-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1psbLTkTn9KvXJ6kN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "configure-deploy",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1pu5qPN7SkQwXWrgt\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "post-deploy-monitor",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1pvpHPMm4mVgqi6oR\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "performance-regression",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1q7ybXjddk6xtQnfH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "docs-after-release",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1qTZxPtUuucqmVJgZ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "weekly-retro",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1qbWAnFboryrLoocb\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "real-chrome",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1qeELQH3vpdQmntWi\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "auth-cookies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1rDCtvNsZgbPSbQzw\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "careful-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1rHB2g3fFJCwU5sqW\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "freeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1rMtHyxLYGWyvAGug\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "full-guard-mode",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1rQNRSNqpVGBSy2Ey\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "unfreeze-edits",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1s8mjcUDwXJTUDs9y\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "upgrade-gstack",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1sVMNM8xxddeqpMSQ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    },
+    {
+      "case": "no-tool-general-answer",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbQ1t7K5rh2E7Y67RkUN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "boundary_routing_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus-high",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "high",
+      "tool_variant": "gstack_boundary_tuned_skill_descriptions"
+    }
+  ],
+  "source": {
+    "commit": "cd66fc2f890982351e3178925be563681d0ab2c5",
+    "generated_surface_hash": "68d60eeefdde254818b03ee310bf1c4c9aaf0efee8d6db35141fe9cb7da8ae12",
+    "package_name": "gstack",
+    "package_version": "0.13.3.0",
+    "remote": "git@github.com:garrytan/gstack.git",
+    "source_path": "/Users/admin/dev/gstack",
+    "target_surface": ".agents/skills/*/SKILL.md generated skill files",
+    "target_surface_dirty": false,
+    "worktree_dirty": true
+  },
+  "summary": {
+    "errors": 248,
+    "failed_cases": 0,
+    "passed_cases": 0,
+    "planned": 248,
+    "score": 0.0,
+    "skipped": 0,
+    "total": 248
+  }
+}

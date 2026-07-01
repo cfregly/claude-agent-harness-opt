@@ -1,0 +1,1476 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "single_page_scrape",
+      "expected_args_contains": {
+        "url": "example.com/product/123"
+      },
+      "expected_tools": [
+        "firecrawl_scrape"
+      ],
+      "forbidden_tools": [
+        "firecrawl_extract",
+        "firecrawl_batch_scrape",
+        "firecrawl_interact",
+        "firecrawl_monitor_create"
+      ],
+      "name": "single known page structured fields",
+      "task": "Use Firecrawl on this exact product page and return only structured JSON fields name, price, and availability: https://example.com/product/123"
+    },
+    {
+      "check_family": "batch_scrape",
+      "expected_args_contains": {
+        "urls": "example.com/blog/a"
+      },
+      "expected_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_crawl",
+        "firecrawl_extract"
+      ],
+      "name": "several known pages",
+      "task": "Get the readable markdown for these three exact URLs: https://example.com/blog/a, https://example.com/blog/b, and https://example.com/blog/c."
+    },
+    {
+      "check_family": "status_polling",
+      "expected_args_contains": {
+        "id": "batch_123"
+      },
+      "expected_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "forbidden_tools": [
+        "firecrawl_check_crawl_status",
+        "firecrawl_agent_status"
+      ],
+      "name": "batch status",
+      "task": "Check whether Firecrawl batch scrape job batch_123 has completed."
+    },
+    {
+      "check_family": "url_mapping",
+      "expected_args_contains": {
+        "search": "webhook",
+        "url": "docs.example.com"
+      },
+      "expected_tools": [
+        "firecrawl_map"
+      ],
+      "forbidden_tools": [
+        "firecrawl_search",
+        "firecrawl_crawl",
+        "firecrawl_scrape"
+      ],
+      "name": "discover matching urls on known site",
+      "task": "On https://docs.example.com, find URLs related to webhook events. I only need candidate URLs right now, not page content."
+    },
+    {
+      "check_family": "web_search",
+      "expected_args_contains": {
+        "query": "latest React Server Components"
+      },
+      "expected_tools": [
+        "firecrawl_search"
+      ],
+      "forbidden_tools": [
+        "firecrawl_map",
+        "firecrawl_crawl",
+        "firecrawl_scrape",
+        "firecrawl_interact",
+        "firecrawl_monitor_create"
+      ],
+      "name": "unknown source web search",
+      "task": "Find current sources about the latest React Server Components updates. I do not know which site has the answer."
+    },
+    {
+      "check_family": "site_crawl",
+      "expected_args_contains": {
+        "url": "example.com/blog"
+      },
+      "expected_tools": [
+        "firecrawl_crawl"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_map",
+        "firecrawl_batch_scrape"
+      ],
+      "name": "comprehensive section crawl",
+      "task": "Extract content from all posts in the first two levels under https://example.com/blog/ so I can analyze the whole section."
+    },
+    {
+      "check_family": "status_polling",
+      "expected_args_contains": {
+        "id": "crawl_456"
+      },
+      "expected_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "forbidden_tools": [
+        "firecrawl_check_batch_status",
+        "firecrawl_agent_status"
+      ],
+      "name": "crawl status",
+      "task": "Poll crawl job crawl_456 and return its status."
+    },
+    {
+      "check_family": "structured_extraction",
+      "expected_args_contains": {
+        "prompt": "price",
+        "urls": "example.com/p1"
+      },
+      "expected_tools": [
+        "firecrawl_extract"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_batch_scrape",
+        "firecrawl_agent"
+      ],
+      "name": "multi page structured extraction",
+      "task": "Extract name, price, and description from these product pages as a structured dataset: https://example.com/p1, https://example.com/p2, https://example.com/p3."
+    },
+    {
+      "check_family": "agent_research",
+      "expected_args_contains": {
+        "prompt": "competitor"
+      },
+      "expected_tools": [
+        "firecrawl_agent"
+      ],
+      "forbidden_tools": [
+        "firecrawl_search",
+        "firecrawl_extract",
+        "firecrawl_scrape"
+      ],
+      "name": "complex autonomous research",
+      "task": "Start a Firecrawl autonomous agent job to find the top five AI infrastructure startups founded in 2025, gather funding amounts from multiple sources, and return a structured table. I do not know the URLs."
+    },
+    {
+      "check_family": "status_polling",
+      "expected_args_contains": {
+        "id": "agent_789"
+      },
+      "expected_tools": [
+        "firecrawl_agent_status"
+      ],
+      "forbidden_tools": [
+        "firecrawl_check_crawl_status",
+        "firecrawl_check_batch_status"
+      ],
+      "name": "agent status",
+      "task": "Check whether Firecrawl agent job agent_789 is complete and retrieve results if ready."
+    },
+    {
+      "check_family": "page_interaction",
+      "expected_args_contains": {
+        "prompt": "search",
+        "url": "example.com/app"
+      },
+      "expected_tools": [
+        "firecrawl_interact"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_extract",
+        "firecrawl_search"
+      ],
+      "name": "interactive page operation",
+      "task": "Open https://example.com/app, type 'wireless keyboard' into the site search box, submit the search, and extract the visible results."
+    },
+    {
+      "check_family": "monitor_create",
+      "expected_args_contains": {
+        "goal": "pricing",
+        "page": "example.com/pricing"
+      },
+      "expected_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_crawl",
+        "firecrawl_search"
+      ],
+      "name": "create pricing monitor",
+      "task": "Monitor https://example.com/pricing every day and alert when pricing, packaging, or launch messaging changes materially."
+    },
+    {
+      "check_family": "output_budget",
+      "expected_args_contains": {
+        "formats": "json",
+        "url": "example.com/product/123"
+      },
+      "expected_tools": [
+        "firecrawl_scrape"
+      ],
+      "forbidden_tools": [
+        "firecrawl_extract",
+        "firecrawl_crawl",
+        "firecrawl_batch_scrape"
+      ],
+      "name": "single page concise json avoids markdown",
+      "task": "Use Firecrawl on this exact URL and return only concise JSON fields title, price, and availability. Do not return markdown or full page text: https://example.com/product/123"
+    },
+    {
+      "check_family": "error_recovery",
+      "expected_args_contains": {
+        "prompt": "click",
+        "url": "example.com/app"
+      },
+      "expected_tools": [
+        "firecrawl_interact"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_extract",
+        "firecrawl_search"
+      ],
+      "name": "scrape js error recovers with interact",
+      "task": "The previous Firecrawl scrape of https://example.com/app failed with error: page requires JavaScript interaction before content is visible. Next, open the page, click the Sign in button, and extract the visible account panel."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "search": "api reference",
+        "url": "docs.example.com"
+      },
+      "expected_tools": [
+        "firecrawl_map"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_crawl",
+        "firecrawl_extract"
+      ],
+      "name": "url index before content fetch",
+      "task": "Use Firecrawl to find which URLs under https://docs.example.com contain API reference pages. I only need the URL candidates right now, not page content."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 3,
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "passed": 12,
+      "provider": "anthropic",
+      "score": 0.8,
+      "skipped": 0,
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "passed": 14,
+      "provider": "anthropic",
+      "score": 0.933,
+      "skipped": 0,
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    }
+  ],
+  "description": "Compare legacy and tuned Firecrawl MCP tool descriptions for scrape, batch scrape, map, search, crawl, extract, agent, interact, status, feedback, and monitor workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus48-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "firecrawl mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/firecrawl_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "url: failed"
+      ],
+      "case": "single known page structured fields",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product's name, price, and availability from this page. Return only these three fields.",
+          "schema": {
+            "properties": {
+              "availability": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "price",
+              "availability"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/product/123"
+          ]
+        },
+        "confidence": 0.95,
+        "rationale": "The task requires structured JSON with specific fields (name, price, availability) from a single known product URL. firecrawl_extract is purpose-built for extracting specific structured data like prices and names, and the schema constrains output to exactly the requested fields with the smallest practical scope.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 5307,
+      "forbidden_used": [
+        "firecrawl_extract"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [
+        "firecrawl_scrape"
+      ],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "urls: passed"
+      ],
+      "case": "several known pages",
+      "choice": {
+        "arguments": {
+          "options": {
+            "formats": [
+              "markdown"
+            ]
+          },
+          "urls": [
+            "https://example.com/blog/a",
+            "https://example.com/blog/b",
+            "https://example.com/blog/c"
+          ]
+        },
+        "confidence": 0.95,
+        "rationale": "Three exact URLs are known, so batch_scrape efficiently retrieves readable markdown for all of them in one call, which is the intended use for multiple known pages.",
+        "tool_name": "firecrawl_batch_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "elapsed_ms": 3807,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "batch status",
+      "choice": {
+        "arguments": {
+          "id": "batch_123"
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires checking the completion status of a specific batch scrape job identified by 'batch_123', which is exactly the purpose of firecrawl_check_batch_status.",
+        "tool_name": "firecrawl_check_batch_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "elapsed_ms": 3588,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "discover matching urls on known site",
+      "choice": {
+        "arguments": {
+          "search": "webhook events",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.97,
+        "rationale": "The task requires discovering candidate URLs related to webhook events on a known site, without needing page content. firecrawl_map is purpose-built for URL discovery and supports a search filter to narrow results to webhook-related pages, providing the smallest practical scope.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 3785,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "unknown source web search",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "query": "latest React Server Components updates 2024"
+        },
+        "confidence": 0.95,
+        "rationale": "The task requires finding current sources without knowing which specific site holds the answer, which matches firecrawl_search's purpose of finding relevant information across multiple websites when the source is unknown. Other tools like scrape or extract require known URLs, and search is the smallest-scope discovery tool for this need.",
+        "tool_name": "firecrawl_search"
+      },
+      "chosen_tools": [
+        "firecrawl_search"
+      ],
+      "elapsed_ms": 5289,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "comprehensive section crawl",
+      "choice": {
+        "arguments": {
+          "maxDiscoveryDepth": 2,
+          "url": "https://example.com/blog/"
+        },
+        "confidence": 0.82,
+        "rationale": "The task requires extracting content from all posts within the first two levels under the blog section, which is comprehensive multi-page content extraction from related pages. firecrawl_crawl is purpose-built for extracting content from multiple related pages with depth control via maxDiscoveryDepth=2, matching the 'first two levels' scope precisely.",
+        "tool_name": "firecrawl_crawl"
+      },
+      "chosen_tools": [
+        "firecrawl_crawl"
+      ],
+      "elapsed_ms": 4579,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "crawl status",
+      "choice": {
+        "arguments": {
+          "id": "crawl_456"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks to poll a crawl job and return its status, which is exactly the purpose of firecrawl_check_crawl_status using the provided crawl job ID.",
+        "tool_name": "firecrawl_check_crawl_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "elapsed_ms": 3003,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "urls: passed"
+      ],
+      "case": "multi page structured extraction",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and description from each product page.",
+          "schema": {
+            "properties": {
+              "products": {
+                "items": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "price",
+                    "description"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/p1",
+            "https://example.com/p2",
+            "https://example.com/p3"
+          ]
+        },
+        "confidence": 0.95,
+        "rationale": "The task requires specific structured fields (name, price, description) from known URLs, which is exactly what firecrawl_extract handles via LLM-based schema extraction, rather than fetching full page content.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 5029,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: failed"
+      ],
+      "case": "complex autonomous research",
+      "choice": {
+        "arguments": {
+          "prompt": "Find the top five AI infrastructure startups founded in 2025. For each startup, gather funding amounts corroborated from multiple sources. Return a structured table with columns: startup name, founding date/year, description of AI infrastructure focus, total funding amount, and source URLs.",
+          "schema": {
+            "properties": {
+              "startups": {
+                "items": {
+                  "properties": {
+                    "focus": {
+                      "type": "string"
+                    },
+                    "founded_year": {
+                      "type": "string"
+                    },
+                    "funding_amount": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "sources": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "confidence": 0.92,
+        "rationale": "The task requires autonomous, multi-step web research with unknown URLs, cross-source verification of funding amounts, and structured table output. firecrawl_agent independently searches, navigates, and extracts structured data based on a natural-language goal, matching this open-ended discovery-and-synthesis task better than single-page scrape, search, or extract tools.",
+        "tool_name": "firecrawl_agent"
+      },
+      "chosen_tools": [
+        "firecrawl_agent"
+      ],
+      "elapsed_ms": 6033,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "agent status",
+      "choice": {
+        "arguments": {
+          "id": "agent_789"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to check the status of a specific agent job (agent_789) and retrieve results if ready, which is exactly the purpose of firecrawl_agent_status.",
+        "tool_name": "firecrawl_agent_status"
+      },
+      "chosen_tools": [
+        "firecrawl_agent_status"
+      ],
+      "elapsed_ms": 2650,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "interactive page operation",
+      "choice": {
+        "arguments": {
+          "prompt": "Type 'wireless keyboard' into the site search box, submit the search, and extract the visible search results.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.94,
+        "rationale": "The task requires dynamic page interaction (typing into a search box and submitting) before extracting results, which only firecrawl_interact supports. Scrape/extract cannot perform the search input action.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 3881,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "goal: passed",
+        "page: passed"
+      ],
+      "case": "create pricing monitor",
+      "choice": {
+        "arguments": {
+          "goal": "Check daily and alert when pricing, packaging, or launch messaging changes materially",
+          "page": "https://example.com/pricing"
+        },
+        "confidence": 0.98,
+        "rationale": "The task requires recurring daily monitoring of a single page with change detection and alerting on material changes to pricing, packaging, or launch messaging. firecrawl_monitor_create is purpose-built for scheduled scrapes that diff against prior snapshots and notify on changes, matching the requirement exactly with the smallest scope.",
+        "tool_name": "firecrawl_monitor_create"
+      },
+      "chosen_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "elapsed_ms": 3717,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "formats: failed",
+        "url: failed"
+      ],
+      "case": "single page concise json avoids markdown",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product's title, price, and availability. Return concise values only.",
+          "schema": {
+            "properties": {
+              "availability": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "price",
+              "availability"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/product/123"
+          ]
+        },
+        "confidence": 0.95,
+        "rationale": "The task requires specific structured fields (title, price, availability) from a single known URL, explicitly excluding markdown or full page text. firecrawl_extract is purpose-built for extracting specific structured data via schema, matching the requested output exactly and with minimal scope.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 4108,
+      "forbidden_used": [
+        "firecrawl_extract"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [
+        "firecrawl_scrape"
+      ],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "scrape js error recovers with interact",
+      "choice": {
+        "arguments": {
+          "prompt": "Open the page, click the Sign in button, wait for the account panel to render, then extract the visible account panel content.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.94,
+        "rationale": "The task requires opening the page and performing a click on the Sign in button before content becomes visible, which is exactly what firecrawl_interact does. Plain scrape/extract failed because they cannot perform the required dynamic UI interaction.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 3453,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "url index before content fetch",
+      "choice": {
+        "arguments": {
+          "search": "API reference",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.95,
+        "rationale": "The task only requires discovering candidate URLs under the site (not page content), and firecrawl_map is purpose-built for URL discovery. The search filter narrows results to API reference pages, keeping scope minimal.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 3745,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "single known page structured fields",
+      "choice": {
+        "arguments": {
+          "formats": [
+            {
+              "prompt": "Extract the product name, price, and availability from this page.",
+              "schema": {
+                "properties": {
+                  "availability": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "price",
+                  "availability"
+                ],
+                "type": "object"
+              },
+              "type": "json"
+            }
+          ],
+          "url": "https://example.com/product/123"
+        },
+        "confidence": 0.95,
+        "rationale": "Single known URL with a request for specific structured fields; scrape with JSON format is preferred over extract for one exact page.",
+        "tool_name": "firecrawl_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_scrape"
+      ],
+      "elapsed_ms": 3690,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "urls: passed"
+      ],
+      "case": "several known pages",
+      "choice": {
+        "arguments": {
+          "options": {
+            "formats": [
+              "markdown"
+            ],
+            "onlyMainContent": true
+          },
+          "urls": [
+            "https://example.com/blog/a",
+            "https://example.com/blog/b",
+            "https://example.com/blog/c"
+          ]
+        },
+        "confidence": 0.95,
+        "rationale": "Three exact known URLs need readable markdown content. firecrawl_batch_scrape is designed for scraping multiple known URLs together, and markdown format with onlyMainContent gives clean readable text.",
+        "tool_name": "firecrawl_batch_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "elapsed_ms": 7586,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "batch status",
+      "choice": {
+        "arguments": {
+          "id": "batch_123"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to check the completion status of a specific batch scrape job identified by 'batch_123', which is exactly what firecrawl_check_batch_status does with a batch operation ID.",
+        "tool_name": "firecrawl_check_batch_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "elapsed_ms": 3054,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "discover matching urls on known site",
+      "choice": {
+        "arguments": {
+          "search": "webhook events",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.97,
+        "rationale": "The task provides a known site and asks only for candidate URLs (not content) related to webhook events. firecrawl_map discovers matching URLs on a known site using the search parameter without fetching full page content.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 3282,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "unknown source web search",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "query": "latest React Server Components updates 2025"
+        },
+        "confidence": 0.93,
+        "rationale": "The user needs current sources but does not know which site holds the answer, requiring open-web cross-site discovery rather than scraping a known URL or crawling a single site.",
+        "tool_name": "firecrawl_search"
+      },
+      "chosen_tools": [
+        "firecrawl_search"
+      ],
+      "elapsed_ms": 3559,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "comprehensive section crawl",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "maxDepth": 2,
+          "url": "https://example.com/blog/"
+        },
+        "confidence": 0.82,
+        "rationale": "The task requires comprehensive content from all posts across the first two levels of a known site section, which is exactly a multi-page crawl. maxDepth 2 matches the two-level scope and a conservative limit constrains the job.",
+        "tool_name": "firecrawl_crawl"
+      },
+      "chosen_tools": [
+        "firecrawl_crawl"
+      ],
+      "elapsed_ms": 3190,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "crawl status",
+      "choice": {
+        "arguments": {
+          "id": "crawl_456"
+        },
+        "confidence": 0.99,
+        "rationale": "The task provides an explicit crawl job ID and asks to poll its status, which is exactly the purpose of firecrawl_check_crawl_status.",
+        "tool_name": "firecrawl_check_crawl_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "elapsed_ms": 2728,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "urls: passed"
+      ],
+      "case": "multi page structured extraction",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and description from each product page.",
+          "schema": {
+            "properties": {
+              "products": {
+                "items": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "price",
+                    "description"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/p1",
+            "https://example.com/p2",
+            "https://example.com/p3"
+          ]
+        },
+        "confidence": 0.86,
+        "rationale": "The task requests specific structured fields (name, price, description) across multiple known product URLs, which is exactly the use case for firecrawl_extract's LLM extraction layer over a URL set, rather than single-page scrape or full-content batch scrape.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 5071,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: failed"
+      ],
+      "case": "complex autonomous research",
+      "choice": {
+        "arguments": {
+          "prompt": "Find the top five AI infrastructure startups founded in 2025. For each startup, gather funding amounts corroborated from multiple sources. Return a structured table with startup name, founding date/year, funding amount(s), key investors, and source URLs.",
+          "schema": {
+            "properties": {
+              "startups": {
+                "items": {
+                  "properties": {
+                    "founded_year": {
+                      "type": "string"
+                    },
+                    "funding_amount": {
+                      "type": "string"
+                    },
+                    "key_investors": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "sources": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "founded_year",
+                    "funding_amount",
+                    "sources"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "startups"
+            ],
+            "type": "object"
+          }
+        },
+        "confidence": 0.9,
+        "rationale": "The task is open-ended, multi-hop research requiring discovery of unknown URLs, cross-source verification of funding amounts, and structured output. No exact URLs are known, so search/scrape/extract are insufficient; the autonomous agent is the appropriate tool for multi-source research with a structured schema.",
+        "tool_name": "firecrawl_agent"
+      },
+      "chosen_tools": [
+        "firecrawl_agent"
+      ],
+      "elapsed_ms": 6184,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "agent status",
+      "choice": {
+        "arguments": {
+          "id": "agent_789"
+        },
+        "confidence": 0.99,
+        "rationale": "The task provides an agent job ID and asks to check completion and retrieve results, which is exactly what firecrawl_agent_status polls.",
+        "tool_name": "firecrawl_agent_status"
+      },
+      "chosen_tools": [
+        "firecrawl_agent_status"
+      ],
+      "elapsed_ms": 2389,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "interactive page operation",
+      "choice": {
+        "arguments": {
+          "prompt": "Type 'wireless keyboard' into the site search box, submit the search, and extract the visible search results.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.95,
+        "rationale": "The task requires UI actions (typing into a search box and submitting) before extracting results, which is exactly what the interact tool handles; static scrape/extract tools cannot perform the search input.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 3483,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "goal: passed",
+        "page: passed"
+      ],
+      "case": "create pricing monitor",
+      "choice": {
+        "arguments": {
+          "goal": "Alert when pricing, packaging/plan tiers, or launch messaging changes materially (e.g., price changes, added/removed plans, new features, or launch/announcement copy).",
+          "page": "https://example.com/pricing"
+        },
+        "confidence": 0.98,
+        "rationale": "The task explicitly requests recurring daily monitoring with alerts on meaningful changes to a single known page, which is exactly what firecrawl_monitor_create handles; other tools only perform one-time reads or discovery.",
+        "tool_name": "firecrawl_monitor_create"
+      },
+      "chosen_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "elapsed_ms": 3617,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "formats: passed",
+        "url: passed"
+      ],
+      "case": "single page concise json avoids markdown",
+      "choice": {
+        "arguments": {
+          "formats": [
+            {
+              "prompt": "Extract the product title, price, and availability status.",
+              "schema": {
+                "properties": {
+                  "availability": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "price",
+                  "availability"
+                ],
+                "type": "object"
+              },
+              "type": "json"
+            }
+          ],
+          "url": "https://example.com/product/123"
+        },
+        "confidence": 0.97,
+        "rationale": "A single known URL requires only specific structured fields (title, price, availability), so scrape with a JSON format is preferred over extract or markdown, keeping scope minimal.",
+        "tool_name": "firecrawl_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_scrape"
+      ],
+      "elapsed_ms": 3786,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "scrape js error recovers with interact",
+      "choice": {
+        "arguments": {
+          "prompt": "Open the page, click the 'Sign in' button, wait for the account panel to load, then extract the visible account panel content.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.95,
+        "rationale": "The page requires JavaScript interaction (clicking Sign in) before content is visible, which is exactly the use case for firecrawl_interact. A plain scrape already failed for this reason, and other tools cannot perform UI clicks.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 3629,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "url index before content fetch",
+      "choice": {
+        "arguments": {
+          "search": "API reference",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.95,
+        "rationale": "The task is URL discovery on a single known site without needing page content. firecrawl_map lists matching URLs and supports a search term to narrow to API reference pages, providing the smallest-scope evidence.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 3236,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "commit": "e744bba494c0e77086d66af838d7a64fab52f138",
+    "current_descriptions": "src/index.ts",
+    "docs": "README.md#how-to-choose-a-tool",
+    "legacy_descriptions": "src/legacy/index.md",
+    "package": "firecrawl-mcp",
+    "repo": "https://github.com/firecrawl/firecrawl-mcp-server",
+    "version": "3.22.0"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 4,
+    "passed_cases": 26,
+    "planned": 30,
+    "score": 0.867,
+    "skipped": 0,
+    "total": 30
+  }
+}

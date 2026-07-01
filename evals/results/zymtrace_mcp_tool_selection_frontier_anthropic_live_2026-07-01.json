@@ -1,0 +1,2280 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "time_window",
+      "expected_tools": [
+        "get_date_time"
+      ],
+      "forbidden_tools": [
+        "topfunctions",
+        "project_metrics_query",
+        "projects_events_aggregate"
+      ],
+      "name": "relative time needs date helper",
+      "task": "For the last 30 minutes of Zymtrace data, prepare the time range I should use for generated project metrics API calls."
+    },
+    {
+      "check_family": "project_selection",
+      "expected_args_contains": {
+        "request_body": "llama-inference"
+      },
+      "expected_tools": [
+        "projects_search"
+      ],
+      "forbidden_tools": [
+        "topfunctions",
+        "project_metrics_query",
+        "project_events_raw"
+      ],
+      "name": "unknown project id uses search",
+      "task": "Find the Zymtrace project named llama-inference before we inspect its metrics."
+    },
+    {
+      "check_family": "rank_first",
+      "expected_args_contains": {
+        "profile_type": "CPU"
+      },
+      "expected_tools": [
+        "topfunctions"
+      ],
+      "forbidden_tools": [
+        "topentities",
+        "hot_traces",
+        "flamegraph",
+        "recommendations",
+        "get_date_time"
+      ],
+      "name": "cpu hot functions",
+      "task": "Show the hottest CPU functions from 2026-06-25T04:00:00+00:00 to 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "entity_ranking",
+      "expected_args_contains": {
+        "entity": "container"
+      },
+      "expected_tools": [
+        "topentities"
+      ],
+      "forbidden_tools": [
+        "topfunctions",
+        "hot_traces",
+        "flamegraph"
+      ],
+      "name": "hot containers use entities",
+      "task": "Which containers consumed the most CPU between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00?"
+    },
+    {
+      "check_family": "bounded_discovery",
+      "expected_args_contains": {
+        "meta_only": "true"
+      },
+      "expected_tools": [
+        "hot_traces"
+      ],
+      "forbidden_tools": [
+        "flamegraph",
+        "topfunctions",
+        "project_events_raw"
+      ],
+      "name": "first trace discovery is meta only",
+      "task": "Find the hottest stack traces for python workers between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00, but do not dump full stacks yet."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "profile_type": "CPU"
+      },
+      "expected_tools": [
+        "flamegraph"
+      ],
+      "forbidden_tools": [
+        "topfunctions",
+        "topentities",
+        "project_flamegraph_json"
+      ],
+      "name": "high level flamegraph",
+      "task": "Give me a CPU flamegraph for the vllm executable from 2026-06-25T04:00:00+00:00 to 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "metric_discovery",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "project_metrics_activity_aggr"
+      ],
+      "forbidden_tools": [
+        "project_metrics_query",
+        "projects_events_aggregate",
+        "topfunctions"
+      ],
+      "name": "discover metrics before query",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, what metric names and attributes are active between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00?"
+    },
+    {
+      "check_family": "metric_query",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "project_metrics_query"
+      ],
+      "forbidden_tools": [
+        "project_metrics_activity_aggr",
+        "projects_events_aggregate",
+        "topfunctions"
+      ],
+      "name": "known metric query",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, query the known request_latency histogram for service api between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "recommendation",
+      "expected_args_contains": {
+        "profile_type": "CPU"
+      },
+      "expected_tools": [
+        "recommendations"
+      ],
+      "forbidden_tools": [
+        "topfunctions",
+        "topentities",
+        "project_events_raw"
+      ],
+      "name": "generated optimization advice",
+      "task": "Show already-generated Zymtrace optimization recommendations for CPU traces from 2026-06-25T04:00:00+00:00 to 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "raw_payload",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "project_events_raw"
+      ],
+      "forbidden_tools": [
+        "topfunctions",
+        "hot_traces",
+        "recommendations"
+      ],
+      "name": "raw events are explicit",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, fetch a small raw event sample between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 for debugging the event payload shape."
+    },
+    {
+      "check_family": "filter_discovery",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_events_aggregate_top_field_values"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_containers",
+        "projects_stats_aggregate_top_user_tags",
+        "topentities",
+        "topfunctions"
+      ],
+      "name": "discover common filter fields",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, show the most common available filter field values across profiling events between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_pods"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_containers",
+        "projects_stats_aggregate_top_namespaces",
+        "topfunctions"
+      ],
+      "name": "project top pods endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the hottest Kubernetes pods between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "default_project",
+      "expected_args_contains": {
+        "project_id": "00000000-0000-0000-0000-000000000000"
+      },
+      "expected_tools": [
+        "project_metrics_activity_aggr"
+      ],
+      "forbidden_tools": [
+        "projects_search",
+        "project_metrics_query",
+        "topfunctions"
+      ],
+      "name": "default project metrics discovery skips search",
+      "task": "For the default Zymtrace project, discover active GPU, CPU, model, service, token, and latency metric names between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "default_project",
+      "expected_args_contains": {
+        "project_id": "00000000-0000-0000-0000-000000000000"
+      },
+      "expected_tools": [
+        "project_events_raw"
+      ],
+      "forbidden_tools": [
+        "projects_search",
+        "topfunctions",
+        "hot_traces"
+      ],
+      "name": "default project raw sample skips search",
+      "task": "For the default Zymtrace project, fetch a small raw event sample between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 to inspect payload shape."
+    },
+    {
+      "check_family": "rank_first",
+      "expected_args_contains": {
+        "entity": "container"
+      },
+      "expected_tools": [
+        "topentities"
+      ],
+      "forbidden_tools": [
+        "hot_traces",
+        "flamegraph",
+        "recommendations"
+      ],
+      "name": "cpu rank first containerized apps",
+      "task": "Which containerized app should I optimize first by CPU cost from 2026-06-25T04:00:00+00:00 to 2026-06-25T05:00:00+00:00?"
+    },
+    {
+      "check_family": "gpu_workflow",
+      "expected_args_contains": {
+        "project_id": "00000000-0000-0000-0000-000000000000"
+      },
+      "expected_tools": [
+        "project_metrics_activity_aggr"
+      ],
+      "forbidden_tools": [
+        "hot_traces",
+        "flamegraph",
+        "topfunctions"
+      ],
+      "name": "gpu inference workflow starts with metrics",
+      "task": "For the default Zymtrace project, start investigating why the vLLM inference workload has low GPU utilization between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 by finding the relevant GPU, CPU, and framework metrics."
+    },
+    {
+      "check_family": "gpu_workflow",
+      "expected_args_contains": {
+        "meta_only": "true",
+        "profile_type": "GPU"
+      },
+      "expected_tools": [
+        "hot_traces"
+      ],
+      "forbidden_tools": [
+        "flamegraph",
+        "topfunctions",
+        "project_flamegraph_json"
+      ],
+      "name": "gpu call tree uses hot traces",
+      "task": "Pull the GPU call tree for the vLLM workload from 2026-06-25T04:00:00+00:00 to 2026-06-25T05:00:00+00:00, but only do first-pass discovery."
+    },
+    {
+      "check_family": "drilldown_boundary",
+      "expected_args_contains": {
+        "limit": "1",
+        "meta_only": "false",
+        "prefix_hash": "981237"
+      },
+      "expected_tools": [
+        "hot_traces"
+      ],
+      "forbidden_tools": [
+        "flamegraph",
+        "topfunctions",
+        "project_events_raw"
+      ],
+      "name": "selected trace drilldown is bounded",
+      "task": "Drill into hot trace prefix_hash 981237 and fetch exactly that full trace for the CPU profile from 2026-06-25T04:00:00+00:00 to 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "error_recovery",
+      "expected_args_contains": {
+        "meta_only": "true"
+      },
+      "expected_tools": [
+        "hot_traces"
+      ],
+      "forbidden_tools": [
+        "flamegraph",
+        "topfunctions",
+        "project_events_raw"
+      ],
+      "name": "full trace error recovers to discovery",
+      "task": "The previous Zymtrace hot_traces call failed because meta_only=false was requested without a selected prefix_hash. Recover by doing first-pass CPU hot trace discovery for the default project between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "output_budget",
+      "expected_args_contains": {
+        "limit": "3",
+        "meta_only": "true"
+      },
+      "expected_tools": [
+        "hot_traces"
+      ],
+      "forbidden_tools": [
+        "flamegraph",
+        "topfunctions",
+        "project_events_raw"
+      ],
+      "name": "hot trace discovery is bounded",
+      "task": "Show only the top 3 hot trace candidates as metadata for CPU between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00. Do not return full stacks yet."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "profile_type": "CPU"
+      },
+      "expected_tools": [
+        "topfunctions"
+      ],
+      "forbidden_tools": [
+        "hot_traces",
+        "flamegraph",
+        "project_metrics_query"
+      ],
+      "name": "resource fallback hot functions",
+      "task": "In this tool-only Zymtrace matrix, choose the fallback call for the topfunctions MCP resource to rank hottest CPU functions between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "project_id": "00000000-0000-0000-0000-000000000000"
+      },
+      "expected_tools": [
+        "project_flamegraph_json"
+      ],
+      "forbidden_tools": [
+        "flamegraph",
+        "hot_traces",
+        "project_events_raw"
+      ],
+      "name": "project json flamegraph stays project scoped",
+      "task": "For the default Zymtrace project, generate JSON flamegraph data for downstream processing between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "event_aggregate",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_events_aggregate"
+      ],
+      "forbidden_tools": [
+        "project_events_raw",
+        "projects_events_aggregate_top_field_values",
+        "topfunctions"
+      ],
+      "name": "project event aggregate counts",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate profiling event counts by kind between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "host_metadata",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_events_aggregate_host_metadata"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_architectures",
+        "projects_stats_aggregate_top_hosts",
+        "topfunctions"
+      ],
+      "name": "host metadata aggregation",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, aggregate host metadata between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00 to see OS, GPU, and architecture attributes."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_architectures"
+      ],
+      "forbidden_tools": [
+        "projects_events_aggregate_host_metadata",
+        "projects_stats_aggregate_top_hosts",
+        "topfunctions"
+      ],
+      "name": "project top architectures endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the CPU architectures present in the profiling data between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_clusters"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_deployments",
+        "projects_stats_aggregate_top_namespaces",
+        "projects_stats_aggregate_top_pods"
+      ],
+      "name": "project top clusters endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank the Kubernetes clusters contributing the most profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_containers"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_main_exes",
+        "projects_stats_aggregate_top_pods",
+        "topentities"
+      ],
+      "name": "project top containers endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, use the generated project stats endpoint to rank containers by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_deployments"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_containers",
+        "projects_stats_aggregate_top_namespaces",
+        "projects_stats_aggregate_top_pods"
+      ],
+      "name": "project top deployments endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes deployments by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_hosts"
+      ],
+      "forbidden_tools": [
+        "projects_events_aggregate_host_metadata",
+        "projects_stats_aggregate_top_architectures",
+        "topfunctions"
+      ],
+      "name": "project top hosts endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank hosts by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_main_exes"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_script_names",
+        "topentities",
+        "topfunctions"
+      ],
+      "name": "project top executables endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank main executable names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_namespaces"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_clusters",
+        "projects_stats_aggregate_top_deployments",
+        "projects_stats_aggregate_top_pods"
+      ],
+      "name": "project top namespaces endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank Kubernetes namespaces by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_script_names"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_main_exes",
+        "projects_stats_aggregate_top_thread_names",
+        "topfunctions"
+      ],
+      "name": "project top scripts endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank script names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_thread_names"
+      ],
+      "forbidden_tools": [
+        "projects_stats_aggregate_top_script_names",
+        "hot_traces",
+        "topfunctions"
+      ],
+      "name": "project top threads endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank thread names by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    },
+    {
+      "check_family": "dimension_ranking",
+      "expected_args_contains": {
+        "project_id": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "expected_tools": [
+        "projects_stats_aggregate_top_user_tags"
+      ],
+      "forbidden_tools": [
+        "projects_events_aggregate_top_field_values",
+        "projects_stats_aggregate_top_containers",
+        "projects_stats_aggregate_top_hosts"
+      ],
+      "name": "project top user tags endpoint",
+      "task": "For project 123e4567-e89b-12d3-a456-426614174000, rank custom user tags by profiling activity between 2026-06-25T04:00:00+00:00 and 2026-06-25T05:00:00+00:00."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 34,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "errors": 34,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "errors": 34,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "errors": 34,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned descriptions for the Zymtrace MCP profiling-analysis tools.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus48-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "zymtrace mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/zymtrace_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "case": "relative time needs date helper",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwVa8C81xo9PLqTsEA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "unknown project id uses search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwVKjpdsvU7qW57tcC\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "cpu hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwVe6MMDrHCJEN7Z2s\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "hot containers use entities",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwVVukUBQq4nJQLtdA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "first trace discovery is meta only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWFYnP8CarCfqucsu\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "high level flamegraph",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwVb7kAoT3kJ8GmxBy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "discover metrics before query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWSTuxdV9wYFCun4Q\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "known metric query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwVTReGwxAnmzTxawT\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "generated optimization advice",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWerx8juB8Sq3zVFx\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "raw events are explicit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWk52c67QwC2asHpB\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "discover common filter fields",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWmK3YCGRMXDexSTf\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top pods endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWujukz243SDzfpZB\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "default project metrics discovery skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwWrmUhUXrd5ysXLnj\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "default project raw sample skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwXWTcAfQUd5KxTFMM\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "cpu rank first containerized apps",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwXWCteXvYpL3Wn1fz\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "gpu inference workflow starts with metrics",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwY2xbhvXDVJ1E8xQT\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "gpu call tree uses hot traces",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwXwFq5p2GkGEYPuTX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "selected trace drilldown is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwY1Dqmn8GDUFgqFfk\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "full trace error recovers to discovery",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwY1DqLg4ueBqqdFTN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "hot trace discovery is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwY6vh3E17oF2p9dLN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "resource fallback hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwYTFkpS8rmSoQj51q\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project json flamegraph stays project scoped",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwYnboXov9PbveAsrk\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project event aggregate counts",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZ2jVBnLZoTF7S64Z\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "host metadata aggregation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZWG7WADzsvqzhR4b\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top architectures endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZGsd91PDm55rgE4o\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top clusters endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZQJnCCpjw6mXV6Ap\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top containers endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZRoCURCHKJ4hvG6q\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top deployments endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZWktoxJ7zHrHpww7\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top hosts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwZgBSHDtEzU6tezEq\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top executables endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwa7UGiC4J9V12gPph\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top namespaces endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwaVJ2gYXLXJCSEK4H\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top scripts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwaYWyGy3Q4i1dWVEk\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top threads endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwavavV8gRtQQ7frok\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top user tags endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwahwMGNYk2MWj56dn\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "relative time needs date helper",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwcGwwCffeuxZYTsWF\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "unknown project id uses search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwcGwzgB7g8LUDARgZ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "cpu hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwbUpqVQjZQn8ptR5o\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "hot containers use entities",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwbnRzZ9YSCj4x1giR\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "first trace discovery is meta only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwbvcexhs9nzf56YHj\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "high level flamegraph",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwcEiPhJJr3ZuonRUi\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "discover metrics before query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwc7H7av6dKKu9tpau\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "known metric query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwcBVdicjo4wM4jnVs\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "generated optimization advice",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwcqgVjPSVJytPxrZh\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "raw events are explicit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwd4LAigxnCgbHhCbp\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "discover common filter fields",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwdXMmjSHcc2ZAYnWi\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top pods endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPweCHgFXGjHoSStX9D\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "default project metrics discovery skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwdWcSK2MP82LdyqKC\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "default project raw sample skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwdnjRyefazwgFHkxh\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "cpu rank first containerized apps",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwdhmuUBQsNtNpibW1\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "gpu inference workflow starts with metrics",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwdmz71m8pYJ2ihs5z\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "gpu call tree uses hot traces",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPweCY9icoEypi25M9j\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "selected trace drilldown is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwePCkx7UsuPW3uiNm\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "full trace error recovers to discovery",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPweqjfyubRDdZgAQca\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "hot trace discovery is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwezfFiFeKjF7UHU1y\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "resource fallback hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwfALM5pK8BvUHf7fs\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project json flamegraph stays project scoped",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwfFHysJgCG3HsgA9q\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project event aggregate counts",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwfL17gNWMW6auPAqy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "host metadata aggregation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwfd7PsDz8dKieipqd\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top architectures endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwfjZHHGVA1HCVh2vu\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top clusters endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwgNkzYGAWEnUXy1Mb\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top containers endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwgSixcvHoUHgKBTqX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top deployments endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwgVhL9xGRQt4tcrbh\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top hosts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwgxUh3uJbA6Xr9xbs\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top executables endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwgtWZTuGgJQHHSk5c\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top namespaces endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwgzDSmYw3gykq2jMM\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top scripts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwh5vG1dLeFmK17bHh\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top threads endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwiQJBhRjxkDkjRt4A\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "project top user tags endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwhs3opBbEgCUac87H\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_zymtrace_mcp"
+    },
+    {
+      "case": "relative time needs date helper",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwhisMQmL7wG4huaXk\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "unknown project id uses search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwhnLXegu63aqVuLyy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "cpu hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwi8RSix5ZpKKXgziY\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "hot containers use entities",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwiaDQm2wQ7jDxw9ao\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "first trace discovery is meta only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwihQTRjqsEVUBGt8Q\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "high level flamegraph",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwiyXXSgBHcFjtgJQ6\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "discover metrics before query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwj219uMhijxUY54dd\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "known metric query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwjUHxdbRFT8D8sUM4\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "generated optimization advice",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwjSZ9gUbRF4qqVtQ8\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "raw events are explicit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwk41qhDFz9Zuy38M6\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "discover common filter fields",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwk7Ehqo2MFQ49c53B\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top pods endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwjwpCrMArigSS5yro\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "default project metrics discovery skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwkUozebTMxysxQdU1\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "default project raw sample skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwkMck23gwWek5ZthX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "cpu rank first containerized apps",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwkjgupMnpqvVHKJhL\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "gpu inference workflow starts with metrics",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwm3YPyXDmoPxaqi9U\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "gpu call tree uses hot traces",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwmFhHxqkf4poSWeeQ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "selected trace drilldown is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwmFwrcYUW8CW9Cuep\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "full trace error recovers to discovery",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwmTbYHdCjbKeFBPgY\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "hot trace discovery is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwmbXgM47Z1b98yufP\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "resource fallback hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwoLiCAfnzyx1J1LU5\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project json flamegraph stays project scoped",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwmkxWimgD8PT8sTyn\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project event aggregate counts",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwn8HVzqYDqzXdxeMG\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "host metadata aggregation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwoep7yWqcmUNpgiPK\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top architectures endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwnmUkWnFT9cjzw9BS\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top clusters endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwnvuKwBHYLkgYnG4U\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top containers endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwoGVcQZMWsdB5hh4S\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top deployments endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwnzNbsn6BVKf5rFZz\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top hosts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwo5pp13E7m3E2qZqG\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top executables endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwoQRkN24iimuvLZG5\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top namespaces endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwpKjzv4vtq2jxBZb8\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top scripts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwpWencUd1tcQPaWCp\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top threads endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwxCG7owmyQVLqFhom\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top user tags endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwpgKe4y75fPAS5Ndr\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "relative time needs date helper",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwpnXNiSq9ovqpqkyE\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "unknown project id uses search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwpyS1dP7sff8d2BFT\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "cpu hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwqKmVQ7VbfxqiJBVV\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "hot containers use entities",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwqiqEL3B5oSbXQXKX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "first trace discovery is meta only",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwqt1NEz6sg9nXpcZy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "high level flamegraph",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwqwUh9fFJGfcMh5Lp\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "discover metrics before query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwr4fapBD2SHq44kTy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "known metric query",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwrQWUcS7SRUWXAz8d\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "generated optimization advice",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwri7CXR9yyF8YzCXT\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "raw events are explicit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwrsXrSTFyEKfEt4fP\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "discover common filter fields",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwryymoX4qopWMQAG2\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top pods endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPws9u8knhfXWMa4QgB\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "default project metrics discovery skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwsBt9cuqNpgGhibTT\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "default project raw sample skips search",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwsK5QWEZfYz7eccdF\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "cpu rank first containerized apps",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwsoqkELoXbeKgviEr\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "gpu inference workflow starts with metrics",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwt8Bqzj82Py6Z7G6u\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "gpu call tree uses hot traces",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwt7wb1jE54JpaPR3y\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "selected trace drilldown is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwtPKEydj2csXd6s9b\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "full trace error recovers to discovery",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwtXW8X79Lg65rpW96\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "hot trace discovery is bounded",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwtZyiptQFNr6av3Av\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "resource fallback hot functions",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwtiQhe2tKY8XLu2rA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project json flamegraph stays project scoped",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwu8DmzMZT8QbVXmmt\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project event aggregate counts",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwuNbtgfMaFQEVZLwc\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "host metadata aggregation",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwuRaKD8Am32YwRkLz\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top architectures endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwudUmPy8bzU56zh3t\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top clusters endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwukRL3WhgTaUqxihH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top containers endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwvLtU1LBoQ7ui1h3F\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top deployments endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwv6zzPpw7rMFpbiTX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top hosts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwvQ7VpVBrmtPjbgND\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top executables endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwvuczFLmr93MwXkzC\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top namespaces endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwvjwyvkPxjrfQSVFG\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top scripts endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwvsPSaNXa7fsa8RiW\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top threads endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPww63BWXVFXLHeVzbE\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    },
+    {
+      "case": "project top user tags endpoint",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwwJw6w1f5pXuyHdzw\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "zymtrace_host_and_skill_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_zymtrace_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "default_project_id": "00000000-0000-0000-0000-000000000000",
+    "docs": [
+      "https://docs.zymtrace.com/getting-started/",
+      "https://docs.zymtrace.com/category/model-context-protocol-mcp/"
+    ],
+    "local_mcp_server": "zymtrace-mcp 26.6.1",
+    "local_mcp_url": "http://localhost:8080/mcp",
+    "resource_count": 3,
+    "resources": [
+      "flamegraph",
+      "topfunctions",
+      "topentities"
+    ],
+    "skills": [
+      "configure-zymtrace-mcp",
+      "optimize-cpu-workloads",
+      "optimize-gpu-workloads",
+      "optimize-memory-allocation"
+    ],
+    "tool_count": 25
+  },
+  "summary": {
+    "errors": 136,
+    "failed_cases": 0,
+    "passed_cases": 0,
+    "planned": 136,
+    "score": 0.0,
+    "skipped": 0,
+    "total": 136
+  }
+}

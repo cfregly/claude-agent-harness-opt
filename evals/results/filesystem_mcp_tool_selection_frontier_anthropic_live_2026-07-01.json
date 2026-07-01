@@ -1,0 +1,973 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "file_read",
+      "expected_args_contains": {
+        "path": "/project/README.md"
+      },
+      "expected_tools": [
+        "read_file"
+      ],
+      "forbidden_tools": [
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "read one known file",
+      "task": "Read the contents of /project/README.md."
+    },
+    {
+      "check_family": "multi_file_read",
+      "expected_args_contains": {
+        "paths": "README.md"
+      },
+      "expected_tools": [
+        "read_multiple_files"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "read several known files",
+      "task": "Read /project/README.md, /project/package.json, and /project/CHANGELOG.md so I can compare them."
+    },
+    {
+      "check_family": "file_write",
+      "expected_args_contains": {
+        "path": "/project/notes/new-plan.md"
+      },
+      "expected_tools": [
+        "write_file"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "create new file with full content",
+      "task": "Create /project/notes/new-plan.md with the full content I provided."
+    },
+    {
+      "check_family": "file_edit",
+      "expected_args_contains": {
+        "path": "/project/config.yaml"
+      },
+      "expected_tools": [
+        "edit_file"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "targeted line edit",
+      "task": "In /project/config.yaml, replace the line timeout: 30 with timeout: 60 without rewriting the whole file."
+    },
+    {
+      "check_family": "directory_create",
+      "expected_args_contains": {
+        "path": "/project/reports/2026/june"
+      },
+      "expected_tools": [
+        "create_directory"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "create nested directory",
+      "task": "Create the nested directory /project/reports/2026/june."
+    },
+    {
+      "check_family": "directory_listing",
+      "expected_args_contains": {
+        "path": "/project/src"
+      },
+      "expected_tools": [
+        "list_directory"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "list immediate directory children",
+      "task": "List the immediate files and folders directly inside /project/src. Do not recurse."
+    },
+    {
+      "check_family": "tree_listing",
+      "expected_args_contains": {
+        "path": "/project/src"
+      },
+      "expected_tools": [
+        "directory_tree"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "recursive tree view",
+      "task": "Show a recursive tree view of /project/src."
+    },
+    {
+      "check_family": "file_search",
+      "expected_args_contains": {
+        "path": "/project",
+        "pattern": "*.test.ts"
+      },
+      "expected_tools": [
+        "search_files"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "recursive filename search",
+      "task": "Find all files matching *.test.ts somewhere under /project."
+    },
+    {
+      "check_family": "file_metadata",
+      "expected_args_contains": {
+        "path": "/project/build/output.zip"
+      },
+      "expected_tools": [
+        "get_file_info"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "get file metadata",
+      "task": "Get the size and last modified time for /project/build/output.zip without reading its contents."
+    },
+    {
+      "check_family": "file_move",
+      "expected_args_contains": {
+        "destination": "/project/archive/old.txt",
+        "source": "/project/tmp/old.txt"
+      },
+      "expected_tools": [
+        "move_file"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "list_allowed_directories"
+      ],
+      "name": "move file to archive",
+      "task": "Move /project/tmp/old.txt to /project/archive/old.txt."
+    },
+    {
+      "check_family": "root_discovery",
+      "expected_tools": [
+        "list_allowed_directories"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file"
+      ],
+      "name": "list accessible roots",
+      "task": "What filesystem directories is this MCP server allowed to access?"
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "passed": 11,
+      "provider": "anthropic",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "passed": 11,
+      "provider": "anthropic",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for common Filesystem MCP read, write, edit, list, tree, search, metadata, and move workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus48-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "filesystem mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/filesystem_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": true,
+  "results": [
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "read one known file",
+      "choice": {
+        "arguments": {
+          "path": "/project/README.md"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to read the contents of a single specific file, which is exactly what read_file does.",
+        "tool_name": "read_file"
+      },
+      "chosen_tools": [
+        "read_file"
+      ],
+      "elapsed_ms": 2722,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "paths: passed"
+      ],
+      "case": "read several known files",
+      "choice": {
+        "arguments": {
+          "paths": [
+            "/project/README.md",
+            "/project/package.json",
+            "/project/CHANGELOG.md"
+          ]
+        },
+        "confidence": 0.98,
+        "rationale": "The task requires reading three specific files to compare them. read_multiple_files is designed to read several files simultaneously, which is more efficient than three separate read_file calls.",
+        "tool_name": "read_multiple_files"
+      },
+      "chosen_tools": [
+        "read_multiple_files"
+      ],
+      "elapsed_ms": 3606,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create new file with full content",
+      "choice": {
+        "arguments": {
+          "content": "<full content provided by the user>",
+          "path": "/project/notes/new-plan.md"
+        },
+        "confidence": 0.95,
+        "rationale": "The task is to create a new file with the full provided content, which is exactly what write_file does (creating or fully replacing a file). Edit tools are for small targeted changes to existing files, not for creating new ones.",
+        "tool_name": "write_file"
+      },
+      "chosen_tools": [
+        "write_file"
+      ],
+      "elapsed_ms": 3456,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "targeted line edit",
+      "choice": {
+        "arguments": {
+          "edits": [
+            {
+              "newText": "timeout: 60",
+              "oldText": "timeout: 30"
+            }
+          ],
+          "path": "/project/config.yaml"
+        },
+        "confidence": 0.95,
+        "rationale": "The task is a small targeted change to a specific line in an existing file, so a line-based edit is preferred over rewriting the whole file with write_file.",
+        "tool_name": "edit_file"
+      },
+      "chosen_tools": [
+        "edit_file"
+      ],
+      "elapsed_ms": 3242,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create nested directory",
+      "choice": {
+        "arguments": {
+          "path": "/project/reports/2026/june"
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires creating a nested directory path, and create_directory can create multiple nested directories in one operation.",
+        "tool_name": "create_directory"
+      },
+      "chosen_tools": [
+        "create_directory"
+      ],
+      "elapsed_ms": 5020,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "list immediate directory children",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks for immediate files and folders directly inside /project/src without recursion. list_directory provides a non-recursive listing of a single directory, which exactly matches the bounded requirement, unlike directory_tree which recurses.",
+        "tool_name": "list_directory"
+      },
+      "chosen_tools": [
+        "list_directory"
+      ],
+      "elapsed_ms": 4055,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "recursive tree view",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly requests a recursive tree view of a directory, which is exactly what directory_tree provides as a recursive JSON structure.",
+        "tool_name": "directory_tree"
+      },
+      "chosen_tools": [
+        "directory_tree"
+      ],
+      "elapsed_ms": 2566,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed",
+        "pattern: passed"
+      ],
+      "case": "recursive filename search",
+      "choice": {
+        "arguments": {
+          "path": "/project",
+          "pattern": "*.test.ts"
+        },
+        "confidence": 0.97,
+        "rationale": "The task requires finding files matching a pattern recursively under a directory tree ('somewhere under /project'), which is exactly what search_files does. Non-recursive listing tools would not cover nested directories.",
+        "tool_name": "search_files"
+      },
+      "chosen_tools": [
+        "search_files"
+      ],
+      "elapsed_ms": 4941,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "get file metadata",
+      "choice": {
+        "arguments": {
+          "path": "/project/build/output.zip"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks for metadata (size and last modified time) of a specific file without reading its contents. get_file_info returns exactly this metadata, avoiding any content reads.",
+        "tool_name": "get_file_info"
+      },
+      "chosen_tools": [
+        "get_file_info"
+      ],
+      "elapsed_ms": 3726,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "destination: passed",
+        "source: passed"
+      ],
+      "case": "move file to archive",
+      "choice": {
+        "arguments": {
+          "destination": "/project/archive/old.txt",
+          "source": "/project/tmp/old.txt"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to relocate a file from one path to another, which is exactly what move_file does with source and destination arguments.",
+        "tool_name": "move_file"
+      },
+      "chosen_tools": [
+        "move_file"
+      ],
+      "elapsed_ms": 2956,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "list accessible roots",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "The task directly asks which directories the MCP server is allowed to access, which is exactly what list_allowed_directories returns. No path or other arguments are required.",
+        "tool_name": "list_allowed_directories"
+      },
+      "chosen_tools": [
+        "list_allowed_directories"
+      ],
+      "elapsed_ms": 2559,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "read one known file",
+      "choice": {
+        "arguments": {
+          "path": "/project/README.md"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to read the contents of a single known file path, which is exactly what read_file is designed for.",
+        "tool_name": "read_file"
+      },
+      "chosen_tools": [
+        "read_file"
+      ],
+      "elapsed_ms": 2205,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "paths: passed"
+      ],
+      "case": "read several known files",
+      "choice": {
+        "arguments": {
+          "paths": [
+            "/project/README.md",
+            "/project/package.json",
+            "/project/CHANGELOG.md"
+          ]
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires reading three known files together for comparison, which matches read_multiple_files (two or more known paths in one call).",
+        "tool_name": "read_multiple_files"
+      },
+      "chosen_tools": [
+        "read_multiple_files"
+      ],
+      "elapsed_ms": 2613,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create new file with full content",
+      "choice": {
+        "arguments": {
+          "content": "<full content provided by the user>",
+          "path": "/project/notes/new-plan.md"
+        },
+        "confidence": 0.95,
+        "rationale": "The task is to create a new file with the full content provided, which matches write_file's purpose of creating or fully replacing a file. This is not a targeted edit, so edit_file is inappropriate.",
+        "tool_name": "write_file"
+      },
+      "chosen_tools": [
+        "write_file"
+      ],
+      "elapsed_ms": 3170,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "targeted line edit",
+      "choice": {
+        "arguments": {
+          "edits": [
+            {
+              "newText": "timeout: 60",
+              "oldText": "timeout: 30"
+            }
+          ],
+          "path": "/project/config.yaml"
+        },
+        "confidence": 0.98,
+        "rationale": "The task requires a small targeted line replacement in an existing file without rewriting it, which is exactly what edit_file provides.",
+        "tool_name": "edit_file"
+      },
+      "chosen_tools": [
+        "edit_file"
+      ],
+      "elapsed_ms": 2886,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create nested directory",
+      "choice": {
+        "arguments": {
+          "path": "/project/reports/2026/june"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to create a nested directory, which is exactly what create_directory handles, including nested paths.",
+        "tool_name": "create_directory"
+      },
+      "chosen_tools": [
+        "create_directory"
+      ],
+      "elapsed_ms": 3111,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "list immediate directory children",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 0.98,
+        "rationale": "The task asks for the immediate files and folders directly inside /project/src without recursion, which is exactly what list_directory provides for a bounded one-level listing.",
+        "tool_name": "list_directory"
+      },
+      "chosen_tools": [
+        "list_directory"
+      ],
+      "elapsed_ms": 2607,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "recursive tree view",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 0.98,
+        "rationale": "The task explicitly asks for a recursive tree view of a directory, which matches directory_tree's purpose.",
+        "tool_name": "directory_tree"
+      },
+      "chosen_tools": [
+        "directory_tree"
+      ],
+      "elapsed_ms": 2804,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed",
+        "pattern: passed"
+      ],
+      "case": "recursive filename search",
+      "choice": {
+        "arguments": {
+          "path": "/project",
+          "pattern": "*.test.ts"
+        },
+        "confidence": 0.97,
+        "rationale": "The task requires a recursive search for files matching a pattern under /project where exact locations are unknown, which is exactly what search_files does.",
+        "tool_name": "search_files"
+      },
+      "chosen_tools": [
+        "search_files"
+      ],
+      "elapsed_ms": 2389,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "get file metadata",
+      "choice": {
+        "arguments": {
+          "path": "/project/build/output.zip"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks for size and last modified time of a single file without reading contents, which is exactly what get_file_info provides.",
+        "tool_name": "get_file_info"
+      },
+      "chosen_tools": [
+        "get_file_info"
+      ],
+      "elapsed_ms": 2818,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "destination: passed",
+        "source: passed"
+      ],
+      "case": "move file to archive",
+      "choice": {
+        "arguments": {
+          "destination": "/project/archive/old.txt",
+          "source": "/project/tmp/old.txt"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks to move a single file from one path to another, which is exactly what move_file does.",
+        "tool_name": "move_file"
+      },
+      "chosen_tools": [
+        "move_file"
+      ],
+      "elapsed_ms": 3366,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [],
+      "case": "list accessible roots",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks which filesystem directories the MCP server is allowed to access, which is exactly the purpose of list_allowed_directories. No specific file or directory operation is requested.",
+        "tool_name": "list_allowed_directories"
+      },
+      "chosen_tools": [
+        "list_allowed_directories"
+      ],
+      "elapsed_ms": 2602,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "registry": "https://mcpservers.org/servers/modelcontextprotocol/filesystem",
+    "repo": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+    "tool_reference": "https://hub.docker.com/r/mcp/filesystem"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 0,
+    "passed_cases": 22,
+    "planned": 22,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 22
+  }
+}

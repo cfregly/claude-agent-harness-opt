@@ -6,7 +6,7 @@ without asking them to inspect the whole repository.
 Every promoted change must clear the adversarially-confirmed to add value bar: same task, same
 model or harness cell, baseline compared with tuned wording, and a live receipt.
 
-Every current available-frontier receipt is indexed in [Frontier Stress Receipts](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md).
+Every current available-frontier receipt and Anthropic Opus attempt is indexed in [Frontier Stress Receipts](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md).
 
 ## Shareable Bundles
 

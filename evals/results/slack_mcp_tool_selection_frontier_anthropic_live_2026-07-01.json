@@ -1,0 +1,419 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "channel_discovery",
+      "expected_args_contains": {
+        "limit": "20"
+      },
+      "expected_tools": [
+        "slack_list_channels"
+      ],
+      "forbidden_tools": [
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "list channels to find id",
+      "task": "List up to 20 Slack channels so I can find the right channel id."
+    },
+    {
+      "check_family": "message_post",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "text": "Deploy is complete"
+      },
+      "expected_tools": [
+        "slack_post_message"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "post top level channel message",
+      "task": "Post a new top-level message to channel C123: Deploy is complete."
+    },
+    {
+      "check_family": "thread_reply",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "text": "I will investigate",
+        "thread_ts": "1712345678.000100"
+      },
+      "expected_tools": [
+        "slack_reply_to_thread"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "reply in existing thread",
+      "task": "Reply in channel C123 under thread 1712345678.000100 with: I will investigate."
+    },
+    {
+      "check_family": "channel_history",
+      "expected_args_contains": {
+        "channel_id": "C123"
+      },
+      "expected_tools": [
+        "slack_get_channel_history"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "read recent channel messages",
+      "task": "Get recent messages from channel C123."
+    },
+    {
+      "check_family": "thread_history",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "thread_ts": "1712345678.000100"
+      },
+      "expected_tools": [
+        "slack_get_thread_replies"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "read thread replies",
+      "task": "Get all replies in channel C123 under thread 1712345678.000100."
+    },
+    {
+      "check_family": "reaction",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "reaction": "eyes",
+        "timestamp": "1712345678.000100"
+      },
+      "expected_tools": [
+        "slack_add_reaction"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "add reaction to message",
+      "task": "Add the :eyes: reaction to message 1712345678.000100 in channel C123."
+    },
+    {
+      "check_family": "user_discovery",
+      "expected_args_contains": {
+        "limit": "20"
+      },
+      "expected_tools": [
+        "slack_get_users"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_user_profile"
+      ],
+      "name": "list users to find id",
+      "task": "List up to 20 Slack users so I can find the right user id."
+    },
+    {
+      "check_family": "profile_read",
+      "expected_args_contains": {
+        "user_id": "U123"
+      },
+      "expected_tools": [
+        "slack_get_user_profile"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users"
+      ],
+      "name": "get known user profile",
+      "task": "Get detailed profile information for Slack user U123."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 8,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "errors": 8,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for common Slack MCP messaging, thread, reaction, channel, and user workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus48-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "slack mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/slack_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "case": "list channels to find id",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEcxUFBKfsPuJ2LGx\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "post top level channel message",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEaUUqPw7B6eGHCjR\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "reply in existing thread",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEpcKXVg62RrbKkYH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "read recent channel messages",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEZjGcA3Sanycs72i\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "read thread replies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEfw2UHGkmfd4doYa\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "add reaction to message",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEu5JuttSWgcD52C1\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "list users to find id",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEciA19U9eoMaSoEc\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "get known user profile",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwEfBaTUz3bknEMaLJ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "case": "list channels to find id",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwFiBhogQQVSvwNTU7\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "post top level channel message",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwFmQmQrbH2z57iaSX\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "reply in existing thread",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwFiBtiPQ7K1g9RGr2\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "read recent channel messages",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwFmf431k5FDLogBxs\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "read thread replies",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwFpdz1zuQ7QA2qhHS\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "add reaction to message",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwG5GZR9ejG3zqZ2yu\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "list users to find id",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwGTLVm3jVSSB1zXyJ\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "case": "get known user profile",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPwGBiA5azdNoHnUJ42\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "help_docs": "https://slack.com/help/articles/48855576908307-Guide-to-Model-Context-Protocol-in-Slack",
+    "official_docs": "https://docs.slack.dev/ai/slack-mcp-server",
+    "tool_reference": "https://hub.docker.com/r/mcp/slack"
+  },
+  "summary": {
+    "errors": 16,
+    "failed_cases": 0,
+    "passed_cases": 0,
+    "planned": 16,
+    "score": 0.0,
+    "skipped": 0,
+    "total": 16
+  }
+}

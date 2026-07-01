@@ -1,0 +1,702 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "navigation",
+      "expected_args_contains": {
+        "url": "https://example.com"
+      },
+      "expected_tools": [
+        "browser_navigate"
+      ],
+      "forbidden_tools": [
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "navigate to url",
+      "task": "Open https://example.com in the browser."
+    },
+    {
+      "check_family": "page_snapshot",
+      "expected_args_contains": {
+        "target": "page"
+      },
+      "expected_tools": [
+        "browser_snapshot"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "inspect page for actionable refs",
+      "task": "Inspect the current page snapshot target page for actionable refs."
+    },
+    {
+      "check_family": "screenshot",
+      "expected_args_contains": {
+        "fullPage": "true"
+      },
+      "expected_tools": [
+        "browser_take_screenshot"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "capture full page visual proof",
+      "task": "Take a full-page screenshot of the current page for visual proof."
+    },
+    {
+      "check_family": "click",
+      "expected_args_contains": {
+        "target": "submit"
+      },
+      "expected_tools": [
+        "browser_click"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "click known target",
+      "task": "Click the Submit button using target ref submit-button from the current snapshot."
+    },
+    {
+      "check_family": "type",
+      "expected_args_contains": {
+        "submit": "true",
+        "text": "playwright mcp"
+      },
+      "expected_tools": [
+        "browser_type"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "type search and submit",
+      "task": "Type \"playwright mcp\" into the search input target search-box and press Enter."
+    },
+    {
+      "check_family": "form_fill",
+      "expected_args_contains": {
+        "fields": "email"
+      },
+      "expected_tools": [
+        "browser_fill_form"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "fill multi field form",
+      "task": "Fill the multi field form with email user@example.com and name Ada Lovelace."
+    },
+    {
+      "check_family": "select",
+      "expected_args_contains": {
+        "values": "Canada"
+      },
+      "expected_tools": [
+        "browser_select_option"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "select dropdown option",
+      "task": "Select Canada from the country dropdown target country-select."
+    },
+    {
+      "check_family": "wait",
+      "expected_args_contains": {
+        "text": "Success"
+      },
+      "expected_tools": [
+        "browser_wait_for"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "wait for success text",
+      "task": "Wait until the text Success appears on the page."
+    },
+    {
+      "check_family": "evaluate",
+      "expected_args_contains": {
+        "function": "localStorage"
+      },
+      "expected_tools": [
+        "browser_evaluate"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "evaluate local storage",
+      "task": "Read window.localStorage.getItem('authToken') from the current page."
+    },
+    {
+      "check_family": "keyboard",
+      "expected_args_contains": {
+        "key": "Escape"
+      },
+      "expected_tools": [
+        "browser_press_key"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "press escape key",
+      "task": "Press Escape to close the current modal."
+    },
+    {
+      "check_family": "network_list",
+      "expected_args_contains": {
+        "filter": "/api/"
+      },
+      "expected_tools": [
+        "browser_network_requests"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "list api network requests",
+      "task": "List network requests since page load, filtered to URLs matching /api/."
+    },
+    {
+      "check_family": "network_detail",
+      "expected_args_contains": {
+        "index": "3"
+      },
+      "expected_tools": [
+        "browser_network_request"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_console_messages"
+      ],
+      "name": "inspect numbered network request",
+      "task": "Show full details for network request #3 from the previous request list."
+    },
+    {
+      "check_family": "console",
+      "expected_args_contains": {
+        "level": "error"
+      },
+      "expected_tools": [
+        "browser_console_messages"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request"
+      ],
+      "name": "get console errors",
+      "task": "Return browser console errors since the last navigation."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 13,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "errors": 13,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "passed": 0,
+      "provider": "anthropic",
+      "score": 0.0,
+      "skipped": 0,
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for Microsoft Playwright MCP core browser automation workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus48-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "playwright mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/playwright_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "case": "navigate to url",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSY2rRJK6kbUusYYp\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "inspect page for actionable refs",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSZmZbygPLSATpoYy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "capture full page visual proof",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSckMFz6cV3aNfLe3\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "click known target",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSRqVTCRQgCDKdMfN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "type search and submit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSQMFV9B7QCczb5b4\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "fill multi field form",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvScFV1vY4Mo13sMxd\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "select dropdown option",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSurZZdb5QDSd98xH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "wait for success text",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvSeybLmfrPgYu7hsj\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "evaluate local storage",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvTmCdvrJrLV66aYsb\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "press escape key",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvTkD3LTo5w44WZUsd\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "list api network requests",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvTudhzBnMACZRTC1X\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "inspect numbered network request",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvTx7JgJBbdN39cXeA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "get console errors",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvTybby8njgKN4YexG\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "case": "navigate to url",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvUDjUYQ2pbRxkodvH\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "inspect page for actionable refs",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvUJhSXHynW4gqVUem\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "capture full page visual proof",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvUz84Q7NGLG5gKkXj\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "click known target",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvV36ZKRzpV8zL68Au\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "type search and submit",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvVD25aGNB3VLnXFkN\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "fill multi field form",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvVGVGf2etAKoFMpEc\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "select dropdown option",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvVEG1i9hAQUYXY1ML\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "wait for success text",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvVJUE2tLVchfPU8UM\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "evaluate local storage",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvVZbde2mbvqAA6neE\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "press escape key",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvVabANtZTJCXdAUmy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "list api network requests",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvWE34Sj4V17kBf2EA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "inspect numbered network request",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvWKVVD4e3shy2yxYM\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "case": "get console errors",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPvWq1Bzm6xdQ12Ug53\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "commit": "511320db60d6774557243a32b2ff201f14ca4188",
+    "docs": [
+      "README.md#tools",
+      "https://playwright.dev/docs/getting-started-mcp"
+    ],
+    "repo": "https://github.com/microsoft/playwright-mcp"
+  },
+  "summary": {
+    "errors": 26,
+    "failed_cases": 0,
+    "passed_cases": 0,
+    "planned": 26,
+    "score": 0.0,
+    "skipped": 0,
+    "total": 26
+  }
+}

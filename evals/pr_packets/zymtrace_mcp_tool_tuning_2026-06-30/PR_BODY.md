@@ -21,6 +21,13 @@ Suggested title: Tighten Zymtrace MCP retrieval routing with live evals
 <details>
 <summary>LLM / Machine-readable details</summary>
 
+## Frontier Receipts
+
+- Anthropic Opus frontier receipt: [zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.md)
+- Anthropic Opus JSON receipt: [zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.json)
+- Current frontier stress receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- Current frontier JSON receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
+
 ## How This Is Proven Useful
 
 - The proof compares `stock_zymtrace_mcp` and `tuned_zymtrace_mcp_boundaries` on the same tasks, providers, harnesses, and instruction variants.
@@ -33,7 +40,7 @@ Suggested title: Tighten Zymtrace MCP retrieval routing with live evals
 - The packet now includes a 2026-07-01 frontier stress/descent run for OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`.
 - The frontier run completed 272 live cells with 233 passed, 27 failed, and 12 errors across both stock/tuned tool variants and both instruction variants.
 - Treat the 24/24 held-out default-profile result as the confirmed improvement, and treat the frontier receipt as the next failure-discovery surface.
-- Anthropic frontier coverage is incomplete because `claude-fable-5` was unavailable to the provided key and the accessible `claude-opus-4-8` run hit Anthropic API credit exhaustion during the full sweep.
+- Anthropic Opus coverage is retained separately: `claude-fable-5` remained unavailable, the new key passed a `claude-opus-4-8` smoke test, and later cells hit Anthropic credit exhaustion during the sweep.
 
 ## Downside If Not Changed
 
@@ -143,5 +150,3 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_
 - All-provider frontier attempt: [zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_all_providers_attempt_2026-07-01.md)
 
 </details>
-- Current frontier stress receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
-- Current frontier JSON receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)

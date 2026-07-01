@@ -23,8 +23,7 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_
 python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_tool_selection.json --env-file .env --live --require-live --providers openai-gpt55-frontier,gemini-31-pro-customtools-frontier --harnesses prompt_json --variants stock_zymtrace_mcp,tuned_zymtrace_mcp_boundaries --out evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json --concurrency 8
 ```
 
-Anthropic frontier was attempted separately. `claude-fable-5` was unavailable to the provided key,
-and the accessible `claude-opus-4-8` all-provider sweep hit Anthropic API credit exhaustion.
+Anthropic frontier was attempted separately. `claude-fable-5` remained unavailable to the provided key. The newly provided key passed a `claude-opus-4-8` smoke test, then later sweep cells hit Anthropic API credit exhaustion.
 
 
 ## Current Frontier Stress Receipt
@@ -33,7 +32,10 @@ and the accessible `claude-opus-4-8` all-provider sweep hit Anthropic API credit
 - JSON: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
 - All retained available-frontier receipts: [frontier-stress-2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md)
 
-The retained current available-frontier run uses OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`. Anthropic frontier remains blocked in this workspace by account credit state, not by missing local key material.
+The retained current available-frontier run uses OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`. Anthropic Opus receipts are retained separately after the new key passed smoke testing; later Anthropic calls hit credit exhaustion where shown in the receipts.
+
+- Anthropic Opus summary: [zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.md)
+- Anthropic Opus JSON: [zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.json)
 
 ## Value Bar
 

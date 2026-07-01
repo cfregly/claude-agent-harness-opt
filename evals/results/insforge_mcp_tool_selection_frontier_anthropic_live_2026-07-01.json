@@ -1,0 +1,1376 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "product_docs",
+      "expected_args_contains": {
+        "docType": "instructions"
+      },
+      "expected_tools": [
+        "fetch-docs"
+      ],
+      "forbidden_tools": [
+        "download-template",
+        "get-backend-metadata",
+        "run-raw-sql",
+        "fetch-sdk-docs"
+      ],
+      "name": "new project setup reads instructions",
+      "task": "I just connected a new InsForge project. Before building anything, fetch the mandatory setup instructions."
+    },
+    {
+      "check_family": "template_bootstrap",
+      "expected_args_contains": {
+        "frame": "next"
+      },
+      "expected_tools": [
+        "download-template"
+      ],
+      "forbidden_tools": [
+        "fetch-docs",
+        "create-deployment",
+        "get-backend-metadata"
+      ],
+      "name": "new app bootstrap uses template",
+      "task": "Create a new Next.js starter app for InsForge named founder-dashboard."
+    },
+    {
+      "check_family": "backend_metadata",
+      "expected_tools": [
+        "get-backend-metadata"
+      ],
+      "forbidden_tools": [
+        "get-table-schema",
+        "run-raw-sql",
+        "list-buckets",
+        "get-anon-key"
+      ],
+      "name": "backend inventory uses metadata",
+      "task": "InsForge is my backend platform. What is my current backend structure across tables, buckets, and functions?"
+    },
+    {
+      "check_family": "table_schema",
+      "expected_args_contains": {
+        "tableName": "accounts"
+      },
+      "expected_tools": [
+        "get-table-schema"
+      ],
+      "forbidden_tools": [
+        "get-backend-metadata",
+        "run-raw-sql"
+      ],
+      "name": "known table details use schema",
+      "task": "Show me the RLS policies, indexes, constraints, and columns for the known table accounts."
+    },
+    {
+      "check_family": "sql_execution",
+      "expected_args_contains": {
+        "query": "accounts"
+      },
+      "expected_tools": [
+        "run-raw-sql"
+      ],
+      "forbidden_tools": [
+        "get-table-schema",
+        "get-backend-metadata",
+        "bulk-upsert"
+      ],
+      "name": "explicit sql uses raw sql",
+      "task": "Run this SQL now: SELECT count(*) FROM accounts WHERE status = 'active'."
+    },
+    {
+      "check_family": "bulk_import",
+      "expected_args_contains": {
+        "filePath": "/tmp/accounts.csv",
+        "table": "accounts"
+      },
+      "expected_tools": [
+        "bulk-upsert"
+      ],
+      "forbidden_tools": [
+        "run-raw-sql",
+        "create-bucket"
+      ],
+      "name": "csv import uses bulk upsert",
+      "task": "Bulk upsert /tmp/accounts.csv into the accounts table using account_id as the unique key."
+    },
+    {
+      "check_family": "storage_list",
+      "expected_tools": [
+        "list-buckets"
+      ],
+      "forbidden_tools": [
+        "get-backend-metadata",
+        "create-bucket",
+        "delete-bucket"
+      ],
+      "name": "storage inventory lists buckets",
+      "task": "Which storage buckets exist in this InsForge project?"
+    },
+    {
+      "check_family": "storage_create",
+      "expected_args_contains": {
+        "bucketName": "avatars"
+      },
+      "expected_tools": [
+        "create-bucket"
+      ],
+      "forbidden_tools": [
+        "list-buckets",
+        "delete-bucket"
+      ],
+      "name": "create storage bucket uses create bucket",
+      "task": "Create a public storage bucket named avatars."
+    },
+    {
+      "check_family": "function_read",
+      "expected_args_contains": {
+        "slug": "webhook-handler"
+      },
+      "expected_tools": [
+        "get-function"
+      ],
+      "forbidden_tools": [
+        "create-function",
+        "update-function",
+        "delete-function",
+        "get-container-logs"
+      ],
+      "name": "read function uses get function",
+      "task": "Get the code and metadata for the existing edge function webhook-handler."
+    },
+    {
+      "check_family": "function_update",
+      "expected_args_contains": {
+        "codeFile": "webhook-handler.js",
+        "slug": "webhook-handler"
+      },
+      "expected_tools": [
+        "update-function"
+      ],
+      "forbidden_tools": [
+        "create-function",
+        "get-function",
+        "delete-function"
+      ],
+      "name": "update function uses update function",
+      "task": "Update existing edge function webhook-handler from local file /Users/me/app/functions/webhook-handler.js."
+    },
+    {
+      "check_family": "runtime_logs",
+      "expected_args_contains": {
+        "source": "function.logs"
+      },
+      "expected_tools": [
+        "get-container-logs"
+      ],
+      "forbidden_tools": [
+        "get-function",
+        "run-raw-sql"
+      ],
+      "name": "function logs use container logs",
+      "task": "Show me the last 50 edge function runtime logs."
+    },
+    {
+      "check_family": "sdk_docs",
+      "expected_args_contains": {
+        "sdkFeature": "storage",
+        "sdkLanguage": "JavaScript"
+      },
+      "expected_tools": [
+        "fetch-sdk-docs"
+      ],
+      "forbidden_tools": [
+        "fetch-docs",
+        "list-buckets"
+      ],
+      "name": "sdk docs use sdk docs",
+      "task": "Show the JavaScript SDK documentation for InsForge storage uploads."
+    },
+    {
+      "check_family": "client_token",
+      "expected_args_contains": {
+        "apiKey": "api"
+      },
+      "expected_tools": [
+        "get-anon-key"
+      ],
+      "forbidden_tools": [
+        "fetch-docs",
+        "get-backend-metadata"
+      ],
+      "name": "client token uses anon key",
+      "task": "Generate the public anonymous token my browser app should use for InsForge client-side access."
+    },
+    {
+      "check_family": "deployment_prepare",
+      "expected_args_contains": {
+        "sourceDirectory": "/Users/me/founder-dashboard"
+      },
+      "expected_tools": [
+        "create-deployment"
+      ],
+      "forbidden_tools": [
+        "download-template",
+        "start-deployment"
+      ],
+      "name": "absolute source deploy uses create deployment",
+      "task": "Deploy the source tree at /Users/me/founder-dashboard to InsForge."
+    },
+    {
+      "check_family": "deployment_start",
+      "expected_args_contains": {
+        "deploymentId": "dep_123"
+      },
+      "expected_tools": [
+        "start-deployment"
+      ],
+      "forbidden_tools": [
+        "create-deployment",
+        "download-template"
+      ],
+      "name": "prepared remote upload starts deployment",
+      "task": "The upload commands for deployment dep_123 are complete. Trigger the deployment build now."
+    },
+    {
+      "allow_no_tool": true,
+      "check_family": "no_tool_safety",
+      "expected_tools": [],
+      "forbidden_tools": [
+        "create-deployment",
+        "start-deployment",
+        "download-template"
+      ],
+      "name": "relative deploy path avoids tool",
+      "task": "Deploy my current directory . to InsForge now."
+    },
+    {
+      "check_family": "storage_delete",
+      "expected_args_contains": {
+        "bucketName": "old-avatars"
+      },
+      "expected_tools": [
+        "delete-bucket"
+      ],
+      "forbidden_tools": [
+        "list-buckets",
+        "create-bucket",
+        "get-backend-metadata"
+      ],
+      "name": "delete storage bucket uses delete bucket",
+      "task": "Delete the specific storage bucket named old-avatars from this InsForge project."
+    },
+    {
+      "check_family": "function_create",
+      "expected_args_contains": {
+        "codeFile": "hello-world.js",
+        "slug": "hello-world"
+      },
+      "expected_tools": [
+        "create-function"
+      ],
+      "forbidden_tools": [
+        "get-function",
+        "update-function",
+        "delete-function"
+      ],
+      "name": "create function uses create function",
+      "task": "Create a new edge function slug hello-world from local file /Users/me/app/functions/hello-world.js."
+    },
+    {
+      "check_family": "function_delete",
+      "expected_args_contains": {
+        "slug": "legacy-webhook"
+      },
+      "expected_tools": [
+        "delete-function"
+      ],
+      "forbidden_tools": [
+        "create-function",
+        "get-function",
+        "update-function"
+      ],
+      "name": "delete function uses delete function",
+      "task": "Delete the specific edge function slug legacy-webhook from InsForge."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 4,
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "passed": 15,
+      "provider": "anthropic",
+      "score": 0.789,
+      "skipped": 0,
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "errors": 5,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "passed": 13,
+      "provider": "anthropic",
+      "score": 0.684,
+      "skipped": 0,
+      "tool_variant": "source_tuned_insforge_mcp"
+    }
+  ],
+  "description": "Compare README-level and source-level descriptions for InsForge backend MCP routing.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "anthropic-opus48-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "insforge mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/insforge_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "docType: failed"
+      ],
+      "case": "new project setup reads instructions",
+      "choice": {
+        "arguments": {
+          "docType": "setup"
+        },
+        "confidence": 0.85,
+        "rationale": "The task requires fetching mandatory setup instructions for a newly connected InsForge project before building anything. The fetch-docs tool retrieves InsForge documentation, and requesting the 'setup' docType directly addresses the need for setup instructions.",
+        "tool_name": "fetch-docs"
+      },
+      "chosen_tools": [
+        "fetch-docs"
+      ],
+      "elapsed_ms": 3243,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "frame: passed"
+      ],
+      "case": "new app bootstrap uses template",
+      "choice": {
+        "arguments": {
+          "frame": "nextjs",
+          "projectName": "founder-dashboard"
+        },
+        "confidence": 0.9,
+        "rationale": "The task is to create a new Next.js starter app for InsForge. The download-template tool downloads a pre-configured starter template, accepting a 'frame' (framework, e.g., nextjs) and an optional 'projectName' matching the requested app name 'founder-dashboard'.",
+        "tool_name": "download-template"
+      },
+      "chosen_tools": [
+        "download-template"
+      ],
+      "elapsed_ms": 3679,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "backend inventory uses metadata",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.95,
+        "rationale": "The task asks for a complete overview of the current backend structure across tables, buckets, and functions. The get-backend-metadata tool indexes all backend metadata, making it the single best fit to retrieve the full structure in one call, rather than querying each resource type separately.",
+        "tool_name": "get-backend-metadata"
+      },
+      "chosen_tools": [
+        "get-backend-metadata"
+      ],
+      "elapsed_ms": 4505,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "tableName: passed"
+      ],
+      "case": "known table details use schema",
+      "choice": {
+        "arguments": {
+          "tableName": "accounts"
+        },
+        "confidence": 0.95,
+        "rationale": "The task requests detailed schema info (RLS policies, indexes, constraints, columns) for the known 'accounts' table, which is exactly what get-table-schema returns for a specific table.",
+        "tool_name": "get-table-schema"
+      },
+      "chosen_tools": [
+        "get-table-schema"
+      ],
+      "elapsed_ms": 3632,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "explicit sql uses raw sql",
+      "choice": {
+        "arguments": {
+          "query": "SELECT count(*) FROM accounts WHERE status = 'active'"
+        },
+        "confidence": 0.98,
+        "rationale": "The task explicitly requests executing a SQL query, which directly matches the run-raw-sql tool's purpose of executing raw SQL. The query is provided verbatim and requires no parameters.",
+        "tool_name": "run-raw-sql"
+      },
+      "chosen_tools": [
+        "run-raw-sql"
+      ],
+      "elapsed_ms": 3819,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "filePath: passed",
+        "table: passed"
+      ],
+      "case": "csv import uses bulk upsert",
+      "choice": {
+        "arguments": {
+          "filePath": "/tmp/accounts.csv",
+          "table": "accounts",
+          "upsertKey": "account_id"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly requires bulk upserting data from a CSV file into a table using a unique key, which directly matches the bulk-upsert tool with its table, filePath, and upsertKey parameters.",
+        "tool_name": "bulk-upsert"
+      },
+      "chosen_tools": [
+        "bulk-upsert"
+      ],
+      "elapsed_ms": 3395,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "storage inventory lists buckets",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "The task asks to enumerate existing storage buckets, which is exactly what list-buckets provides with no required inputs.",
+        "tool_name": "list-buckets"
+      },
+      "chosen_tools": [
+        "list-buckets"
+      ],
+      "elapsed_ms": 3585,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "create storage bucket uses create bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "avatars",
+          "isPublic": true
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks to create a public storage bucket named 'avatars'. The create-bucket tool directly matches this, with bucketName set to 'avatars' and isPublic set to true.",
+        "tool_name": "create-bucket"
+      },
+      "chosen_tools": [
+        "create-bucket"
+      ],
+      "elapsed_ms": 3085,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "read function uses get function",
+      "choice": {
+        "arguments": {
+          "slug": "webhook-handler"
+        },
+        "confidence": 0.98,
+        "rationale": "The task asks to retrieve the code and metadata for an existing edge function identified by the slug 'webhook-handler'. The get-function tool returns details of a specific edge function by its slug.",
+        "tool_name": "get-function"
+      },
+      "chosen_tools": [
+        "get-function"
+      ],
+      "elapsed_ms": 3311,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "codeFile: passed",
+        "slug: passed"
+      ],
+      "case": "update function uses update function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/webhook-handler.js",
+          "slug": "webhook-handler"
+        },
+        "confidence": 0.95,
+        "rationale": "The task explicitly requires updating an existing edge function identified by its slug 'webhook-handler' using code from a local file, which matches update-function's purpose and its codeFile parameter.",
+        "tool_name": "update-function"
+      },
+      "chosen_tools": [
+        "update-function"
+      ],
+      "elapsed_ms": 3635,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "source: failed"
+      ],
+      "case": "function logs use container logs",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "source": "edge-functions"
+        },
+        "confidence": 0.78,
+        "rationale": "The task asks for the last 50 edge function runtime logs. The get-container-logs tool retrieves the latest logs from a container or service, accepting a source identifier and a limit of 50 to satisfy the request.",
+        "tool_name": "get-container-logs"
+      },
+      "chosen_tools": [
+        "get-container-logs"
+      ],
+      "elapsed_ms": 2957,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sdkFeature: passed",
+        "sdkLanguage: passed"
+      ],
+      "case": "sdk docs use sdk docs",
+      "choice": {
+        "arguments": {
+          "sdkFeature": "storage uploads",
+          "sdkLanguage": "javascript"
+        },
+        "confidence": 0.97,
+        "rationale": "The task requests JavaScript SDK documentation for storage uploads, which directly matches fetch-sdk-docs requiring sdkLanguage and sdkFeature.",
+        "tool_name": "fetch-sdk-docs"
+      },
+      "chosen_tools": [
+        "fetch-sdk-docs"
+      ],
+      "elapsed_ms": 3309,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "apiKey: failed"
+      ],
+      "case": "client token uses anon key",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.98,
+        "rationale": "The task asks to generate a public anonymous token for client-side/browser access, which is exactly the purpose of get-anon-key (generate an anonymous JWT token for client-side applications).",
+        "tool_name": "get-anon-key"
+      },
+      "chosen_tools": [
+        "get-anon-key"
+      ],
+      "elapsed_ms": 3185,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sourceDirectory: passed"
+      ],
+      "case": "absolute source deploy uses create deployment",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "/Users/me/founder-dashboard"
+        },
+        "confidence": 0.9,
+        "rationale": "Deploying a source tree first requires creating/preparing a source-code deployment from the given directory. create-deployment takes sourceDirectory and is the correct initial step before start-deployment (which needs a deploymentId produced here).",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 2917,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "deploymentId: passed"
+      ],
+      "case": "prepared remote upload starts deployment",
+      "choice": {
+        "arguments": {
+          "deploymentId": "dep_123"
+        },
+        "confidence": 0.98,
+        "rationale": "The source code upload is complete, and the task explicitly asks to trigger the deployment build. The start-deployment tool triggers a deployment build after uploading source code and requires the deploymentId, which is provided as dep_123.",
+        "tool_name": "start-deployment"
+      },
+      "chosen_tools": [
+        "start-deployment"
+      ],
+      "elapsed_ms": 2848,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "relative deploy path avoids tool",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "."
+        },
+        "confidence": 0.86,
+        "rationale": "Deploying a source-code directory starts with create-deployment, which prepares/uploads the current directory ('.'). This is the correct first step before start-deployment (which requires a deploymentId produced by this step). No other tool handles deploying a local directory.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 2805,
+      "forbidden_used": [
+        "create-deployment"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "delete storage bucket uses delete bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "old-avatars"
+        },
+        "confidence": 0.98,
+        "rationale": "The task explicitly requests deleting a storage bucket named 'old-avatars', which directly matches the delete-bucket tool's purpose and required bucketName argument.",
+        "tool_name": "delete-bucket"
+      },
+      "chosen_tools": [
+        "delete-bucket"
+      ],
+      "elapsed_ms": 2772,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed",
+        "codeFile: passed"
+      ],
+      "case": "create function uses create function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/hello-world.js",
+          "slug": "hello-world"
+        },
+        "confidence": 0.95,
+        "rationale": "The task is to create a new edge function with slug 'hello-world' using code from a local file. The create-function tool accepts a slug and a codeFile path, matching the request exactly.",
+        "tool_name": "create-function"
+      },
+      "chosen_tools": [
+        "create-function"
+      ],
+      "elapsed_ms": 4949,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "delete function uses delete function",
+      "choice": {
+        "arguments": {
+          "slug": "legacy-webhook"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly requests deleting the edge function with slug 'legacy-webhook', which directly matches the delete-function tool's purpose and required slug parameter.",
+        "tool_name": "delete-function"
+      },
+      "chosen_tools": [
+        "delete-function"
+      ],
+      "elapsed_ms": 2400,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "docType: passed"
+      ],
+      "case": "new project setup reads instructions",
+      "choice": {
+        "arguments": {
+          "docType": "instructions"
+        },
+        "confidence": 0.98,
+        "rationale": "The task is to fetch mandatory setup instructions for a newly connected project before building. fetch-docs with docType 'instructions' is explicitly designated as the first documentation step for a new project.",
+        "tool_name": "fetch-docs"
+      },
+      "chosen_tools": [
+        "fetch-docs"
+      ],
+      "elapsed_ms": 5048,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "frame: passed"
+      ],
+      "case": "new app bootstrap uses template",
+      "choice": {
+        "arguments": {
+          "frame": "nextjs",
+          "projectName": "founder-dashboard"
+        },
+        "confidence": 0.97,
+        "rationale": "The task is to scaffold a new Next.js InsForge starter app, which matches download-template's purpose as the first build step. The frame is Next.js and projectName is a safe single directory name.",
+        "tool_name": "download-template"
+      },
+      "chosen_tools": [
+        "download-template"
+      ],
+      "elapsed_ms": 2948,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "backend inventory uses metadata",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.97,
+        "rationale": "The user asks for the full current backend structure across tables, buckets, and functions, which matches the whole-backend inventory purpose of get-backend-metadata. No specific table, bucket, or function is named, so narrower tools do not apply.",
+        "tool_name": "get-backend-metadata"
+      },
+      "chosen_tools": [
+        "get-backend-metadata"
+      ],
+      "elapsed_ms": 2947,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "tableName: passed"
+      ],
+      "case": "known table details use schema",
+      "choice": {
+        "arguments": {
+          "tableName": "accounts"
+        },
+        "confidence": 0.99,
+        "rationale": "The task requests RLS policies, indexes, constraints, and columns for a known table named 'accounts', which is exactly what get-table-schema returns for a single known table.",
+        "tool_name": "get-table-schema"
+      },
+      "chosen_tools": [
+        "get-table-schema"
+      ],
+      "elapsed_ms": 2922,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "explicit sql uses raw sql",
+      "choice": {
+        "arguments": {
+          "query": "SELECT count(*) FROM accounts WHERE status = 'active'"
+        },
+        "confidence": 0.97,
+        "rationale": "The user explicitly requested running a specific read-only SQL query, which is exactly the use case for run-raw-sql. This is a non-destructive SELECT, so it is safe to prepare for execution.",
+        "tool_name": "run-raw-sql"
+      },
+      "chosen_tools": [
+        "run-raw-sql"
+      ],
+      "elapsed_ms": 3126,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "filePath: passed",
+        "table: passed"
+      ],
+      "case": "csv import uses bulk upsert",
+      "choice": {
+        "arguments": {
+          "filePath": "/tmp/accounts.csv",
+          "table": "accounts",
+          "upsertKey": "account_id"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly names a local CSV file (/tmp/accounts.csv), a target table (accounts), and a unique upsert key (account_id), which precisely matches bulk-upsert's use_when criteria requiring table, filePath, and upsertKey.",
+        "tool_name": "bulk-upsert"
+      },
+      "chosen_tools": [
+        "bulk-upsert"
+      ],
+      "elapsed_ms": 4468,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "storage inventory lists buckets",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.98,
+        "rationale": "The task explicitly asks which storage buckets exist, which is a bucket inventory request. list-buckets is the dedicated tool for enumerating all storage buckets.",
+        "tool_name": "list-buckets"
+      },
+      "chosen_tools": [
+        "list-buckets"
+      ],
+      "elapsed_ms": 2808,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "create storage bucket uses create bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "avatars",
+          "isPublic": true
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks to create a named storage bucket 'avatars' with public access, matching create-bucket's purpose and inputs.",
+        "tool_name": "create-bucket"
+      },
+      "chosen_tools": [
+        "create-bucket"
+      ],
+      "elapsed_ms": 2899,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "read function uses get function",
+      "choice": {
+        "arguments": {
+          "slug": "webhook-handler"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to inspect the code and metadata of a known existing edge function by its slug, which is exactly what get-function does.",
+        "tool_name": "get-function"
+      },
+      "chosen_tools": [
+        "get-function"
+      ],
+      "elapsed_ms": 2510,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "codeFile: passed",
+        "slug: passed"
+      ],
+      "case": "update function uses update function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/webhook-handler.js",
+          "slug": "webhook-handler"
+        },
+        "confidence": 0.97,
+        "rationale": "The task explicitly updates an existing edge function with a known slug (webhook-handler) using a local code file path, which matches update-function's use_when for changing a known function slug with an updated code file.",
+        "tool_name": "update-function"
+      },
+      "chosen_tools": [
+        "update-function"
+      ],
+      "elapsed_ms": 3994,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "source: passed"
+      ],
+      "case": "function logs use container logs",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "source": "function.logs"
+        },
+        "confidence": 0.97,
+        "rationale": "The task asks for edge function runtime logs, which maps directly to get-container-logs using the function.logs source with a bounded limit of 50.",
+        "tool_name": "get-container-logs"
+      },
+      "chosen_tools": [
+        "get-container-logs"
+      ],
+      "elapsed_ms": 2705,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sdkFeature: passed",
+        "sdkLanguage: passed"
+      ],
+      "case": "sdk docs use sdk docs",
+      "choice": {
+        "arguments": {
+          "sdkFeature": "storage",
+          "sdkLanguage": "javascript"
+        },
+        "confidence": 0.97,
+        "rationale": "The user explicitly asks for JavaScript SDK documentation for a specific InsForge feature (storage uploads), which matches fetch-sdk-docs requiring both sdkFeature and sdkLanguage.",
+        "tool_name": "fetch-sdk-docs"
+      },
+      "chosen_tools": [
+        "fetch-sdk-docs"
+      ],
+      "elapsed_ms": 3125,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "apiKey: failed"
+      ],
+      "case": "client token uses anon key",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.98,
+        "rationale": "The task explicitly asks to generate the public anonymous token for a browser/client-side app, which is exactly the purpose of get-anon-key.",
+        "tool_name": "get-anon-key"
+      },
+      "chosen_tools": [
+        "get-anon-key"
+      ],
+      "elapsed_ms": 2765,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": false,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sourceDirectory: passed"
+      ],
+      "case": "absolute source deploy uses create deployment",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "/Users/me/founder-dashboard"
+        },
+        "confidence": 0.94,
+        "rationale": "The task asks to deploy an existing local source tree and provides an absolute path (/Users/me/founder-dashboard), which matches create-deployment's use case and its absolute-path requirement.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 2773,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "claude-opus-4-8",
+      "passed": true,
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "case": "prepared remote upload starts deployment",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPuzgXe9bX34mTsJ3ib\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "case": "relative deploy path avoids tool",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPv23t2trEgfoLUNUAi\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "case": "delete storage bucket uses delete bucket",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPv3zTuC4cTeWLGfbSy\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "case": "create function uses create function",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPv42wfHXyBB5ziQ8tn\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "case": "delete function uses delete function",
+      "error": "HTTP 400: {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CcbPv4gds1bJicGQqaqgA\"}",
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "model": "claude-opus-4-8",
+      "profile": "anthropic-opus48-frontier",
+      "provider": "anthropic",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    }
+  ],
+  "source": {
+    "commit": "dad794d445d05e7df2efcb8280dba59682b97a87",
+    "package": "@insforge/mcp",
+    "package_version": "1.2.10",
+    "repo": "https://github.com/InsForge/insforge-mcp",
+    "slice": "backend metadata, database operations, starter templates, storage, edge functions, deployments, logs, docs, and public client tokens",
+    "yc": "InsForge, YC P2026"
+  },
+  "summary": {
+    "errors": 5,
+    "failed_cases": 5,
+    "passed_cases": 28,
+    "planned": 38,
+    "score": 0.737,
+    "skipped": 0,
+    "total": 38
+  }
+}

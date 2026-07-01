@@ -35,7 +35,7 @@ The featured example is the [Supabase MCP Database Tool Tuning full PR/evidence 
 | Any MCP founder | [Founder Findings](https://github.com/cfregly/claude-agent-harness-opt/tree/main/docs/findings) |
 | A reviewer who wants the proof trail | [Confirmed Improvements](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/confirmed-improvements.md) |
 | Someone evaluating the workflow | [Demo GIF](https://github.com/cfregly/claude-agent-harness-opt/blob/main/demo.gif) or [demo.mp4](https://github.com/cfregly/claude-agent-harness-opt/blob/main/demo.mp4) |
-| Current frontier receipts | [Available-frontier stress receipts](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md) across MCP matrices and gstack |
+| Current frontier receipts | [Frontier stress receipts](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md) across OpenAI, Gemini, and retained Anthropic Opus attempts |
 
 ## Quickstart
 

@@ -27,9 +27,7 @@ The pinned gstack packet still has a confirmed baseline-to-tuned improvement on 
 and Gemini `gemini-3.1-pro-preview-customtools`: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md).
 
 That current receipt completed 496 live cells with 484 passed, 8 failed, and 4 errors. Treat it as
-hill-descending evidence for the next tuning pass. Anthropic frontier is blocked in this workspace
-because the configured key returns a low-credit API error, and `/home/cfregly/dev/anthropic` is not
-present here.
+hill-descending evidence for the next tuning pass. Anthropic Opus is now retained in a separate receipt. The new key passed smoke testing, then later calls hit credit exhaustion where shown in the receipt.
 
 <details>
 <summary>LLM / Machine-readable details</summary>

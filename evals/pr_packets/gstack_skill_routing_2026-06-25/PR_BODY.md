@@ -21,6 +21,13 @@ Suggested title: Tighten gstack browser and safety routing with live evals
 <details>
 <summary>LLM / Machine-readable details</summary>
 
+## Frontier Receipts
+
+- Anthropic Opus frontier receipt: [gstack_skill_matrix_frontier_anthropic_attempt_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_anthropic_attempt_2026-07-01.md)
+- Anthropic Opus JSON receipt: [gstack_skill_matrix_frontier_anthropic_attempt_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_anthropic_attempt_2026-07-01.json)
+- Current frontier stress receipt: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md)
+- Current frontier JSON receipt: [gstack_skill_matrix_frontier_available_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.json)
+
 ## How This Is Proven Useful
 
 - The proof compares `gstack_stock_skill_descriptions` and `gstack_boundary_tuned_skill_descriptions` on the same tasks, providers, harnesses, and instruction variants.
@@ -33,7 +40,7 @@ Suggested title: Tighten gstack browser and safety routing with live evals
 - The packet now includes a current available-frontier sweep: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md).
 - The available-frontier sweep completed 496 current available-frontier cells, 484 passed, 8 failed, 4 errors across OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`.
 - The older `claude-sonnet-4-5`, `gpt-4.1`, and `gemini-2.5-pro` cells remain regression evidence, while the 2026-07-01 receipt is the current hill-descending surface.
-- Anthropic frontier is still blocked in this workspace because the configured key returns a low-credit API error and `/home/cfregly/dev/anthropic` is not present.
+- Anthropic Opus is now retained in a separate receipt: the new key passed smoke testing, then later calls hit credit exhaustion where shown in the receipt.
 
 ## Downside If Not Changed
 
@@ -157,5 +164,3 @@ python -m claude_agent_harness_opt model-matrix evals/targets/gstack/gstack_skil
 - Result artifact: [gstack_skill_matrix_live_2026-06-25.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_live_2026-06-25.json)
 
 </details>
-- Current frontier stress receipt: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md)
-- Current frontier JSON receipt: [gstack_skill_matrix_frontier_available_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.json)

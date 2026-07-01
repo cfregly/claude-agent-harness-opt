@@ -18,6 +18,8 @@ Bundle folder: [Zymtrace full PR/evidence bundle](https://github.com/cfregly/cla
 - Matrix: [zymtrace_mcp_tool_selection.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/model_matrix/zymtrace_mcp_tool_selection.json)
 - Frontier stress receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
 - Frontier JSON receipt: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
+- Anthropic Opus receipt: [zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.md)
+- Anthropic Opus JSON: [zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_tool_selection_frontier_anthropic_live_2026-07-01.json)
 - Coverage: [zymtrace_mcp_coverage_2026-06-30.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_coverage_2026-06-30.md)
 - Live result: [zymtrace_mcp_matrix_live_2026-06-30.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_matrix_live_2026-06-30.json)
 - Frontier stress result: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
@@ -32,6 +34,8 @@ Bundle folder: [Zymtrace full PR/evidence bundle](https://github.com/cfregly/cla
 Confirmed improvement. This clears the adversarially-confirmed to add value bar.
 
 Current frontier stress receipt: 272 current available-frontier cells, 233 passed, 27 failed, 12 errors on OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`. Treat this as hill-descending coverage for the next tuning pass, not as a replacement for the promoted baseline-to-tuned result.
+
+Anthropic Opus frontier receipt: 136 Anthropic Opus cells, 0 passed, 0 failed, 136 errors. The new key passed smoke testing, then later Anthropic calls hit credit exhaustion where shown in the receipt.
 
 The expanded held-out prompt JSON run moved from 4/8 to 8/8 on Anthropic, 5/8 to 8/8 on OpenAI, and
 5/8 to 8/8 on Gemini. Across all three providers, stock passed 14/24 cells and tuned passed 24/24.
@@ -60,9 +64,7 @@ This is descent evidence for the next tuning pass. It shows the latest frontier 
 edge cases around generated stats endpoints, JSON flamegraph-vs-rendered flamegraph boundaries, and
 prompt-JSON output robustness.
 
-Anthropic frontier coverage is not complete in this packet: `claude-fable-5` was unavailable to the
-provided key, and the accessible `claude-opus-4-8` run was blocked by Anthropic API credit
-exhaustion during the all-provider sweep.
+Anthropic Opus coverage is retained separately in this packet. `claude-fable-5` remained unavailable to the provided key. The newly provided key passed a `claude-opus-4-8` smoke test, then later sweep cells hit Anthropic API credit exhaustion.
 
 ## GPU Verification
 
