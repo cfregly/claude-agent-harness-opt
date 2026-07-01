@@ -26,6 +26,15 @@ python -m claude_agent_harness_opt model-matrix evals/model_matrix/zymtrace_mcp_
 Anthropic frontier was attempted separately. `claude-fable-5` was unavailable to the provided key,
 and the accessible `claude-opus-4-8` all-provider sweep hit Anthropic API credit exhaustion.
 
+
+## Current Frontier Stress Receipt
+
+- Summary: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md)
+- JSON: [zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.json)
+- All retained available-frontier receipts: [frontier-stress-2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md)
+
+The retained current available-frontier run uses OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`. Anthropic frontier remains blocked in this workspace by account credit state, not by missing local key material.
+
 ## Value Bar
 
 - baseline: stock_zymtrace_mcp at 0.583

@@ -1,0 +1,1854 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "table_inventory",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "schemas": "public"
+      },
+      "expected_tools": [
+        "list_tables"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration",
+        "list_migrations",
+        "list_extensions"
+      ],
+      "name": "list public tables",
+      "task": "For Supabase project proj_abc, list the public schema tables."
+    },
+    {
+      "check_family": "table_inventory",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "verbose": "true"
+      },
+      "expected_tools": [
+        "list_tables"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration"
+      ],
+      "name": "inspect table columns",
+      "task": "For project proj_abc, show the columns, primary keys, and foreign keys for tables in the public schema."
+    },
+    {
+      "check_family": "migration_inventory",
+      "expected_args_contains": {
+        "project_id": "proj_abc"
+      },
+      "expected_tools": [
+        "list_migrations"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration",
+        "list_tables"
+      ],
+      "name": "list applied migrations",
+      "task": "For project proj_abc, list the migrations that have already been applied."
+    },
+    {
+      "check_family": "extension_inventory",
+      "expected_args_contains": {
+        "project_id": "proj_abc"
+      },
+      "expected_tools": [
+        "list_extensions"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration",
+        "list_tables"
+      ],
+      "name": "list installed extensions",
+      "task": "For project proj_abc, list the installed Postgres extensions."
+    },
+    {
+      "check_family": "sql_read",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "query": "select"
+      },
+      "expected_tools": [
+        "execute_sql"
+      ],
+      "forbidden_tools": [
+        "apply_migration",
+        "list_tables"
+      ],
+      "name": "run read only report query",
+      "task": "For project proj_abc, run this SQL report: SELECT status, count(*) FROM orders GROUP BY status;"
+    },
+    {
+      "check_family": "migration_apply",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "query": "create table"
+      },
+      "expected_tools": [
+        "apply_migration"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "list_tables"
+      ],
+      "name": "ddl create table uses migration",
+      "task": "For project proj_abc, run this SQL: CREATE TABLE public.audit_events (id bigint generated always as identity primary key, created_at timestamptz default now());"
+    },
+    {
+      "check_family": "migration_apply",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "query": "alter table"
+      },
+      "expected_tools": [
+        "apply_migration"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "list_tables"
+      ],
+      "name": "ddl alter table uses migration",
+      "task": "For project proj_abc, apply this schema change: ALTER TABLE public.orders ADD COLUMN archived_at timestamptz;"
+    },
+    {
+      "check_family": "migration_apply",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "query": "create index"
+      },
+      "expected_tools": [
+        "apply_migration"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "list_tables"
+      ],
+      "name": "ddl create index uses migration",
+      "task": "For project proj_abc, run this SQL to speed up lookups: CREATE INDEX orders_customer_id_idx ON public.orders(customer_id);"
+    },
+    {
+      "check_family": "migration_apply",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "query": "policy"
+      },
+      "expected_tools": [
+        "apply_migration"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "list_tables"
+      ],
+      "name": "rls policy uses migration",
+      "task": "For project proj_abc, add an RLS policy so users can select their own rows in public.profiles."
+    },
+    {
+      "check_family": "error_recovery",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "schemas": "public"
+      },
+      "expected_tools": [
+        "list_tables"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration",
+        "list_migrations",
+        "list_extensions"
+      ],
+      "name": "unknown relation error inspects schema",
+      "task": "For Supabase project proj_abc, the previous execute_sql call failed with: relation \"public.orders_2026\" does not exist. Before trying another query, inspect the public schema tables to find the correct table name."
+    },
+    {
+      "check_family": "output_budget",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "schemas": "public",
+        "verbose": "false"
+      },
+      "expected_tools": [
+        "list_tables"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration",
+        "list_migrations"
+      ],
+      "name": "table inventory concise skips verbose",
+      "task": "For Supabase project proj_abc, list only the public table names. Keep the result concise and do not include columns, primary keys, or foreign key details."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "project_id": "proj_abc",
+        "schemas": "public",
+        "verbose": "true"
+      },
+      "expected_tools": [
+        "list_tables"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "apply_migration"
+      ],
+      "name": "schema metadata before select star",
+      "task": "For project proj_abc, I need to know which columns exist before writing a SELECT. Inspect the public schema metadata first instead of running SELECT *."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 4,
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "passed": 8,
+      "provider": "gemini",
+      "score": 0.667,
+      "skipped": 0,
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "passed": 12,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "passed": 11,
+      "provider": "openai",
+      "score": 0.917,
+      "skipped": 0,
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "passed": 12,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_supabase_database_boundaries"
+    }
+  ],
+  "description": "Compare terse and tuned Supabase MCP database tool descriptions for schema changes, SQL execution, metadata, migrations, and extension workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "supabase mcp database tool-selection matrix",
+  "matrix_path": "evals/model_matrix/supabase_mcp_database_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "list public tables",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ]
+        },
+        "confidence": 1,
+        "rationale": "The task is to list tables in the public schema for the specified Supabase project, which is exactly what list_tables is intended for.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 5321,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "verbose: passed"
+      ],
+      "case": "inspect table columns",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 0.95,
+        "rationale": "This task requires schema metadata for public tables, including columns and key relationships; list_tables with the public schema and verbose details is the appropriate read-only database metadata tool.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3933,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list applied migrations",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to list migrations already applied for the specified Supabase project, which is exactly what the list_migrations tool does.",
+        "tool_name": "list_migrations"
+      },
+      "chosen_tools": [
+        "list_migrations"
+      ],
+      "elapsed_ms": 2949,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list installed extensions",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to list installed Postgres extensions for the specified Supabase project, which matches the purpose of the list_extensions tool.",
+        "tool_name": "list_extensions"
+      },
+      "chosen_tools": [
+        "list_extensions"
+      ],
+      "elapsed_ms": 2871,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "run read only report query",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "SELECT status, count(*) FROM orders GROUP BY status;"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to run a read-only SQL report, so the appropriate database tool is execute_sql rather than a schema listing or migration tool.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 3347,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create table uses migration",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "CREATE TABLE public.audit_events (id bigint generated always as identity primary key, created_at timestamptz default now());"
+        },
+        "confidence": 0.96,
+        "rationale": "The task asks to run a specific SQL statement against the given Supabase project, so the raw SQL execution tool is the appropriate single tool to call.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 8544,
+      "forbidden_used": [
+        "execute_sql"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [
+        "apply_migration"
+      ],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl alter table uses migration",
+      "choice": {
+        "arguments": {
+          "name": "add_archived_at_to_orders",
+          "project_id": "proj_abc",
+          "query": "ALTER TABLE public.orders ADD COLUMN archived_at timestamptz;"
+        },
+        "confidence": 0.98,
+        "rationale": "A schema change should be applied as a database migration, using the provided project id and SQL statement.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 4616,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create index uses migration",
+      "choice": {
+        "arguments": {
+          "name": "create_orders_customer_id_idx",
+          "project_id": "proj_abc",
+          "query": "CREATE INDEX orders_customer_id_idx ON public.orders(customer_id);"
+        },
+        "confidence": 0.98,
+        "rationale": "Creating an index is a schema change, so it should be applied as a tracked migration rather than an ad hoc SQL execution.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 4625,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "rls policy uses migration",
+      "choice": {
+        "arguments": {
+          "name": "add_profiles_select_own_rows_policy",
+          "project_id": "proj_abc",
+          "query": "alter table public.profiles enable row level security;\n\ndo $$\nbegin\n  if not exists (\n    select 1\n    from pg_policies\n    where schemaname = 'public'\n      and tablename = 'profiles'\n      and policyname = 'profiles_select_own_rows'\n  ) then\n    create policy profiles_select_own_rows\n      on public.profiles\n      for select\n      to authenticated\n      using (auth.uid() = id);\n  end if;\nend $$;"
+        },
+        "confidence": 0.84,
+        "rationale": "Adding an RLS policy is a database schema/security change, so it should be applied as a migration. The SQL enables RLS on public.profiles and creates a SELECT policy allowing authenticated users to read rows whose id matches auth.uid().",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 10332,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "unknown relation error inspects schema",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 0.98,
+        "rationale": "The previous query failed because the referenced table does not exist, so the next step is to list tables in the public schema to identify the correct table name.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3986,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "table inventory concise skips verbose",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 0.99,
+        "rationale": "This tool lists tables for specified schemas; using the public schema with verbose false should return concise table-name information without column, primary key, or foreign key details.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3638,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "schema metadata before select star",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 0.98,
+        "rationale": "The task is to inspect public schema metadata to see existing columns before writing a SELECT, so listing tables in the public schema with verbose details is the appropriate next database metadata call.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3326,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "list public tables",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 1,
+        "rationale": "The task asks to list tables in the public schema, which matches the list_tables tool. Verbose metadata is not needed because only table names are requested.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 2770,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "verbose: passed"
+      ],
+      "case": "inspect table columns",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 1,
+        "rationale": "The task asks for table columns, primary keys, and foreign keys in the public schema, which requires listing tables with verbose metadata enabled.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 2625,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list applied migrations",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to list migrations that have already been applied, which matches the migration history/applied migration state use case.",
+        "tool_name": "list_migrations"
+      },
+      "chosen_tools": [
+        "list_migrations"
+      ],
+      "elapsed_ms": 2501,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list installed extensions",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to list installed Postgres extensions for the specified Supabase project, which matches the list_extensions tool purpose.",
+        "tool_name": "list_extensions"
+      },
+      "chosen_tools": [
+        "list_extensions"
+      ],
+      "elapsed_ms": 2148,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "run read only report query",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "SELECT status, count(*) FROM orders GROUP BY status;"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to run a SELECT report that does not change database schema, so execute_sql is the appropriate Supabase MCP tool.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 2989,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create table uses migration",
+      "choice": {
+        "arguments": {
+          "name": "create_audit_events_table",
+          "project_id": "proj_abc",
+          "query": "CREATE TABLE public.audit_events (id bigint generated always as identity primary key, created_at timestamptz default now());"
+        },
+        "confidence": 0.99,
+        "rationale": "The SQL creates a new table, which is a schema-changing DDL operation that should be applied as a tracked migration.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 6798,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl alter table uses migration",
+      "choice": {
+        "arguments": {
+          "name": "add_archived_at_to_orders",
+          "project_id": "proj_abc",
+          "query": "ALTER TABLE public.orders ADD COLUMN archived_at timestamptz;"
+        },
+        "confidence": 1,
+        "rationale": "The task requests a schema-changing ALTER TABLE statement, which should be applied as a tracked migration.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 2781,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create index uses migration",
+      "choice": {
+        "arguments": {
+          "name": "create_orders_customer_id_idx",
+          "project_id": "proj_abc",
+          "query": "CREATE INDEX orders_customer_id_idx ON public.orders(customer_id);"
+        },
+        "confidence": 1,
+        "rationale": "Creating an index is a schema-changing operation that should be applied as a tracked migration.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 3068,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "rls policy uses migration",
+      "choice": {
+        "arguments": {
+          "name": "add_profiles_select_own_rls_policy",
+          "project_id": "proj_abc",
+          "query": "alter table public.profiles enable row level security;\n\ncreate policy \"Users can select their own profile\"\non public.profiles\nfor select\nto authenticated\nusing (auth.uid() = id);"
+        },
+        "confidence": 0.86,
+        "rationale": "Adding an RLS policy is a schema-changing operation that should be applied as a tracked migration. The policy allows authenticated users to SELECT only rows in public.profiles where the row owner id matches auth.uid().",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 8699,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "unknown relation error inspects schema",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 0.98,
+        "rationale": "The failed query indicates the referenced table does not exist, so the next step is to list tables in the public schema to identify the correct table name. No column or relationship details are needed, so verbose is false.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3472,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "table inventory concise skips verbose",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to list table names in the public schema only, without columns, primary keys, or foreign key details, so list_tables with verbose false is appropriate.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3340,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "schema metadata before select star",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to inspect public schema metadata to determine existing columns before writing a SELECT, so the appropriate next tool is list_tables with verbose enabled for column details.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 2890,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "list public tables",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to list the tables in the public schema for the project 'proj_abc'. The list_tables tool is specifically designed to list tables within specified schemas.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3559,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "verbose: passed"
+      ],
+      "case": "inspect table columns",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to see detailed information (columns, primary keys, foreign keys) for tables in the 'public' schema. The 'list_tables' tool with the 'verbose' flag set to true will provide these full details.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 5090,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list applied migrations",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to list the migrations that have already been applied for the project 'proj_abc'. The 'list_migrations' tool is specifically designed to list all migrations in the database.",
+        "tool_name": "list_migrations"
+      },
+      "chosen_tools": [
+        "list_migrations"
+      ],
+      "elapsed_ms": 3329,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list installed extensions",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to list the installed Postgres extensions for the project 'proj_abc', which perfectly matches the 'list_extensions' tool.",
+        "tool_name": "list_extensions"
+      },
+      "chosen_tools": [
+        "list_extensions"
+      ],
+      "elapsed_ms": 3873,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "run read only report query",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "SELECT status, count(*) FROM orders GROUP BY status;"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to run a specific SQL query to generate a report. The execute_sql tool is designed to execute raw SQL queries on the specified project.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 3268,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create table uses migration",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "CREATE TABLE public.audit_events (id bigint generated always as identity primary key, created_at timestamptz default now());"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires executing a raw SQL query to create a table in the specified Supabase project. The execute_sql tool is the correct choice for running raw SQL.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 4188,
+      "forbidden_used": [
+        "execute_sql"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [
+        "apply_migration"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl alter table uses migration",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "ALTER TABLE public.orders ADD COLUMN archived_at timestamptz;"
+        },
+        "confidence": 0.95,
+        "rationale": "The task requires applying a specific SQL schema change to the database. The execute_sql tool is the most direct way to run this raw SQL query without needing to generate a migration name.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 8089,
+      "forbidden_used": [
+        "execute_sql"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [
+        "apply_migration"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create index uses migration",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "CREATE INDEX orders_customer_id_idx ON public.orders(customer_id);"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to run a specific raw SQL query to create an index on the orders table for the given project ID. The execute_sql tool is the most appropriate for this task.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 11138,
+      "forbidden_used": [
+        "execute_sql"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [
+        "apply_migration"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "rls policy uses migration",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "CREATE POLICY select_own_profile ON public.profiles FOR SELECT USING (auth.uid() = id);"
+        },
+        "confidence": 0.95,
+        "rationale": "To add an RLS policy allowing users to select their own rows in the public.profiles table, we need to execute a raw SQL query using the execute_sql tool.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 5255,
+      "forbidden_used": [
+        "execute_sql"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [
+        "apply_migration"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "unknown relation error inspects schema",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The previous SQL query failed because the table 'public.orders_2026' does not exist. To find the correct table name, we need to list the tables in the 'public' schema using the list_tables tool.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3494,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "table inventory concise skips verbose",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 1.0,
+        "rationale": "The list_tables tool allows us to retrieve the tables for a specific project. By specifying the 'public' schema and setting 'verbose' to false, we can get a concise list of public table names without the extra details like columns or keys.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 5260,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "schema metadata before select star",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to inspect the metadata of the public schema to see which columns exist. The list_tables tool with the verbose flag set to true will provide detailed information about the tables, including their columns, for the specified schema.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 4265,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "terse_supabase_database_mcp"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "list public tables",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to list the tables in the public schema for the project 'proj_abc'. The list_tables tool is specifically designed for this purpose.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 3748,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "verbose: passed"
+      ],
+      "case": "inspect table columns",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to see the columns, primary keys, and foreign keys for tables in the public schema. The list_tables tool with the verbose flag set to true provides exactly this information.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 13941,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list applied migrations",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to list the migrations that have already been applied for the project 'proj_abc'. The 'list_migrations' tool is designed exactly for this purpose.",
+        "tool_name": "list_migrations"
+      },
+      "chosen_tools": [
+        "list_migrations"
+      ],
+      "elapsed_ms": 3397,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed"
+      ],
+      "case": "list installed extensions",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc"
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested to list the installed Postgres extensions for the project 'proj_abc'.",
+        "tool_name": "list_extensions"
+      },
+      "chosen_tools": [
+        "list_extensions"
+      ],
+      "elapsed_ms": 4143,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "run read only report query",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "query": "SELECT status, count(*) FROM orders GROUP BY status;"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to run a SELECT query to generate a report. Since this is a read-only query that does not change the database schema, execute_sql is the appropriate tool.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 3857,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create table uses migration",
+      "choice": {
+        "arguments": {
+          "name": "create_audit_events_table",
+          "project_id": "proj_abc",
+          "query": "CREATE TABLE public.audit_events (id bigint generated always as identity primary key, created_at timestamptz default now());"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to execute a CREATE TABLE statement, which is a schema change (DDL). The apply_migration tool is specifically designed for applying schema-changing SQL as a tracked migration.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 5054,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl alter table uses migration",
+      "choice": {
+        "arguments": {
+          "name": "add_archived_at_to_orders",
+          "project_id": "proj_abc",
+          "query": "ALTER TABLE public.orders ADD COLUMN archived_at timestamptz;"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested a schema change (ALTER TABLE) which should be applied and tracked as a migration using the apply_migration tool.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 4177,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "ddl create index uses migration",
+      "choice": {
+        "arguments": {
+          "name": "create_orders_customer_id_idx",
+          "project_id": "proj_abc",
+          "query": "CREATE INDEX orders_customer_id_idx ON public.orders(customer_id);"
+        },
+        "confidence": 1.0,
+        "rationale": "Creating an index is a schema change (DDL), which should be applied as a tracked migration rather than executed as a regular SQL query.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 3925,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "query: passed"
+      ],
+      "case": "rls policy uses migration",
+      "choice": {
+        "arguments": {
+          "name": "add_rls_policy_to_profiles",
+          "project_id": "proj_abc",
+          "query": "CREATE POLICY select_own_profile ON public.profiles FOR SELECT USING (auth.uid() = id);"
+        },
+        "confidence": 0.95,
+        "rationale": "Adding an RLS policy is a schema change, which should be applied and tracked as a migration using the apply_migration tool.",
+        "tool_name": "apply_migration"
+      },
+      "chosen_tools": [
+        "apply_migration"
+      ],
+      "elapsed_ms": 7171,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed"
+      ],
+      "case": "unknown relation error inspects schema",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 1.0,
+        "rationale": "The previous query failed because the table 'orders_2026' does not exist. Using list_tables on the public schema will help identify the correct table name to use in the query.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 4570,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "table inventory concise skips verbose",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": false
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested a list of public table names for project 'proj_abc' without column or key details, which maps to the 'list_tables' tool with 'verbose' set to false.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 5142,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    },
+    {
+      "arg_details": [
+        "project_id: passed",
+        "schemas: passed",
+        "verbose: passed"
+      ],
+      "case": "schema metadata before select star",
+      "choice": {
+        "arguments": {
+          "project_id": "proj_abc",
+          "schemas": [
+            "public"
+          ],
+          "verbose": true
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to inspect the public schema metadata to see which columns exist before writing a SELECT query. The list_tables tool with verbose set to true provides table columns and structure.",
+        "tool_name": "list_tables"
+      },
+      "chosen_tools": [
+        "list_tables"
+      ],
+      "elapsed_ms": 4071,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "supabase_database_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_supabase_database_boundaries"
+    }
+  ],
+  "source": {
+    "commit": "100565f26d7eec6d314a08597ded22da63045923",
+    "database_tools": "packages/mcp-server-supabase/src/tools/database-operation-tools.ts",
+    "docs": "https://supabase.com/docs/guides/ai-tools/mcp",
+    "package": "@supabase/mcp-server-supabase",
+    "repo": "https://github.com/supabase/mcp",
+    "server_instructions": "packages/mcp-server-supabase/src/server.ts",
+    "version": "0.8.2"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 5,
+    "passed_cases": 43,
+    "planned": 48,
+    "score": 0.896,
+    "skipped": 0,
+    "total": 48
+  }
+}

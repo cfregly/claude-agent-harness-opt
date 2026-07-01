@@ -1,0 +1,1226 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "channel_discovery",
+      "expected_args_contains": {
+        "limit": "20"
+      },
+      "expected_tools": [
+        "slack_list_channels"
+      ],
+      "forbidden_tools": [
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "list channels to find id",
+      "task": "List up to 20 Slack channels so I can find the right channel id."
+    },
+    {
+      "check_family": "message_post",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "text": "Deploy is complete"
+      },
+      "expected_tools": [
+        "slack_post_message"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "post top level channel message",
+      "task": "Post a new top-level message to channel C123: Deploy is complete."
+    },
+    {
+      "check_family": "thread_reply",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "text": "I will investigate",
+        "thread_ts": "1712345678.000100"
+      },
+      "expected_tools": [
+        "slack_reply_to_thread"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "reply in existing thread",
+      "task": "Reply in channel C123 under thread 1712345678.000100 with: I will investigate."
+    },
+    {
+      "check_family": "channel_history",
+      "expected_args_contains": {
+        "channel_id": "C123"
+      },
+      "expected_tools": [
+        "slack_get_channel_history"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "read recent channel messages",
+      "task": "Get recent messages from channel C123."
+    },
+    {
+      "check_family": "thread_history",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "thread_ts": "1712345678.000100"
+      },
+      "expected_tools": [
+        "slack_get_thread_replies"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_add_reaction",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "read thread replies",
+      "task": "Get all replies in channel C123 under thread 1712345678.000100."
+    },
+    {
+      "check_family": "reaction",
+      "expected_args_contains": {
+        "channel_id": "C123",
+        "reaction": "eyes",
+        "timestamp": "1712345678.000100"
+      },
+      "expected_tools": [
+        "slack_add_reaction"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_get_users",
+        "slack_get_user_profile"
+      ],
+      "name": "add reaction to message",
+      "task": "Add the :eyes: reaction to message 1712345678.000100 in channel C123."
+    },
+    {
+      "check_family": "user_discovery",
+      "expected_args_contains": {
+        "limit": "20"
+      },
+      "expected_tools": [
+        "slack_get_users"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_user_profile"
+      ],
+      "name": "list users to find id",
+      "task": "List up to 20 Slack users so I can find the right user id."
+    },
+    {
+      "check_family": "profile_read",
+      "expected_args_contains": {
+        "user_id": "U123"
+      },
+      "expected_tools": [
+        "slack_get_user_profile"
+      ],
+      "forbidden_tools": [
+        "slack_list_channels",
+        "slack_post_message",
+        "slack_reply_to_thread",
+        "slack_get_channel_history",
+        "slack_get_thread_replies",
+        "slack_add_reaction",
+        "slack_get_users"
+      ],
+      "name": "get known user profile",
+      "task": "Get detailed profile information for Slack user U123."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "passed": 8,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "passed": 8,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "passed": 8,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "passed": 8,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for common Slack MCP messaging, thread, reaction, channel, and user workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "slack mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/slack_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": true,
+  "results": [
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list channels to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1,
+        "rationale": "The user wants to list up to 20 Slack channels to identify the correct channel ID, which matches the channel listing tool with a limit of 20.",
+        "tool_name": "slack_list_channels"
+      },
+      "chosen_tools": [
+        "slack_list_channels"
+      ],
+      "elapsed_ms": 2707,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed"
+      ],
+      "case": "post top level channel message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "Deploy is complete."
+        },
+        "confidence": 1,
+        "rationale": "The task is to post a new top-level message to channel C123, so the top-level Slack message posting tool is appropriate.",
+        "tool_name": "slack_post_message"
+      },
+      "chosen_tools": [
+        "slack_post_message"
+      ],
+      "elapsed_ms": 2818,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed",
+        "thread_ts: passed"
+      ],
+      "case": "reply in existing thread",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "I will investigate.",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1,
+        "rationale": "A thread timestamp is provided, so the correct next action is to reply in that specific Slack thread rather than post a top-level channel message.",
+        "tool_name": "slack_reply_to_thread"
+      },
+      "chosen_tools": [
+        "slack_reply_to_thread"
+      ],
+      "elapsed_ms": 2783,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed"
+      ],
+      "case": "read recent channel messages",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123"
+        },
+        "confidence": 1,
+        "rationale": "The task is to read recent messages from a channel, which matches the channel history tool. No thread timestamp is provided, so thread replies are not appropriate.",
+        "tool_name": "slack_get_channel_history"
+      },
+      "chosen_tools": [
+        "slack_get_channel_history"
+      ],
+      "elapsed_ms": 3019,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "thread_ts: passed"
+      ],
+      "case": "read thread replies",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1,
+        "rationale": "A thread timestamp is provided and the task is to get all replies in that specific thread, so the thread replies tool is the appropriate choice.",
+        "tool_name": "slack_get_thread_replies"
+      },
+      "chosen_tools": [
+        "slack_get_thread_replies"
+      ],
+      "elapsed_ms": 3266,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "reaction: passed",
+        "timestamp: passed"
+      ],
+      "case": "add reaction to message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "reaction": "eyes",
+          "timestamp": "1712345678.000100"
+        },
+        "confidence": 1,
+        "rationale": "The task is to add an :eyes: reaction to an existing Slack message, which requires the slack_add_reaction tool with the channel ID, message timestamp, and emoji name without colons.",
+        "tool_name": "slack_add_reaction"
+      },
+      "chosen_tools": [
+        "slack_add_reaction"
+      ],
+      "elapsed_ms": 3843,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list users to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1,
+        "rationale": "The task is to list up to 20 Slack users to identify the correct user ID, which matches the purpose of slack_get_users with a limit of 20.",
+        "tool_name": "slack_get_users"
+      },
+      "chosen_tools": [
+        "slack_get_users"
+      ],
+      "elapsed_ms": 3317,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "user_id: passed"
+      ],
+      "case": "get known user profile",
+      "choice": {
+        "arguments": {
+          "user_id": "U123"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for detailed profile information for a specific Slack user, which matches the slack_get_user_profile tool and requires the provided user_id.",
+        "tool_name": "slack_get_user_profile"
+      },
+      "chosen_tools": [
+        "slack_get_user_profile"
+      ],
+      "elapsed_ms": 3898,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list channels to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1,
+        "rationale": "The user needs to list Slack channels to find the correct channel id, and requested up to 20 channels.",
+        "tool_name": "slack_list_channels"
+      },
+      "chosen_tools": [
+        "slack_list_channels"
+      ],
+      "elapsed_ms": 2504,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed"
+      ],
+      "case": "post top level channel message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "Deploy is complete."
+        },
+        "confidence": 1,
+        "rationale": "The task asks to post a new top-level message to a known channel, with no thread timestamp provided.",
+        "tool_name": "slack_post_message"
+      },
+      "chosen_tools": [
+        "slack_post_message"
+      ],
+      "elapsed_ms": 3100,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed",
+        "thread_ts: passed"
+      ],
+      "case": "reply in existing thread",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "I will investigate.",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to reply under an existing Slack thread, and a channel ID plus thread timestamp are provided, so the thread reply tool is appropriate.",
+        "tool_name": "slack_reply_to_thread"
+      },
+      "chosen_tools": [
+        "slack_reply_to_thread"
+      ],
+      "elapsed_ms": 3108,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed"
+      ],
+      "case": "read recent channel messages",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123"
+        },
+        "confidence": 1,
+        "rationale": "The user wants to read recent messages from a known channel ID, with no thread timestamp provided, so the channel history tool is appropriate.",
+        "tool_name": "slack_get_channel_history"
+      },
+      "chosen_tools": [
+        "slack_get_channel_history"
+      ],
+      "elapsed_ms": 2948,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "thread_ts: passed"
+      ],
+      "case": "read thread replies",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to get all replies under a specific Slack thread timestamp, so the thread replies tool is the correct choice.",
+        "tool_name": "slack_get_thread_replies"
+      },
+      "chosen_tools": [
+        "slack_get_thread_replies"
+      ],
+      "elapsed_ms": 2730,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "reaction: passed",
+        "timestamp: passed"
+      ],
+      "case": "add reaction to message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "reaction": "eyes",
+          "timestamp": "1712345678.000100"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to add an emoji reaction to an existing Slack message, so the reaction tool is appropriate. The emoji name is provided without surrounding colons as required.",
+        "tool_name": "slack_add_reaction"
+      },
+      "chosen_tools": [
+        "slack_add_reaction"
+      ],
+      "elapsed_ms": 3275,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list users to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1,
+        "rationale": "The user wants to list Slack users to find the correct user id, which matches the user-listing tool. Limit is set to 20 as requested.",
+        "tool_name": "slack_get_users"
+      },
+      "chosen_tools": [
+        "slack_get_users"
+      ],
+      "elapsed_ms": 2477,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "user_id: passed"
+      ],
+      "case": "get known user profile",
+      "choice": {
+        "arguments": {
+          "user_id": "U123"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for detailed profile information for a known Slack user ID, so the appropriate tool is slack_get_user_profile.",
+        "tool_name": "slack_get_user_profile"
+      },
+      "chosen_tools": [
+        "slack_get_user_profile"
+      ],
+      "elapsed_ms": 2213,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list channels to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to list up to 20 Slack channels to find a specific channel ID. The slack_list_channels tool is designed for this purpose, and setting the limit to 20 satisfies the request.",
+        "tool_name": "slack_list_channels"
+      },
+      "chosen_tools": [
+        "slack_list_channels"
+      ],
+      "elapsed_ms": 3294,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed"
+      ],
+      "case": "post top level channel message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "Deploy is complete."
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires posting a new top-level message to a specific channel, which matches the purpose of the slack_post_message tool.",
+        "tool_name": "slack_post_message"
+      },
+      "chosen_tools": [
+        "slack_post_message"
+      ],
+      "elapsed_ms": 3680,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed",
+        "thread_ts: passed"
+      ],
+      "case": "reply in existing thread",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "I will investigate.",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires replying to a specific thread in a channel. The slack_reply_to_thread tool is designed for this purpose, and the channel ID, thread timestamp, and reply text are provided.",
+        "tool_name": "slack_reply_to_thread"
+      },
+      "chosen_tools": [
+        "slack_reply_to_thread"
+      ],
+      "elapsed_ms": 3681,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed"
+      ],
+      "case": "read recent channel messages",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to get recent messages from a specific channel (C123). The slack_get_channel_history tool is designed to fetch recent messages from a channel using its ID.",
+        "tool_name": "slack_get_channel_history"
+      },
+      "chosen_tools": [
+        "slack_get_channel_history"
+      ],
+      "elapsed_ms": 3639,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "thread_ts: passed"
+      ],
+      "case": "read thread replies",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires fetching all replies for a specific thread in a channel. The slack_get_thread_replies tool is designed exactly for this purpose, taking the channel ID and thread timestamp as arguments.",
+        "tool_name": "slack_get_thread_replies"
+      },
+      "chosen_tools": [
+        "slack_get_thread_replies"
+      ],
+      "elapsed_ms": 3009,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "reaction: passed",
+        "timestamp: passed"
+      ],
+      "case": "add reaction to message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "reaction": "eyes",
+          "timestamp": "1712345678.000100"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to add the ':eyes:' reaction to a specific message. The slack_add_reaction tool is designed for this purpose. I provided the channel ID 'C123', the message timestamp '1712345678.000100', and the reaction name 'eyes' without colons as required by the schema.",
+        "tool_name": "slack_add_reaction"
+      },
+      "chosen_tools": [
+        "slack_add_reaction"
+      ],
+      "elapsed_ms": 4215,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list users to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to list up to 20 Slack users to find a specific user ID. The `slack_get_users` tool is designed to get a list of users in the workspace, and the `limit` parameter can be set to 20.",
+        "tool_name": "slack_get_users"
+      },
+      "chosen_tools": [
+        "slack_get_users"
+      ],
+      "elapsed_ms": 3485,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "user_id: passed"
+      ],
+      "case": "get known user profile",
+      "choice": {
+        "arguments": {
+          "user_id": "U123"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks for detailed profile information for a specific user (U123), which perfectly matches the purpose and input schema of the slack_get_user_profile tool.",
+        "tool_name": "slack_get_user_profile"
+      },
+      "chosen_tools": [
+        "slack_get_user_profile"
+      ],
+      "elapsed_ms": 3049,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_slack_mcp"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list channels to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to list up to 20 Slack channels to find a channel id, which matches the purpose of the slack_list_channels tool.",
+        "tool_name": "slack_list_channels"
+      },
+      "chosen_tools": [
+        "slack_list_channels"
+      ],
+      "elapsed_ms": 2859,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed"
+      ],
+      "case": "post top level channel message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "Deploy is complete."
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to post a new top-level message to channel C123 with the text 'Deploy is complete.', which matches the purpose of the slack_post_message tool.",
+        "tool_name": "slack_post_message"
+      },
+      "chosen_tools": [
+        "slack_post_message"
+      ],
+      "elapsed_ms": 3468,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "text: passed",
+        "thread_ts: passed"
+      ],
+      "case": "reply in existing thread",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "text": "I will investigate.",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to reply in a thread, providing the channel ID, thread timestamp, and the text to reply with. The slack_reply_to_thread tool is the correct choice for this action.",
+        "tool_name": "slack_reply_to_thread"
+      },
+      "chosen_tools": [
+        "slack_reply_to_thread"
+      ],
+      "elapsed_ms": 4019,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed"
+      ],
+      "case": "read recent channel messages",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123"
+        },
+        "confidence": 1.0,
+        "rationale": "The user asked to get recent messages from a specific channel, which matches the purpose of the slack_get_channel_history tool.",
+        "tool_name": "slack_get_channel_history"
+      },
+      "chosen_tools": [
+        "slack_get_channel_history"
+      ],
+      "elapsed_ms": 3038,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "thread_ts: passed"
+      ],
+      "case": "read thread replies",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "thread_ts": "1712345678.000100"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to read all replies in a specific thread, providing both the channel ID and the parent message timestamp. The slack_get_thread_replies tool is designed exactly for this purpose.",
+        "tool_name": "slack_get_thread_replies"
+      },
+      "chosen_tools": [
+        "slack_get_thread_replies"
+      ],
+      "elapsed_ms": 4523,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "channel_id: passed",
+        "reaction: passed",
+        "timestamp: passed"
+      ],
+      "case": "add reaction to message",
+      "choice": {
+        "arguments": {
+          "channel_id": "C123",
+          "reaction": "eyes",
+          "timestamp": "1712345678.000100"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to add an emoji reaction (:eyes:) to a specific message timestamp in a specific channel. The slack_add_reaction tool is designed for this purpose, and the emoji name is provided without colons as required.",
+        "tool_name": "slack_add_reaction"
+      },
+      "chosen_tools": [
+        "slack_add_reaction"
+      ],
+      "elapsed_ms": 5314,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "list users to find id",
+      "choice": {
+        "arguments": {
+          "limit": 20
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to list up to 20 Slack users to find a specific user id, which perfectly matches the purpose of the slack_get_users tool.",
+        "tool_name": "slack_get_users"
+      },
+      "chosen_tools": [
+        "slack_get_users"
+      ],
+      "elapsed_ms": 3299,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "user_id: passed"
+      ],
+      "case": "get known user profile",
+      "choice": {
+        "arguments": {
+          "user_id": "U123"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a specific user ID (U123) and requested detailed profile information for that user, which perfectly matches the purpose of the slack_get_user_profile tool.",
+        "tool_name": "slack_get_user_profile"
+      },
+      "chosen_tools": [
+        "slack_get_user_profile"
+      ],
+      "elapsed_ms": 3253,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "slack_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_slack_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "help_docs": "https://slack.com/help/articles/48855576908307-Guide-to-Model-Context-Protocol-in-Slack",
+    "official_docs": "https://docs.slack.dev/ai/slack-mcp-server",
+    "tool_reference": "https://hub.docker.com/r/mcp/slack"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 0,
+    "passed_cases": 32,
+    "planned": 32,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 32
+  }
+}

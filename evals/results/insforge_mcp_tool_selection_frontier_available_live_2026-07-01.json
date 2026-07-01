@@ -1,0 +1,2564 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "product_docs",
+      "expected_args_contains": {
+        "docType": "instructions"
+      },
+      "expected_tools": [
+        "fetch-docs"
+      ],
+      "forbidden_tools": [
+        "download-template",
+        "get-backend-metadata",
+        "run-raw-sql",
+        "fetch-sdk-docs"
+      ],
+      "name": "new project setup reads instructions",
+      "task": "I just connected a new InsForge project. Before building anything, fetch the mandatory setup instructions."
+    },
+    {
+      "check_family": "template_bootstrap",
+      "expected_args_contains": {
+        "frame": "next"
+      },
+      "expected_tools": [
+        "download-template"
+      ],
+      "forbidden_tools": [
+        "fetch-docs",
+        "create-deployment",
+        "get-backend-metadata"
+      ],
+      "name": "new app bootstrap uses template",
+      "task": "Create a new Next.js starter app for InsForge named founder-dashboard."
+    },
+    {
+      "check_family": "backend_metadata",
+      "expected_tools": [
+        "get-backend-metadata"
+      ],
+      "forbidden_tools": [
+        "get-table-schema",
+        "run-raw-sql",
+        "list-buckets",
+        "get-anon-key"
+      ],
+      "name": "backend inventory uses metadata",
+      "task": "InsForge is my backend platform. What is my current backend structure across tables, buckets, and functions?"
+    },
+    {
+      "check_family": "table_schema",
+      "expected_args_contains": {
+        "tableName": "accounts"
+      },
+      "expected_tools": [
+        "get-table-schema"
+      ],
+      "forbidden_tools": [
+        "get-backend-metadata",
+        "run-raw-sql"
+      ],
+      "name": "known table details use schema",
+      "task": "Show me the RLS policies, indexes, constraints, and columns for the known table accounts."
+    },
+    {
+      "check_family": "sql_execution",
+      "expected_args_contains": {
+        "query": "accounts"
+      },
+      "expected_tools": [
+        "run-raw-sql"
+      ],
+      "forbidden_tools": [
+        "get-table-schema",
+        "get-backend-metadata",
+        "bulk-upsert"
+      ],
+      "name": "explicit sql uses raw sql",
+      "task": "Run this SQL now: SELECT count(*) FROM accounts WHERE status = 'active'."
+    },
+    {
+      "check_family": "bulk_import",
+      "expected_args_contains": {
+        "filePath": "/tmp/accounts.csv",
+        "table": "accounts"
+      },
+      "expected_tools": [
+        "bulk-upsert"
+      ],
+      "forbidden_tools": [
+        "run-raw-sql",
+        "create-bucket"
+      ],
+      "name": "csv import uses bulk upsert",
+      "task": "Bulk upsert /tmp/accounts.csv into the accounts table using account_id as the unique key."
+    },
+    {
+      "check_family": "storage_list",
+      "expected_tools": [
+        "list-buckets"
+      ],
+      "forbidden_tools": [
+        "get-backend-metadata",
+        "create-bucket",
+        "delete-bucket"
+      ],
+      "name": "storage inventory lists buckets",
+      "task": "Which storage buckets exist in this InsForge project?"
+    },
+    {
+      "check_family": "storage_create",
+      "expected_args_contains": {
+        "bucketName": "avatars"
+      },
+      "expected_tools": [
+        "create-bucket"
+      ],
+      "forbidden_tools": [
+        "list-buckets",
+        "delete-bucket"
+      ],
+      "name": "create storage bucket uses create bucket",
+      "task": "Create a public storage bucket named avatars."
+    },
+    {
+      "check_family": "function_read",
+      "expected_args_contains": {
+        "slug": "webhook-handler"
+      },
+      "expected_tools": [
+        "get-function"
+      ],
+      "forbidden_tools": [
+        "create-function",
+        "update-function",
+        "delete-function",
+        "get-container-logs"
+      ],
+      "name": "read function uses get function",
+      "task": "Get the code and metadata for the existing edge function webhook-handler."
+    },
+    {
+      "check_family": "function_update",
+      "expected_args_contains": {
+        "codeFile": "webhook-handler.js",
+        "slug": "webhook-handler"
+      },
+      "expected_tools": [
+        "update-function"
+      ],
+      "forbidden_tools": [
+        "create-function",
+        "get-function",
+        "delete-function"
+      ],
+      "name": "update function uses update function",
+      "task": "Update existing edge function webhook-handler from local file /Users/me/app/functions/webhook-handler.js."
+    },
+    {
+      "check_family": "runtime_logs",
+      "expected_args_contains": {
+        "source": "function.logs"
+      },
+      "expected_tools": [
+        "get-container-logs"
+      ],
+      "forbidden_tools": [
+        "get-function",
+        "run-raw-sql"
+      ],
+      "name": "function logs use container logs",
+      "task": "Show me the last 50 edge function runtime logs."
+    },
+    {
+      "check_family": "sdk_docs",
+      "expected_args_contains": {
+        "sdkFeature": "storage",
+        "sdkLanguage": "JavaScript"
+      },
+      "expected_tools": [
+        "fetch-sdk-docs"
+      ],
+      "forbidden_tools": [
+        "fetch-docs",
+        "list-buckets"
+      ],
+      "name": "sdk docs use sdk docs",
+      "task": "Show the JavaScript SDK documentation for InsForge storage uploads."
+    },
+    {
+      "check_family": "client_token",
+      "expected_args_contains": {
+        "apiKey": "api"
+      },
+      "expected_tools": [
+        "get-anon-key"
+      ],
+      "forbidden_tools": [
+        "fetch-docs",
+        "get-backend-metadata"
+      ],
+      "name": "client token uses anon key",
+      "task": "Generate the public anonymous token my browser app should use for InsForge client-side access."
+    },
+    {
+      "check_family": "deployment_prepare",
+      "expected_args_contains": {
+        "sourceDirectory": "/Users/me/founder-dashboard"
+      },
+      "expected_tools": [
+        "create-deployment"
+      ],
+      "forbidden_tools": [
+        "download-template",
+        "start-deployment"
+      ],
+      "name": "absolute source deploy uses create deployment",
+      "task": "Deploy the source tree at /Users/me/founder-dashboard to InsForge."
+    },
+    {
+      "check_family": "deployment_start",
+      "expected_args_contains": {
+        "deploymentId": "dep_123"
+      },
+      "expected_tools": [
+        "start-deployment"
+      ],
+      "forbidden_tools": [
+        "create-deployment",
+        "download-template"
+      ],
+      "name": "prepared remote upload starts deployment",
+      "task": "The upload commands for deployment dep_123 are complete. Trigger the deployment build now."
+    },
+    {
+      "allow_no_tool": true,
+      "check_family": "no_tool_safety",
+      "expected_tools": [],
+      "forbidden_tools": [
+        "create-deployment",
+        "start-deployment",
+        "download-template"
+      ],
+      "name": "relative deploy path avoids tool",
+      "task": "Deploy my current directory . to InsForge now."
+    },
+    {
+      "check_family": "storage_delete",
+      "expected_args_contains": {
+        "bucketName": "old-avatars"
+      },
+      "expected_tools": [
+        "delete-bucket"
+      ],
+      "forbidden_tools": [
+        "list-buckets",
+        "create-bucket",
+        "get-backend-metadata"
+      ],
+      "name": "delete storage bucket uses delete bucket",
+      "task": "Delete the specific storage bucket named old-avatars from this InsForge project."
+    },
+    {
+      "check_family": "function_create",
+      "expected_args_contains": {
+        "codeFile": "hello-world.js",
+        "slug": "hello-world"
+      },
+      "expected_tools": [
+        "create-function"
+      ],
+      "forbidden_tools": [
+        "get-function",
+        "update-function",
+        "delete-function"
+      ],
+      "name": "create function uses create function",
+      "task": "Create a new edge function slug hello-world from local file /Users/me/app/functions/hello-world.js."
+    },
+    {
+      "check_family": "function_delete",
+      "expected_args_contains": {
+        "slug": "legacy-webhook"
+      },
+      "expected_tools": [
+        "delete-function"
+      ],
+      "forbidden_tools": [
+        "create-function",
+        "get-function",
+        "update-function"
+      ],
+      "name": "delete function uses delete function",
+      "task": "Delete the specific edge function slug legacy-webhook from InsForge."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 4,
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "passed": 15,
+      "provider": "gemini",
+      "score": 0.789,
+      "skipped": 0,
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "errors": 1,
+      "failed": 2,
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "passed": 16,
+      "provider": "gemini",
+      "score": 0.842,
+      "skipped": 0,
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 4,
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "passed": 15,
+      "provider": "openai",
+      "score": 0.789,
+      "skipped": 0,
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "passed": 18,
+      "provider": "openai",
+      "score": 0.947,
+      "skipped": 0,
+      "tool_variant": "source_tuned_insforge_mcp"
+    }
+  ],
+  "description": "Compare README-level and source-level descriptions for InsForge backend MCP routing.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "insforge mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/insforge_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "docType: failed"
+      ],
+      "case": "new project setup reads instructions",
+      "choice": {
+        "arguments": {
+          "docType": "mandatory-setup"
+        },
+        "confidence": 0.86,
+        "rationale": "The user needs mandatory setup instructions for a newly connected InsForge project before building anything, which is documentation retrieval rather than a backend mutation.",
+        "tool_name": "fetch-docs"
+      },
+      "chosen_tools": [
+        "fetch-docs"
+      ],
+      "elapsed_ms": 3475,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "frame: passed"
+      ],
+      "case": "new app bootstrap uses template",
+      "choice": {
+        "arguments": {
+          "frame": "nextjs",
+          "projectName": "founder-dashboard"
+        },
+        "confidence": 0.95,
+        "rationale": "The task is to create a new InsForge starter app using Next.js, which matches the download-template tool for downloading a pre-configured starter template with the requested project name.",
+        "tool_name": "download-template"
+      },
+      "chosen_tools": [
+        "download-template"
+      ],
+      "elapsed_ms": 4008,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "backend inventory uses metadata",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.95,
+        "rationale": "The user wants an overview of the current backend structure across tables, buckets, and functions; this tool indexes all backend metadata and is the safest single tool for that summary.",
+        "tool_name": "get-backend-metadata"
+      },
+      "chosen_tools": [
+        "get-backend-metadata"
+      ],
+      "elapsed_ms": 3322,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "tableName: passed"
+      ],
+      "case": "known table details use schema",
+      "choice": {
+        "arguments": {
+          "tableName": "accounts"
+        },
+        "confidence": 0.94,
+        "rationale": "The user asks for schema details of a specific known table, including columns, constraints, indexes, and RLS policies; get-table-schema is the dedicated tool for returning detailed schema information for one table.",
+        "tool_name": "get-table-schema"
+      },
+      "chosen_tools": [
+        "get-table-schema"
+      ],
+      "elapsed_ms": 4532,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "explicit sql uses raw sql",
+      "choice": {
+        "arguments": {
+          "query": "SELECT count(*) FROM accounts WHERE status = 'active'."
+        },
+        "confidence": 0.98,
+        "rationale": "The task requests executing a specific SQL query, and run-raw-sql is the appropriate InsForge tool for executing raw SQL.",
+        "tool_name": "run-raw-sql"
+      },
+      "chosen_tools": [
+        "run-raw-sql"
+      ],
+      "elapsed_ms": 3542,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "filePath: passed",
+        "table: passed"
+      ],
+      "case": "csv import uses bulk upsert",
+      "choice": {
+        "arguments": {
+          "filePath": "/tmp/accounts.csv",
+          "table": "accounts",
+          "upsertKey": "account_id"
+        },
+        "confidence": 1,
+        "rationale": "The task is to bulk upsert data from a CSV file into a specific table using a unique key, which matches the bulk-upsert tool's purpose and schema.",
+        "tool_name": "bulk-upsert"
+      },
+      "chosen_tools": [
+        "bulk-upsert"
+      ],
+      "elapsed_ms": 3677,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "storage inventory lists buckets",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The task asks to identify existing storage buckets in the InsForge project, and the list-buckets tool is specifically designed to list all storage buckets.",
+        "tool_name": "list-buckets"
+      },
+      "chosen_tools": [
+        "list-buckets"
+      ],
+      "elapsed_ms": 2756,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "create storage bucket uses create bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "avatars",
+          "isPublic": true
+        },
+        "confidence": 1,
+        "rationale": "The task is to create a public storage bucket named avatars; create-bucket is the InsForge tool designed for creating storage buckets and supports the isPublic flag.",
+        "tool_name": "create-bucket"
+      },
+      "chosen_tools": [
+        "create-bucket"
+      ],
+      "elapsed_ms": 3352,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "read function uses get function",
+      "choice": {
+        "arguments": {
+          "slug": "webhook-handler"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to retrieve the code and metadata for an existing edge function, which is exactly what get-function does when provided the function slug.",
+        "tool_name": "get-function"
+      },
+      "chosen_tools": [
+        "get-function"
+      ],
+      "elapsed_ms": 3134,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "codeFile: passed",
+        "slug: passed"
+      ],
+      "case": "update function uses update function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/webhook-handler.js",
+          "slug": "webhook-handler"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to update an existing edge function using a local source file; update-function supports updating by slug with a codeFile path.",
+        "tool_name": "update-function"
+      },
+      "chosen_tools": [
+        "update-function"
+      ],
+      "elapsed_ms": 3901,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "source: failed"
+      ],
+      "case": "function logs use container logs",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "source": "edge-runtime"
+        },
+        "confidence": 0.84,
+        "rationale": "The task asks for the latest edge function runtime logs, which matches the log retrieval tool; setting limit to 50 requests the last 50 entries from the edge runtime service.",
+        "tool_name": "get-container-logs"
+      },
+      "chosen_tools": [
+        "get-container-logs"
+      ],
+      "elapsed_ms": 9754,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sdkFeature: passed",
+        "sdkLanguage: passed"
+      ],
+      "case": "sdk docs use sdk docs",
+      "choice": {
+        "arguments": {
+          "sdkFeature": "storage uploads",
+          "sdkLanguage": "JavaScript"
+        },
+        "confidence": 0.98,
+        "rationale": "The task asks to show InsForge SDK documentation for a specific feature (storage uploads) and language (JavaScript), which matches the fetch-sdk-docs tool.",
+        "tool_name": "fetch-sdk-docs"
+      },
+      "chosen_tools": [
+        "fetch-sdk-docs"
+      ],
+      "elapsed_ms": 3586,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "apiKey: failed"
+      ],
+      "case": "client token uses anon key",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "The task is to generate the public anonymous JWT token for client-side InsForge access, which is exactly what the get-anon-key tool is designed to do.",
+        "tool_name": "get-anon-key"
+      },
+      "chosen_tools": [
+        "get-anon-key"
+      ],
+      "elapsed_ms": 3296,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sourceDirectory: passed"
+      ],
+      "case": "absolute source deploy uses create deployment",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "/Users/me/founder-dashboard"
+        },
+        "confidence": 0.98,
+        "rationale": "To deploy a local source tree, the next step is to create or prepare a source-code deployment using the provided source directory. Starting the deployment requires a deploymentId that is only available after this step.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 3930,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "deploymentId: passed"
+      ],
+      "case": "prepared remote upload starts deployment",
+      "choice": {
+        "arguments": {
+          "deploymentId": "dep_123"
+        },
+        "confidence": 1,
+        "rationale": "The upload commands are complete and the next step is to trigger the deployment build for deployment dep_123.",
+        "tool_name": "start-deployment"
+      },
+      "chosen_tools": [
+        "start-deployment"
+      ],
+      "elapsed_ms": 3290,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "relative deploy path avoids tool",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "."
+        },
+        "confidence": 0.95,
+        "rationale": "The user explicitly requested deploying the current directory. The first required InsForge deployment step is to create/prepare a deployment from the source directory; starting it requires a deploymentId that is not available yet.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 4095,
+      "forbidden_used": [
+        "create-deployment"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "delete storage bucket uses delete bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "old-avatars"
+        },
+        "confidence": 1,
+        "rationale": "The task is to delete a specific storage bucket by name, which is exactly what the delete-bucket tool does.",
+        "tool_name": "delete-bucket"
+      },
+      "chosen_tools": [
+        "delete-bucket"
+      ],
+      "elapsed_ms": 2929,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed",
+        "codeFile: passed"
+      ],
+      "case": "create function uses create function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/hello-world.js",
+          "slug": "hello-world"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to create a new edge function with slug hello-world using code from a local file, which is exactly handled by the create-function tool with slug and codeFile arguments.",
+        "tool_name": "create-function"
+      },
+      "chosen_tools": [
+        "create-function"
+      ],
+      "elapsed_ms": 3144,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "delete function uses delete function",
+      "choice": {
+        "arguments": {
+          "slug": "legacy-webhook"
+        },
+        "confidence": 1,
+        "rationale": "The task is to permanently delete an existing edge function identified by slug, and the delete-function tool is specifically designed for deleting an edge function by slug.",
+        "tool_name": "delete-function"
+      },
+      "chosen_tools": [
+        "delete-function"
+      ],
+      "elapsed_ms": 3130,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "docType: passed"
+      ],
+      "case": "new project setup reads instructions",
+      "choice": {
+        "arguments": {
+          "docType": "instructions"
+        },
+        "confidence": 0.99,
+        "rationale": "The user connected a new InsForge project and explicitly asked for mandatory setup instructions before building; the catalog says to use fetch-docs with docType \"instructions\" as the first documentation step for a new project.",
+        "tool_name": "fetch-docs"
+      },
+      "chosen_tools": [
+        "fetch-docs"
+      ],
+      "elapsed_ms": 2754,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "frame: passed"
+      ],
+      "case": "new app bootstrap uses template",
+      "choice": {
+        "arguments": {
+          "frame": "Next.js",
+          "projectName": "founder-dashboard"
+        },
+        "confidence": 0.98,
+        "rationale": "The task asks to create a new InsForge-backed Next.js starter app with a specific project name, which matches the starter template bootstrap tool.",
+        "tool_name": "download-template"
+      },
+      "chosen_tools": [
+        "download-template"
+      ],
+      "elapsed_ms": 2786,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "backend inventory uses metadata",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user is asking for an inventory of the current backend structure across tables, storage buckets, and functions, which is exactly what the backend metadata tool is designed to provide.",
+        "tool_name": "get-backend-metadata"
+      },
+      "chosen_tools": [
+        "get-backend-metadata"
+      ],
+      "elapsed_ms": 2770,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "tableName: passed"
+      ],
+      "case": "known table details use schema",
+      "choice": {
+        "arguments": {
+          "tableName": "accounts"
+        },
+        "confidence": 0.99,
+        "rationale": "The user asks for detailed schema information (columns, RLS policies, indexes, and constraints) for a known table named accounts, which is exactly what get-table-schema is intended for.",
+        "tool_name": "get-table-schema"
+      },
+      "chosen_tools": [
+        "get-table-schema"
+      ],
+      "elapsed_ms": 2655,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "explicit sql uses raw sql",
+      "choice": {
+        "arguments": {
+          "query": "SELECT count(*) FROM accounts WHERE status = 'active'."
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly requests execution of a SQL query against the database, which matches the run-raw-sql tool purpose.",
+        "tool_name": "run-raw-sql"
+      },
+      "chosen_tools": [
+        "run-raw-sql"
+      ],
+      "elapsed_ms": 3674,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "filePath: passed",
+        "table: passed"
+      ],
+      "case": "csv import uses bulk upsert",
+      "choice": {
+        "arguments": {
+          "filePath": "/tmp/accounts.csv",
+          "table": "accounts",
+          "upsertKey": "account_id"
+        },
+        "confidence": 1,
+        "rationale": "The task explicitly requests bulk upserting a local CSV file into a named table using a specified unique key, which matches the bulk-upsert tool.",
+        "tool_name": "bulk-upsert"
+      },
+      "chosen_tools": [
+        "bulk-upsert"
+      ],
+      "elapsed_ms": 2661,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "storage inventory lists buckets",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user asks for storage bucket inventory, and list-buckets is the specific tool for listing all InsForge storage buckets.",
+        "tool_name": "list-buckets"
+      },
+      "chosen_tools": [
+        "list-buckets"
+      ],
+      "elapsed_ms": 3263,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "create storage bucket uses create bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "avatars",
+          "isPublic": true
+        },
+        "confidence": 1,
+        "rationale": "The task explicitly asks to create a named public storage bucket, which matches create-bucket with bucketName and isPublic=true.",
+        "tool_name": "create-bucket"
+      },
+      "chosen_tools": [
+        "create-bucket"
+      ],
+      "elapsed_ms": 2614,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "read function uses get function",
+      "choice": {
+        "arguments": {
+          "slug": "webhook-handler"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to retrieve code and metadata for a known existing edge function slug, which matches get-function.",
+        "tool_name": "get-function"
+      },
+      "chosen_tools": [
+        "get-function"
+      ],
+      "elapsed_ms": 3018,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "codeFile: passed",
+        "slug: passed"
+      ],
+      "case": "update function uses update function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/webhook-handler.js",
+          "slug": "webhook-handler"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks to update an existing edge function with a known slug using a provided local code file path.",
+        "tool_name": "update-function"
+      },
+      "chosen_tools": [
+        "update-function"
+      ],
+      "elapsed_ms": 3220,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "source: passed"
+      ],
+      "case": "function logs use container logs",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "source": "function.logs"
+        },
+        "confidence": 0.98,
+        "rationale": "The user asks to view recent edge function runtime logs; get-container-logs is the appropriate tool for reading InsForge service container logs, with source set to function.logs and limit 50.",
+        "tool_name": "get-container-logs"
+      },
+      "chosen_tools": [
+        "get-container-logs"
+      ],
+      "elapsed_ms": 2803,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sdkFeature: passed",
+        "sdkLanguage: passed"
+      ],
+      "case": "sdk docs use sdk docs",
+      "choice": {
+        "arguments": {
+          "sdkFeature": "storage uploads",
+          "sdkLanguage": "JavaScript"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks for SDK documentation for a specific InsForge feature (storage uploads) in a specific language (JavaScript), which matches fetch-sdk-docs.",
+        "tool_name": "fetch-sdk-docs"
+      },
+      "chosen_tools": [
+        "fetch-sdk-docs"
+      ],
+      "elapsed_ms": 3513,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "apiKey: failed"
+      ],
+      "case": "client token uses anon key",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.98,
+        "rationale": "The task asks to generate the public anonymous token for browser/client-side InsForge access, which is exactly what get-anon-key is for.",
+        "tool_name": "get-anon-key"
+      },
+      "chosen_tools": [
+        "get-anon-key"
+      ],
+      "elapsed_ms": 3177,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sourceDirectory: passed"
+      ],
+      "case": "absolute source deploy uses create deployment",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "/Users/me/founder-dashboard"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to deploy an existing local source tree and provides an absolute sourceDirectory path, which matches create-deployment.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 3255,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "deploymentId: passed"
+      ],
+      "case": "prepared remote upload starts deployment",
+      "choice": {
+        "arguments": {
+          "deploymentId": "dep_123"
+        },
+        "confidence": 1,
+        "rationale": "The upload commands are complete and a prepared deployment ID was provided, so the next safe step is to start the prepared deployment build.",
+        "tool_name": "start-deployment"
+      },
+      "chosen_tools": [
+        "start-deployment"
+      ],
+      "elapsed_ms": 3168,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "relative deploy path avoids tool",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.98,
+        "rationale": "The deployment tool requires an absolute sourceDirectory path and explicitly avoids relative paths. The user provided \".\", which is relative, and I cannot safely resolve it here. Ask for the absolute path before using create-deployment.",
+        "tool_name": "NO_TOOL"
+      },
+      "chosen_tools": [
+        "NO_TOOL"
+      ],
+      "elapsed_ms": 4096,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "delete storage bucket uses delete bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "old-avatars"
+        },
+        "confidence": 1,
+        "rationale": "The user explicitly asked to delete a specific storage bucket named old-avatars, which matches the delete-bucket tool requirements.",
+        "tool_name": "delete-bucket"
+      },
+      "chosen_tools": [
+        "delete-bucket"
+      ],
+      "elapsed_ms": 2691,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed",
+        "codeFile: passed"
+      ],
+      "case": "create function uses create function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/hello-world.js",
+          "slug": "hello-world"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks to create a new edge function with a provided slug and local code file path, which matches create-function.",
+        "tool_name": "create-function"
+      },
+      "chosen_tools": [
+        "create-function"
+      ],
+      "elapsed_ms": 3462,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "delete function uses delete function",
+      "choice": {
+        "arguments": {
+          "slug": "legacy-webhook"
+        },
+        "confidence": 1,
+        "rationale": "The task explicitly asks to delete a specific edge function by known slug, which matches delete-function.",
+        "tool_name": "delete-function"
+      },
+      "chosen_tools": [
+        "delete-function"
+      ],
+      "elapsed_ms": 2138,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "docType: failed"
+      ],
+      "case": "new project setup reads instructions",
+      "choice": {
+        "arguments": {
+          "docType": "setup"
+        },
+        "confidence": 0.95,
+        "rationale": "The user is asking for mandatory setup instructions for a newly connected InsForge project. The fetch-docs tool is designed to retrieve InsForge documentation, making it the appropriate choice to fetch setup guides.",
+        "tool_name": "fetch-docs"
+      },
+      "chosen_tools": [
+        "fetch-docs"
+      ],
+      "elapsed_ms": 6906,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "frame: passed"
+      ],
+      "case": "new app bootstrap uses template",
+      "choice": {
+        "arguments": {
+          "frame": "nextjs",
+          "projectName": "founder-dashboard"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to create a new Next.js starter app named 'founder-dashboard'. The 'download-template' tool is specifically designed to download pre-configured starter templates for a given framework.",
+        "tool_name": "download-template"
+      },
+      "chosen_tools": [
+        "download-template"
+      ],
+      "elapsed_ms": 6996,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "backend inventory uses metadata",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user is asking for a comprehensive overview of their InsForge backend structure, including tables, buckets, and functions. The 'get-backend-metadata' tool is specifically designed to index and retrieve all backend metadata, making it the perfect choice to gather this complete structural overview in a single call.",
+        "tool_name": "get-backend-metadata"
+      },
+      "chosen_tools": [
+        "get-backend-metadata"
+      ],
+      "elapsed_ms": 8408,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "tableName: passed"
+      ],
+      "case": "known table details use schema",
+      "choice": {
+        "arguments": {
+          "tableName": "accounts"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is asking for the detailed schema, including RLS policies, indexes, constraints, and columns, for a specific table named 'accounts'. The 'get-table-schema' tool is designed exactly for this purpose.",
+        "tool_name": "get-table-schema"
+      },
+      "chosen_tools": [
+        "get-table-schema"
+      ],
+      "elapsed_ms": 6345,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "explicit sql uses raw sql",
+      "choice": {
+        "arguments": {
+          "query": "SELECT count(*) FROM accounts WHERE status = 'active'"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to run a specific SQL query to count active accounts. The run-raw-sql tool is the exact match for executing raw SQL queries.",
+        "tool_name": "run-raw-sql"
+      },
+      "chosen_tools": [
+        "run-raw-sql"
+      ],
+      "elapsed_ms": 5841,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "filePath: passed",
+        "table: passed"
+      ],
+      "case": "csv import uses bulk upsert",
+      "choice": {
+        "arguments": {
+          "filePath": "/tmp/accounts.csv",
+          "table": "accounts",
+          "upsertKey": "account_id"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires bulk upserting data from a CSV file into a specific table using a unique key. The bulk-upsert tool is designed exactly for this purpose, accepting the file path, table name, and upsert key as arguments.",
+        "tool_name": "bulk-upsert"
+      },
+      "chosen_tools": [
+        "bulk-upsert"
+      ],
+      "elapsed_ms": 6279,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "storage inventory lists buckets",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user is asking for the existing storage buckets in the project, which can be retrieved using the `list-buckets` tool.",
+        "tool_name": "list-buckets"
+      },
+      "chosen_tools": [
+        "list-buckets"
+      ],
+      "elapsed_ms": 2992,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "create storage bucket uses create bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "avatars",
+          "isPublic": true
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires creating a public storage bucket named 'avatars'. The create-bucket tool is specifically designed for this purpose and accepts both the bucketName and isPublic parameters.",
+        "tool_name": "create-bucket"
+      },
+      "chosen_tools": [
+        "create-bucket"
+      ],
+      "elapsed_ms": 4991,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "read function uses get function",
+      "choice": {
+        "arguments": {
+          "slug": "webhook-handler"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires retrieving the code and metadata for an existing edge function named 'webhook-handler'. The get-function tool is specifically designed to fetch details of an edge function by its slug.",
+        "tool_name": "get-function"
+      },
+      "chosen_tools": [
+        "get-function"
+      ],
+      "elapsed_ms": 7780,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "codeFile: passed",
+        "slug: passed"
+      ],
+      "case": "update function uses update function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/webhook-handler.js",
+          "slug": "webhook-handler"
+        },
+        "confidence": 1.0,
+        "rationale": "The task specifies updating an existing edge function named 'webhook-handler' using a local file. The 'update-function' tool is the exact match for this operation, taking the function slug and the file path as arguments.",
+        "tool_name": "update-function"
+      },
+      "chosen_tools": [
+        "update-function"
+      ],
+      "elapsed_ms": 7362,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "source: failed"
+      ],
+      "case": "function logs use container logs",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "source": "edge-functions"
+        },
+        "confidence": 0.95,
+        "rationale": "The user requested the last 50 logs for edge functions. The get-container-logs tool is designed to fetch the latest logs from a specific service or container, making it the appropriate choice.",
+        "tool_name": "get-container-logs"
+      },
+      "chosen_tools": [
+        "get-container-logs"
+      ],
+      "elapsed_ms": 6806,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sdkFeature: passed",
+        "sdkLanguage: passed"
+      ],
+      "case": "sdk docs use sdk docs",
+      "choice": {
+        "arguments": {
+          "sdkFeature": "storage uploads",
+          "sdkLanguage": "JavaScript"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is asking for SDK documentation for a specific feature (storage uploads) and language (JavaScript). The fetch-sdk-docs tool is exactly suited for this task.",
+        "tool_name": "fetch-sdk-docs"
+      },
+      "chosen_tools": [
+        "fetch-sdk-docs"
+      ],
+      "elapsed_ms": 6743,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "apiKey: failed"
+      ],
+      "case": "client token uses anon key",
+      "choice": {
+        "arguments": {},
+        "confidence": "High",
+        "rationale": "The user requested a public anonymous token for client-side access in a browser app. The 'get-anon-key' tool is specifically designed to generate an anonymous JWT token for client-side applications.",
+        "tool_name": "get-anon-key"
+      },
+      "chosen_tools": [
+        "get-anon-key"
+      ],
+      "elapsed_ms": 6959,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sourceDirectory: passed"
+      ],
+      "case": "absolute source deploy uses create deployment",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "/Users/me/founder-dashboard"
+        },
+        "confidence": 1.0,
+        "rationale": "To deploy the source tree, the first step is to create or prepare the deployment using the provided source directory path.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 6610,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "deploymentId: passed"
+      ],
+      "case": "prepared remote upload starts deployment",
+      "choice": {
+        "arguments": {
+          "deploymentId": "dep_123"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to trigger the deployment build for deployment ID 'dep_123' after the upload commands are complete. The 'start-deployment' tool is designed exactly for this purpose.",
+        "tool_name": "start-deployment"
+      },
+      "chosen_tools": [
+        "start-deployment"
+      ],
+      "elapsed_ms": 3494,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "relative deploy path avoids tool",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "."
+        },
+        "confidence": "high",
+        "rationale": "To deploy the current directory, the first step is to create or prepare a source-code deployment using the create-deployment tool with the sourceDirectory set to '.'.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 7228,
+      "forbidden_used": [
+        "create-deployment"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "delete storage bucket uses delete bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "old-avatars"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to delete a specific storage bucket named 'old-avatars'. The 'delete-bucket' tool is designed exactly for this purpose and requires the 'bucketName' parameter.",
+        "tool_name": "delete-bucket"
+      },
+      "chosen_tools": [
+        "delete-bucket"
+      ],
+      "elapsed_ms": 3331,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed",
+        "codeFile: passed"
+      ],
+      "case": "create function uses create function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/hello-world.js",
+          "slug": "hello-world"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires creating a new edge function with a specific slug and source file. The 'create-function' tool is the exact match for this operation, accepting both 'slug' and 'codeFile' as arguments.",
+        "tool_name": "create-function"
+      },
+      "chosen_tools": [
+        "create-function"
+      ],
+      "elapsed_ms": 7361,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "delete function uses delete function",
+      "choice": {
+        "arguments": {
+          "slug": "legacy-webhook"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to delete the edge function with the slug 'legacy-webhook'. The 'delete-function' tool is designed exactly for this purpose.",
+        "tool_name": "delete-function"
+      },
+      "chosen_tools": [
+        "delete-function"
+      ],
+      "elapsed_ms": 6591,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "docType: failed"
+      ],
+      "case": "new project setup reads instructions",
+      "choice": {
+        "arguments": {
+          "docType": "setup"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested mandatory setup instructions for a newly connected InsForge project before building anything. The fetch-docs tool is designed exactly for this purpose.",
+        "tool_name": "fetch-docs"
+      },
+      "chosen_tools": [
+        "fetch-docs"
+      ],
+      "elapsed_ms": 6553,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "frame: passed"
+      ],
+      "case": "new app bootstrap uses template",
+      "choice": {
+        "arguments": {
+          "frame": "Next.js",
+          "projectName": "founder-dashboard"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to create a new Next.js starter app named 'founder-dashboard'. The 'download-template' tool is designed to bootstrap a pre-configured React or Next.js starter template for a new InsForge app.",
+        "tool_name": "download-template"
+      },
+      "chosen_tools": [
+        "download-template"
+      ],
+      "elapsed_ms": 4237,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "backend inventory uses metadata",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user is asking for the current backend structure across tables, buckets, and functions, which perfectly matches the purpose of the get-backend-metadata tool to index the full backend metadata.",
+        "tool_name": "get-backend-metadata"
+      },
+      "chosen_tools": [
+        "get-backend-metadata"
+      ],
+      "elapsed_ms": 5868,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "tableName: passed"
+      ],
+      "case": "known table details use schema",
+      "choice": {
+        "arguments": {
+          "tableName": "accounts"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested the RLS policies, indexes, constraints, and columns for a specific known table named 'accounts'. The get-table-schema tool is designed exactly for this purpose.",
+        "tool_name": "get-table-schema"
+      },
+      "chosen_tools": [
+        "get-table-schema"
+      ],
+      "elapsed_ms": 5857,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "explicit sql uses raw sql",
+      "choice": {
+        "arguments": {
+          "query": "SELECT count(*) FROM accounts WHERE status = 'active'"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to execute a raw SQL query to count active accounts, which matches the purpose of the run-raw-sql tool.",
+        "tool_name": "run-raw-sql"
+      },
+      "chosen_tools": [
+        "run-raw-sql"
+      ],
+      "elapsed_ms": 5852,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "filePath: passed",
+        "table: passed"
+      ],
+      "case": "csv import uses bulk upsert",
+      "choice": {
+        "arguments": {
+          "filePath": "/tmp/accounts.csv",
+          "table": "accounts",
+          "upsertKey": "account_id"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to bulk upsert a local CSV file into a specific table using a unique key, which perfectly matches the purpose and input schema of the bulk-upsert tool.",
+        "tool_name": "bulk-upsert"
+      },
+      "chosen_tools": [
+        "bulk-upsert"
+      ],
+      "elapsed_ms": 3400,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "storage inventory lists buckets",
+      "choice": {
+        "arguments": {},
+        "confidence": "high",
+        "rationale": "The user is asking for an inventory of existing storage buckets in the project, which exactly matches the purpose of the list-buckets tool.",
+        "tool_name": "list-buckets"
+      },
+      "chosen_tools": [
+        "list-buckets"
+      ],
+      "elapsed_ms": 6688,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "create storage bucket uses create bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "avatars",
+          "isPublic": true
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to create a new storage bucket named 'avatars' and specified that it should be public, which matches the create-bucket tool's purpose and parameters.",
+        "tool_name": "create-bucket"
+      },
+      "chosen_tools": [
+        "create-bucket"
+      ],
+      "elapsed_ms": 5264,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "read function uses get function",
+      "choice": {
+        "arguments": {
+          "slug": "webhook-handler"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested the code and metadata for an existing edge function named 'webhook-handler'. The 'get-function' tool is designed to read details and code for a specific edge function using its slug.",
+        "tool_name": "get-function"
+      },
+      "chosen_tools": [
+        "get-function"
+      ],
+      "elapsed_ms": 5517,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "codeFile: passed",
+        "slug: passed"
+      ],
+      "case": "update function uses update function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/webhook-handler.js",
+          "slug": "webhook-handler"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to update an existing edge function named 'webhook-handler' using the code from a specified local file path.",
+        "tool_name": "update-function"
+      },
+      "chosen_tools": [
+        "update-function"
+      ],
+      "elapsed_ms": 7900,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "source: passed"
+      ],
+      "case": "function logs use container logs",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "source": "function.logs"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested the last 50 runtime logs for edge functions. The get-container-logs tool is designed to fetch recent logs from specific service containers, and 'function.logs' is the correct source for edge function runtime logs.",
+        "tool_name": "get-container-logs"
+      },
+      "chosen_tools": [
+        "get-container-logs"
+      ],
+      "elapsed_ms": 6282,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sdkFeature: passed",
+        "sdkLanguage: passed"
+      ],
+      "case": "sdk docs use sdk docs",
+      "choice": {
+        "arguments": {
+          "sdkFeature": "storage",
+          "sdkLanguage": "JavaScript"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested JavaScript SDK documentation for InsForge storage uploads, which matches the fetch-sdk-docs tool's purpose.",
+        "tool_name": "fetch-sdk-docs"
+      },
+      "chosen_tools": [
+        "fetch-sdk-docs"
+      ],
+      "elapsed_ms": 5609,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "case": "client token uses anon key",
+      "error": "HTTP 503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"The service is currently unavailable.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n",
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "model": "gemini-3.1-pro-preview-customtools",
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "sourceDirectory: passed"
+      ],
+      "case": "absolute source deploy uses create deployment",
+      "choice": {
+        "arguments": {
+          "sourceDirectory": "/Users/me/founder-dashboard"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to deploy an existing source directory and provided an absolute path, which matches the purpose and requirements of the create-deployment tool.",
+        "tool_name": "create-deployment"
+      },
+      "chosen_tools": [
+        "create-deployment"
+      ],
+      "elapsed_ms": 3619,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "deploymentId: failed"
+      ],
+      "case": "prepared remote upload starts deployment",
+      "choice": {
+        "deploymentId": "dep_123"
+      },
+      "chosen_tools": [],
+      "elapsed_ms": 5726,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [
+        "start-deployment"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "relative deploy path avoids tool",
+      "choice": {
+        "arguments": {},
+        "confidence": "High",
+        "rationale": "The create-deployment tool explicitly requires an absolute path for the sourceDirectory and rejects relative paths. The user provided the relative path '.', so the absolute path must be resolved before the deployment tool can be safely called.",
+        "tool_name": "NO_TOOL"
+      },
+      "chosen_tools": [
+        "NO_TOOL"
+      ],
+      "elapsed_ms": 5121,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "bucketName: passed"
+      ],
+      "case": "delete storage bucket uses delete bucket",
+      "choice": {
+        "arguments": {
+          "bucketName": "old-avatars"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to delete a specific storage bucket named 'old-avatars', which matches the purpose and required input schema of the delete-bucket tool.",
+        "tool_name": "delete-bucket"
+      },
+      "chosen_tools": [
+        "delete-bucket"
+      ],
+      "elapsed_ms": 5883,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed",
+        "codeFile: passed"
+      ],
+      "case": "create function uses create function",
+      "choice": {
+        "arguments": {
+          "codeFile": "/Users/me/app/functions/hello-world.js",
+          "slug": "hello-world"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to create a new edge function with the slug 'hello-world' using the code from a local file path.",
+        "tool_name": "create-function"
+      },
+      "chosen_tools": [
+        "create-function"
+      ],
+      "elapsed_ms": 3399,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    },
+    {
+      "arg_details": [
+        "slug: passed"
+      ],
+      "case": "delete function uses delete function",
+      "choice": {
+        "arguments": {
+          "slug": "legacy-webhook"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to delete the edge function with the slug 'legacy-webhook', which matches the purpose of the delete-function tool.",
+        "tool_name": "delete-function"
+      },
+      "chosen_tools": [
+        "delete-function"
+      ],
+      "elapsed_ms": 5062,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "insforge_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_insforge_mcp"
+    }
+  ],
+  "source": {
+    "commit": "dad794d445d05e7df2efcb8280dba59682b97a87",
+    "package": "@insforge/mcp",
+    "package_version": "1.2.10",
+    "repo": "https://github.com/InsForge/insforge-mcp",
+    "slice": "backend metadata, database operations, starter templates, storage, edge functions, deployments, logs, docs, and public client tokens",
+    "yc": "InsForge, YC P2026"
+  },
+  "summary": {
+    "errors": 1,
+    "failed_cases": 11,
+    "passed_cases": 64,
+    "planned": 76,
+    "score": 0.842,
+    "skipped": 0,
+    "total": 76
+  }
+}

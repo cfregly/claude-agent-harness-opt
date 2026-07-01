@@ -1,0 +1,1960 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "navigation",
+      "expected_args_contains": {
+        "url": "https://example.com"
+      },
+      "expected_tools": [
+        "browser_navigate"
+      ],
+      "forbidden_tools": [
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "navigate to url",
+      "task": "Open https://example.com in the browser."
+    },
+    {
+      "check_family": "page_snapshot",
+      "expected_args_contains": {
+        "target": "page"
+      },
+      "expected_tools": [
+        "browser_snapshot"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "inspect page for actionable refs",
+      "task": "Inspect the current page snapshot target page for actionable refs."
+    },
+    {
+      "check_family": "screenshot",
+      "expected_args_contains": {
+        "fullPage": "true"
+      },
+      "expected_tools": [
+        "browser_take_screenshot"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "capture full page visual proof",
+      "task": "Take a full-page screenshot of the current page for visual proof."
+    },
+    {
+      "check_family": "click",
+      "expected_args_contains": {
+        "target": "submit"
+      },
+      "expected_tools": [
+        "browser_click"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "click known target",
+      "task": "Click the Submit button using target ref submit-button from the current snapshot."
+    },
+    {
+      "check_family": "type",
+      "expected_args_contains": {
+        "submit": "true",
+        "text": "playwright mcp"
+      },
+      "expected_tools": [
+        "browser_type"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "type search and submit",
+      "task": "Type \"playwright mcp\" into the search input target search-box and press Enter."
+    },
+    {
+      "check_family": "form_fill",
+      "expected_args_contains": {
+        "fields": "email"
+      },
+      "expected_tools": [
+        "browser_fill_form"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "fill multi field form",
+      "task": "Fill the multi field form with email user@example.com and name Ada Lovelace."
+    },
+    {
+      "check_family": "select",
+      "expected_args_contains": {
+        "values": "Canada"
+      },
+      "expected_tools": [
+        "browser_select_option"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "select dropdown option",
+      "task": "Select Canada from the country dropdown target country-select."
+    },
+    {
+      "check_family": "wait",
+      "expected_args_contains": {
+        "text": "Success"
+      },
+      "expected_tools": [
+        "browser_wait_for"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "wait for success text",
+      "task": "Wait until the text Success appears on the page."
+    },
+    {
+      "check_family": "evaluate",
+      "expected_args_contains": {
+        "function": "localStorage"
+      },
+      "expected_tools": [
+        "browser_evaluate"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "evaluate local storage",
+      "task": "Read window.localStorage.getItem('authToken') from the current page."
+    },
+    {
+      "check_family": "keyboard",
+      "expected_args_contains": {
+        "key": "Escape"
+      },
+      "expected_tools": [
+        "browser_press_key"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_network_requests",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "press escape key",
+      "task": "Press Escape to close the current modal."
+    },
+    {
+      "check_family": "network_list",
+      "expected_args_contains": {
+        "filter": "/api/"
+      },
+      "expected_tools": [
+        "browser_network_requests"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_request",
+        "browser_console_messages"
+      ],
+      "name": "list api network requests",
+      "task": "List network requests since page load, filtered to URLs matching /api/."
+    },
+    {
+      "check_family": "network_detail",
+      "expected_args_contains": {
+        "index": "3"
+      },
+      "expected_tools": [
+        "browser_network_request"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_console_messages"
+      ],
+      "name": "inspect numbered network request",
+      "task": "Show full details for network request #3 from the previous request list."
+    },
+    {
+      "check_family": "console",
+      "expected_args_contains": {
+        "level": "error"
+      },
+      "expected_tools": [
+        "browser_console_messages"
+      ],
+      "forbidden_tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_take_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_fill_form",
+        "browser_select_option",
+        "browser_wait_for",
+        "browser_evaluate",
+        "browser_press_key",
+        "browser_network_requests",
+        "browser_network_request"
+      ],
+      "name": "get console errors",
+      "task": "Return browser console errors since the last navigation."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 2,
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "passed": 11,
+      "provider": "gemini",
+      "score": 0.846,
+      "skipped": 0,
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 3,
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "passed": 10,
+      "provider": "gemini",
+      "score": 0.769,
+      "skipped": 0,
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 2,
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "passed": 11,
+      "provider": "openai",
+      "score": 0.846,
+      "skipped": 0,
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 2,
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "passed": 11,
+      "provider": "openai",
+      "score": 0.846,
+      "skipped": 0,
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for Microsoft Playwright MCP core browser automation workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "playwright mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/playwright_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "navigate to url",
+      "choice": {
+        "arguments": {
+          "url": "https://example.com"
+        },
+        "confidence": 1,
+        "rationale": "The task is to open a specific URL in the browser, which requires navigation.",
+        "tool_name": "browser_navigate"
+      },
+      "chosen_tools": [
+        "browser_navigate"
+      ],
+      "elapsed_ms": 2726,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "target: failed"
+      ],
+      "case": "inspect page for actionable refs",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "An accessibility snapshot is the preferred tool to inspect the current page and obtain actionable element references for subsequent interactions.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 3646,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "fullPage: passed"
+      ],
+      "case": "capture full page visual proof",
+      "choice": {
+        "arguments": {
+          "fullPage": true
+        },
+        "confidence": 1,
+        "rationale": "The task specifically requests a full-page screenshot for visual proof, which requires the screenshot tool with fullPage enabled.",
+        "tool_name": "browser_take_screenshot"
+      },
+      "chosen_tools": [
+        "browser_take_screenshot"
+      ],
+      "elapsed_ms": 3949,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "target: passed"
+      ],
+      "case": "click known target",
+      "choice": {
+        "arguments": {
+          "element": "Submit button",
+          "target": "submit-button"
+        },
+        "confidence": 1,
+        "rationale": "The task explicitly requires clicking the Submit button using the provided target ref, so the click tool is the appropriate next action.",
+        "tool_name": "browser_click"
+      },
+      "chosen_tools": [
+        "browser_click"
+      ],
+      "elapsed_ms": 3234,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "text: passed",
+        "submit: passed"
+      ],
+      "case": "type search and submit",
+      "choice": {
+        "arguments": {
+          "element": "search input",
+          "submit": true,
+          "target": "search-box",
+          "text": "playwright mcp"
+        },
+        "confidence": 0.98,
+        "rationale": "The task requires entering text into an editable search input and pressing Enter; browser_type supports typing text and submitting with Enter in one call.",
+        "tool_name": "browser_type"
+      },
+      "chosen_tools": [
+        "browser_type"
+      ],
+      "elapsed_ms": 4132,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "fields: failed"
+      ],
+      "case": "fill multi field form",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.94,
+        "rationale": "Need an accessibility snapshot to identify the form fields and obtain exact element references before filling the email and name fields.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 4914,
+      "forbidden_used": [
+        "browser_snapshot"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [
+        "browser_fill_form"
+      ],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "values: passed"
+      ],
+      "case": "select dropdown option",
+      "choice": {
+        "arguments": {
+          "target": "country-select",
+          "values": [
+            "Canada"
+          ]
+        },
+        "confidence": 0.94,
+        "rationale": "The task is to choose an item from a dropdown, and browser_select_option is the appropriate tool for selecting the Canada option on the target country-select dropdown.",
+        "tool_name": "browser_select_option"
+      },
+      "chosen_tools": [
+        "browser_select_option"
+      ],
+      "elapsed_ms": 3203,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "text: passed"
+      ],
+      "case": "wait for success text",
+      "choice": {
+        "arguments": {
+          "text": "Success"
+        },
+        "confidence": 1,
+        "rationale": "The task is specifically to wait until the text \u201cSuccess\u201d appears on the page, which is directly supported by the wait tool.",
+        "tool_name": "browser_wait_for"
+      },
+      "chosen_tools": [
+        "browser_wait_for"
+      ],
+      "elapsed_ms": 2829,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "function: passed"
+      ],
+      "case": "evaluate local storage",
+      "choice": {
+        "arguments": {
+          "function": "() => window.localStorage.getItem('authToken')"
+        },
+        "confidence": 0.99,
+        "rationale": "Reading a value from window.localStorage requires JavaScript evaluation of page state; normal browser actions or accessibility snapshots cannot access localStorage.",
+        "tool_name": "browser_evaluate"
+      },
+      "chosen_tools": [
+        "browser_evaluate"
+      ],
+      "elapsed_ms": 4087,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "key: passed"
+      ],
+      "case": "press escape key",
+      "choice": {
+        "arguments": {
+          "key": "Escape"
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires pressing the Escape key to close the current modal, which is a direct keyboard action.",
+        "tool_name": "browser_press_key"
+      },
+      "chosen_tools": [
+        "browser_press_key"
+      ],
+      "elapsed_ms": 2495,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "filter: passed"
+      ],
+      "case": "list api network requests",
+      "choice": {
+        "arguments": {
+          "filter": "/api/",
+          "static": false
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to list network requests since page load filtered to URLs containing /api/, which is exactly what browser_network_requests provides via its filter argument.",
+        "tool_name": "browser_network_requests"
+      },
+      "chosen_tools": [
+        "browser_network_requests"
+      ],
+      "elapsed_ms": 7641,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "index: passed"
+      ],
+      "case": "inspect numbered network request",
+      "choice": {
+        "arguments": {
+          "index": 3
+        },
+        "confidence": 1,
+        "rationale": "The task asks for full details of a specific network request by its number from the previous request list, which is exactly what browser_network_request provides when given index 3 with no part specified.",
+        "tool_name": "browser_network_request"
+      },
+      "chosen_tools": [
+        "browser_network_request"
+      ],
+      "elapsed_ms": 2797,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "level: passed"
+      ],
+      "case": "get console errors",
+      "choice": {
+        "arguments": {
+          "all": false,
+          "level": "error"
+        },
+        "confidence": 0.98,
+        "rationale": "The task asks for browser console errors since the last navigation, which is exactly what the console messages tool provides when filtered to the error level without requesting all session messages.",
+        "tool_name": "browser_console_messages"
+      },
+      "chosen_tools": [
+        "browser_console_messages"
+      ],
+      "elapsed_ms": 3820,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "navigate to url",
+      "choice": {
+        "arguments": {
+          "url": "https://example.com"
+        },
+        "confidence": 1,
+        "rationale": "The task is to open a specific URL in the browser, so the appropriate next tool is navigation.",
+        "tool_name": "browser_navigate"
+      },
+      "chosen_tools": [
+        "browser_navigate"
+      ],
+      "elapsed_ms": 2515,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "target: failed"
+      ],
+      "case": "inspect page for actionable refs",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "The task is to inspect the current page and obtain actionable element references, which is exactly what an accessibility snapshot is for and is preferred over screenshots for interaction planning.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 3630,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "fullPage: passed"
+      ],
+      "case": "capture full page visual proof",
+      "choice": {
+        "arguments": {
+          "filename": "full-page-screenshot.png",
+          "fullPage": true,
+          "type": "png"
+        },
+        "confidence": 0.99,
+        "rationale": "The task explicitly asks for a full-page screenshot for visual proof, which is the intended use of the screenshot tool with fullPage enabled.",
+        "tool_name": "browser_take_screenshot"
+      },
+      "chosen_tools": [
+        "browser_take_screenshot"
+      ],
+      "elapsed_ms": 3288,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "target: passed"
+      ],
+      "case": "click known target",
+      "choice": {
+        "arguments": {
+          "element": "Submit button",
+          "target": "submit-button"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to click a known UI element, and the target reference `submit-button` is already provided from the current snapshot.",
+        "tool_name": "browser_click"
+      },
+      "chosen_tools": [
+        "browser_click"
+      ],
+      "elapsed_ms": 2808,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "text: passed",
+        "submit: passed"
+      ],
+      "case": "type search and submit",
+      "choice": {
+        "arguments": {
+          "element": "search input",
+          "submit": true,
+          "target": "search-box",
+          "text": "playwright mcp"
+        },
+        "confidence": 0.98,
+        "rationale": "The task is to enter text into a known single search input target and press Enter, which matches browser_type with submit=true.",
+        "tool_name": "browser_type"
+      },
+      "chosen_tools": [
+        "browser_type"
+      ],
+      "elapsed_ms": 3081,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "fields: failed"
+      ],
+      "case": "fill multi field form",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.95,
+        "rationale": "Element references for the email and name fields are not yet known; an accessibility snapshot should be taken first to identify actionable form field targets before filling the multi-field form.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 8633,
+      "forbidden_used": [
+        "browser_snapshot"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [
+        "browser_fill_form"
+      ],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "values: passed"
+      ],
+      "case": "select dropdown option",
+      "choice": {
+        "arguments": {
+          "element": "country dropdown",
+          "target": "#country-select",
+          "values": [
+            "Canada"
+          ]
+        },
+        "confidence": 0.86,
+        "rationale": "The task is to choose an option from a known dropdown/select element, so the appropriate single tool is browser_select_option. The target is provided as country-select, interpreted as the select element id.",
+        "tool_name": "browser_select_option"
+      },
+      "chosen_tools": [
+        "browser_select_option"
+      ],
+      "elapsed_ms": 5997,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "text: passed"
+      ],
+      "case": "wait for success text",
+      "choice": {
+        "arguments": {
+          "text": "Success"
+        },
+        "confidence": 1,
+        "rationale": "The task is to wait for specific text to appear on the page, which matches browser_wait_for with the text parameter.",
+        "tool_name": "browser_wait_for"
+      },
+      "chosen_tools": [
+        "browser_wait_for"
+      ],
+      "elapsed_ms": 2446,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "function: passed"
+      ],
+      "case": "evaluate local storage",
+      "choice": {
+        "arguments": {
+          "function": "() => window.localStorage.getItem('authToken')"
+        },
+        "confidence": 0.99,
+        "rationale": "Reading localStorage requires JavaScript evaluation because it is page state not exposed through normal accessibility snapshots or browser actions.",
+        "tool_name": "browser_evaluate"
+      },
+      "chosen_tools": [
+        "browser_evaluate"
+      ],
+      "elapsed_ms": 2822,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "key: passed"
+      ],
+      "case": "press escape key",
+      "choice": {
+        "arguments": {
+          "key": "Escape"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to press a non-text keyboard key to close the current modal, which matches the browser_press_key tool's purpose.",
+        "tool_name": "browser_press_key"
+      },
+      "chosen_tools": [
+        "browser_press_key"
+      ],
+      "elapsed_ms": 2595,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "filter: passed"
+      ],
+      "case": "list api network requests",
+      "choice": {
+        "arguments": {
+          "filter": "/api/",
+          "static": false
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to list network requests since page load and filter them by URL pattern; this tool is designed for listing requests with a regex filter. Static resources are not needed for API request inspection.",
+        "tool_name": "browser_network_requests"
+      },
+      "chosen_tools": [
+        "browser_network_requests"
+      ],
+      "elapsed_ms": 3514,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "index: passed"
+      ],
+      "case": "inspect numbered network request",
+      "choice": {
+        "arguments": {
+          "index": 3
+        },
+        "confidence": 1,
+        "rationale": "The user asks for full details of a specific numbered network request (#3) from a previous request list, so the single appropriate tool is browser_network_request with index 3.",
+        "tool_name": "browser_network_request"
+      },
+      "chosen_tools": [
+        "browser_network_request"
+      ],
+      "elapsed_ms": 5771,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "level: passed"
+      ],
+      "case": "get console errors",
+      "choice": {
+        "arguments": {
+          "level": "error"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to return browser console errors since the last navigation, which is exactly what the console messages tool is for. Using level=\"error\" filters to errors, and omitting all=true keeps the scope to messages since the last navigation.",
+        "tool_name": "browser_console_messages"
+      },
+      "chosen_tools": [
+        "browser_console_messages"
+      ],
+      "elapsed_ms": 3043,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "navigate to url",
+      "choice": {
+        "arguments": {
+          "url": "https://example.com"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to open a specific URL in the browser. The browser_navigate tool is designed for this exact purpose.",
+        "tool_name": "browser_navigate"
+      },
+      "chosen_tools": [
+        "browser_navigate"
+      ],
+      "elapsed_ms": 5119,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "target: failed"
+      ],
+      "case": "inspect page for actionable refs",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "Taking an accessibility snapshot of the current page will provide the actionable element references needed for inspection.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 3793,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "fullPage: passed"
+      ],
+      "case": "capture full page visual proof",
+      "choice": {
+        "arguments": {
+          "fullPage": true
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested a full-page screenshot for visual proof. The `browser_take_screenshot` tool with `fullPage: true` fulfills this requirement.",
+        "tool_name": "browser_take_screenshot"
+      },
+      "chosen_tools": [
+        "browser_take_screenshot"
+      ],
+      "elapsed_ms": 3041,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "target: passed"
+      ],
+      "case": "click known target",
+      "choice": {
+        "arguments": {
+          "element": "Submit button",
+          "target": "submit-button"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to click the Submit button using the target reference 'submit-button'. The browser_click tool is the correct choice for this action.",
+        "tool_name": "browser_click"
+      },
+      "chosen_tools": [
+        "browser_click"
+      ],
+      "elapsed_ms": 5237,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "text: passed",
+        "submit: passed"
+      ],
+      "case": "type search and submit",
+      "choice": {
+        "arguments": {
+          "submit": true,
+          "target": "search-box",
+          "text": "playwright mcp"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires typing 'playwright mcp' into the search input with the target 'search-box' and pressing Enter. The browser_type tool allows typing text into an element and submitting it by setting the 'submit' parameter to true.",
+        "tool_name": "browser_type"
+      },
+      "chosen_tools": [
+        "browser_type"
+      ],
+      "elapsed_ms": 4630,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "fields: failed"
+      ],
+      "case": "fill multi field form",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "To identify the exact target elements for the email and name fields in the form, I need to capture an accessibility snapshot of the current page.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 3958,
+      "forbidden_used": [
+        "browser_snapshot"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [
+        "browser_fill_form"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "values: passed"
+      ],
+      "case": "select dropdown option",
+      "choice": {
+        "arguments": {
+          "element": "country dropdown",
+          "target": "country-select",
+          "values": [
+            "Canada"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires selecting 'Canada' from the country dropdown identified by 'country-select'. The browser_select_option tool is specifically designed for selecting options in dropdowns.",
+        "tool_name": "browser_select_option"
+      },
+      "chosen_tools": [
+        "browser_select_option"
+      ],
+      "elapsed_ms": 4196,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "text: passed"
+      ],
+      "case": "wait for success text",
+      "choice": {
+        "arguments": {
+          "text": "Success"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to wait until the text 'Success' appears on the page. The browser_wait_for tool is designed for this exact purpose.",
+        "tool_name": "browser_wait_for"
+      },
+      "chosen_tools": [
+        "browser_wait_for"
+      ],
+      "elapsed_ms": 2997,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "function: passed"
+      ],
+      "case": "evaluate local storage",
+      "choice": {
+        "arguments": {
+          "function": "() => window.localStorage.getItem('authToken')"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires reading a value from the browser's localStorage, which can only be done by executing JavaScript on the page. The browser_evaluate tool is designed for this purpose.",
+        "tool_name": "browser_evaluate"
+      },
+      "chosen_tools": [
+        "browser_evaluate"
+      ],
+      "elapsed_ms": 3486,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "key: passed"
+      ],
+      "case": "press escape key",
+      "choice": {
+        "arguments": {
+          "key": "Escape"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly requires pressing the Escape key to close a modal, which is directly accomplished using the browser_press_key tool.",
+        "tool_name": "browser_press_key"
+      },
+      "chosen_tools": [
+        "browser_press_key"
+      ],
+      "elapsed_ms": 6103,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "filter: passed"
+      ],
+      "case": "list api network requests",
+      "choice": {
+        "arguments": {
+          "filter": "/api/",
+          "static": false
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to list network requests filtered by '/api/'. The browser_network_requests tool provides this functionality. Setting static to false as we are looking for API requests.",
+        "tool_name": "browser_network_requests"
+      },
+      "chosen_tools": [
+        "browser_network_requests"
+      ],
+      "elapsed_ms": 6045,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "index: passed"
+      ],
+      "case": "inspect numbered network request",
+      "choice": {
+        "arguments": {
+          "index": 3
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested the full details for network request #3. The browser_network_request tool retrieves the headers and body of a specific network request using its 1-based index.",
+        "tool_name": "browser_network_request"
+      },
+      "chosen_tools": [
+        "browser_network_request"
+      ],
+      "elapsed_ms": 5002,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "level: passed"
+      ],
+      "case": "get console errors",
+      "choice": {
+        "arguments": {
+          "all": false,
+          "level": "error"
+        },
+        "confidence": 1.0,
+        "rationale": "The task specifically asks for browser console errors since the last navigation. The browser_console_messages tool allows filtering by level ('error') and setting 'all' to false ensures it only retrieves messages since the last navigation rather than the entire session.",
+        "tool_name": "browser_console_messages"
+      },
+      "chosen_tools": [
+        "browser_console_messages"
+      ],
+      "elapsed_ms": 5599,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_playwright_mcp"
+    },
+    {
+      "arg_details": [
+        "url: failed"
+      ],
+      "case": "navigate to url",
+      "choice": {
+        "url": "https://example.com"
+      },
+      "chosen_tools": [],
+      "elapsed_ms": 6405,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [
+        "browser_navigate"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "target: failed"
+      ],
+      "case": "inspect page for actionable refs",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The task requires inspecting the current page to find actionable element references, which is the exact purpose of the browser_snapshot tool.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 4495,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "fullPage: passed"
+      ],
+      "case": "capture full page visual proof",
+      "choice": {
+        "arguments": {
+          "filename": "fullpage_screenshot.png",
+          "fullPage": true,
+          "type": "png"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested a full-page screenshot for visual proof, which aligns perfectly with the browser_take_screenshot tool using the fullPage=true parameter.",
+        "tool_name": "browser_take_screenshot"
+      },
+      "chosen_tools": [
+        "browser_take_screenshot"
+      ],
+      "elapsed_ms": 5451,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "target: passed"
+      ],
+      "case": "click known target",
+      "choice": {
+        "arguments": {
+          "element": "Submit button",
+          "target": "submit-button"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to click the Submit button using the known target reference 'submit-button'.",
+        "tool_name": "browser_click"
+      },
+      "chosen_tools": [
+        "browser_click"
+      ],
+      "elapsed_ms": 3203,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "text: passed",
+        "submit: passed"
+      ],
+      "case": "type search and submit",
+      "choice": {
+        "arguments": {
+          "element": "search input",
+          "submit": true,
+          "target": "search-box",
+          "text": "playwright mcp"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to type a specific text into a known target element ('search-box') and press Enter to submit. The browser_type tool supports both typing and submitting in a single action.",
+        "tool_name": "browser_type"
+      },
+      "chosen_tools": [
+        "browser_type"
+      ],
+      "elapsed_ms": 3830,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "fields: failed"
+      ],
+      "case": "fill multi field form",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The exact element references for the email and name input fields are currently unknown. An accessibility snapshot must be taken first to identify the correct targets before the form can be filled using browser_fill_form.",
+        "tool_name": "browser_snapshot"
+      },
+      "chosen_tools": [
+        "browser_snapshot"
+      ],
+      "elapsed_ms": 14019,
+      "forbidden_used": [
+        "browser_snapshot"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [
+        "browser_fill_form"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "values: passed"
+      ],
+      "case": "select dropdown option",
+      "choice": {
+        "arguments": {
+          "element": "country dropdown",
+          "target": "country-select",
+          "values": [
+            "Canada"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks to select an option ('Canada') from a dropdown element with a known target ('country-select'). The browser_select_option tool is designed exactly for this purpose.",
+        "tool_name": "browser_select_option"
+      },
+      "chosen_tools": [
+        "browser_select_option"
+      ],
+      "elapsed_ms": 5088,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "text: passed"
+      ],
+      "case": "wait for success text",
+      "choice": {
+        "arguments": {
+          "text": "Success"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to wait for the text 'Success' to appear on the page, which perfectly matches the purpose of the browser_wait_for tool using the text parameter.",
+        "tool_name": "browser_wait_for"
+      },
+      "chosen_tools": [
+        "browser_wait_for"
+      ],
+      "elapsed_ms": 4861,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "function: passed"
+      ],
+      "case": "evaluate local storage",
+      "choice": {
+        "arguments": {
+          "function": "() => window.localStorage.getItem('authToken')"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires reading a specific value from the browser's localStorage, which is a page state variable that can be accessed by evaluating JavaScript.",
+        "tool_name": "browser_evaluate"
+      },
+      "chosen_tools": [
+        "browser_evaluate"
+      ],
+      "elapsed_ms": 3898,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "key: passed"
+      ],
+      "case": "press escape key",
+      "choice": {
+        "arguments": {
+          "key": "Escape"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to press the Escape key to close a modal, which is exactly what the browser_press_key tool is designed for.",
+        "tool_name": "browser_press_key"
+      },
+      "chosen_tools": [
+        "browser_press_key"
+      ],
+      "elapsed_ms": 2799,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "filter: passed"
+      ],
+      "case": "list api network requests",
+      "choice": {
+        "arguments": {
+          "filter": "/api/",
+          "static": false
+        },
+        "confidence": "High",
+        "rationale": "The user wants to list network requests filtered by the URL pattern '/api/'. The browser_network_requests tool is specifically designed to list requests and accepts a regular expression filter.",
+        "tool_name": "browser_network_requests"
+      },
+      "chosen_tools": [
+        "browser_network_requests"
+      ],
+      "elapsed_ms": 6839,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "index: passed"
+      ],
+      "case": "inspect numbered network request",
+      "choice": {
+        "arguments": {
+          "index": 3
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically asked for the full details of network request #3. The browser_network_request tool is designed to fetch headers, body, and details for a specific numbered request from a previous list.",
+        "tool_name": "browser_network_request"
+      },
+      "chosen_tools": [
+        "browser_network_request"
+      ],
+      "elapsed_ms": 3753,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "level: passed"
+      ],
+      "case": "get console errors",
+      "choice": {
+        "arguments": {
+          "level": "error"
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested browser console errors since the last navigation. The browser_console_messages tool with the level set to 'error' and 'all' omitted (which defaults to since the last navigation) perfectly matches this request.",
+        "tool_name": "browser_console_messages"
+      },
+      "chosen_tools": [
+        "browser_console_messages"
+      ],
+      "elapsed_ms": 4265,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "playwright_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_playwright_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "commit": "511320db60d6774557243a32b2ff201f14ca4188",
+    "docs": [
+      "README.md#tools",
+      "https://playwright.dev/docs/getting-started-mcp"
+    ],
+    "repo": "https://github.com/microsoft/playwright-mcp"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 9,
+    "passed_cases": 43,
+    "planned": 52,
+    "score": 0.827,
+    "skipped": 0,
+    "total": 52
+  }
+}

@@ -1,0 +1,1625 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "activity_summary",
+      "expected_args_contains": {
+        "start_time": "2026-06-30T08:00:00Z"
+      },
+      "expected_tools": [
+        "activity-summary"
+      ],
+      "forbidden_tools": [
+        "search-content",
+        "keyword-search",
+        "search-elements",
+        "export-video",
+        "list-meetings"
+      ],
+      "name": "broad morning recap starts summary",
+      "task": "What was I doing from 2026-06-30T08:00:00Z to 2026-06-30T12:00:00Z across apps and meetings?"
+    },
+    {
+      "check_family": "keyword_search",
+      "expected_args_contains": {
+        "q": "Stripe webhook"
+      },
+      "expected_tools": [
+        "keyword-search"
+      ],
+      "forbidden_tools": [
+        "activity-summary",
+        "search-elements",
+        "export-video",
+        "list-meetings"
+      ],
+      "name": "exact keyword uses keyword search",
+      "task": "Find every screen or transcript where I typed or saw the exact phrase \"Stripe webhook\" yesterday."
+    },
+    {
+      "check_family": "content_search",
+      "expected_args_contains": {
+        "speaker_name": "John"
+      },
+      "expected_tools": [
+        "search-content"
+      ],
+      "forbidden_tools": [
+        "activity-summary",
+        "keyword-search",
+        "search-elements",
+        "export-video",
+        "list-meetings"
+      ],
+      "name": "speaker transcript uses content search",
+      "task": "Find what John said about the database in audio transcripts from the last hour."
+    },
+    {
+      "check_family": "element_search",
+      "expected_args_contains": {
+        "q": "submit"
+      },
+      "expected_tools": [
+        "search-elements"
+      ],
+      "forbidden_tools": [
+        "search-content",
+        "activity-summary",
+        "keyword-search",
+        "frame-context",
+        "export-video"
+      ],
+      "name": "ui button lookup uses elements",
+      "task": "Find submit buttons I saw in Chrome today."
+    },
+    {
+      "check_family": "frame_context",
+      "expected_args_contains": {
+        "frame_id": "91234"
+      },
+      "expected_tools": [
+        "frame-context"
+      ],
+      "forbidden_tools": [
+        "search-content",
+        "get-frame-elements",
+        "activity-summary",
+        "export-video",
+        "list-meetings"
+      ],
+      "name": "known frame detail uses frame context",
+      "task": "For frame_id 91234, get the full context: visible text, parsed tree nodes, and URLs."
+    },
+    {
+      "check_family": "pipe_create",
+      "expected_args_contains": {
+        "name": "daily-work-summary"
+      },
+      "expected_tools": [
+        "create-pipe"
+      ],
+      "forbidden_tools": [
+        "run-pipe",
+        "pipe-logs",
+        "activity-summary"
+      ],
+      "name": "create recurring automation uses pipe",
+      "task": "Create a daily 6pm automation that summarizes today's work and sends me a notification."
+    },
+    {
+      "check_family": "pipe_logs",
+      "expected_args_contains": {
+        "name": "daily-time-report"
+      },
+      "expected_tools": [
+        "pipe-logs"
+      ],
+      "forbidden_tools": [
+        "create-pipe",
+        "run-pipe",
+        "activity-summary"
+      ],
+      "name": "verify pipe output uses logs",
+      "task": "I just ran the daily-time-report pipe. Show me its recent output and errors."
+    },
+    {
+      "check_family": "video_export",
+      "expected_args_contains": {
+        "output_path": "/tmp/demo.mp4",
+        "start_time": "2026-06-30T09:00:00Z"
+      },
+      "expected_tools": [
+        "export-video"
+      ],
+      "forbidden_tools": [
+        "activity-summary",
+        "search-content",
+        "list-meetings"
+      ],
+      "name": "export video uses video export",
+      "task": "Export screen recording video from 2026-06-30T09:00:00Z to 2026-06-30T09:15:00Z into /tmp/demo.mp4."
+    },
+    {
+      "check_family": "meeting_inventory",
+      "expected_args_contains": {
+        "q": "John"
+      },
+      "expected_tools": [
+        "list-meetings"
+      ],
+      "forbidden_tools": [
+        "activity-summary",
+        "search-content",
+        "frame-context"
+      ],
+      "name": "meeting inventory uses list meetings",
+      "task": "List meetings with John from 2026-06-30T08:00:00Z to 2026-06-30T12:00:00Z."
+    },
+    {
+      "check_family": "element_detail",
+      "expected_args_contains": {
+        "frame_id": "91234"
+      },
+      "expected_tools": [
+        "get-frame-elements"
+      ],
+      "forbidden_tools": [
+        "frame-context",
+        "search-elements",
+        "search-content"
+      ],
+      "name": "known frame elements use element tree",
+      "task": "For known frame_id 91234, return only the UI element tree."
+    },
+    {
+      "check_family": "pipe_run",
+      "expected_args_contains": {
+        "name": "daily-time-report"
+      },
+      "expected_tools": [
+        "run-pipe"
+      ],
+      "forbidden_tools": [
+        "create-pipe",
+        "pipe-logs",
+        "activity-summary"
+      ],
+      "name": "manual pipe run uses run pipe",
+      "task": "Run the existing daily-time-report pipe once now."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "passed": 11,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "passed": 11,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "passed": 10,
+      "provider": "openai",
+      "score": 0.909,
+      "skipped": 0,
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "passed": 11,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    }
+  ],
+  "description": "Compare README-level and source-level descriptions for Screenpipe MCP local activity tools.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "screenpipe mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/screenpipe_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "start_time: passed"
+      ],
+      "case": "broad morning recap starts summary",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 0.95,
+        "rationale": "This is a broad time-range question asking what the user was doing across apps and meetings, so the next step should start with a lightweight activity overview for the specified interval.",
+        "tool_name": "activity-summary"
+      },
+      "chosen_tools": [
+        "activity-summary"
+      ],
+      "elapsed_ms": 5036,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "exact keyword uses keyword search",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-07-01T00:00:00",
+          "q": "\"Stripe webhook\"",
+          "start_time": "2026-06-30T00:00:00"
+        },
+        "confidence": 0.96,
+        "rationale": "The task is an exact phrase lookup across screens and transcripts for yesterday, which should use keyword-search.",
+        "tool_name": "keyword-search"
+      },
+      "chosen_tools": [
+        "keyword-search"
+      ],
+      "elapsed_ms": 4316,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "speaker_name: passed"
+      ],
+      "case": "speaker transcript uses content search",
+      "choice": {
+        "arguments": {
+          "content_type": "audio",
+          "end_time": "now",
+          "limit": 50,
+          "q": "database",
+          "speaker_name": "John",
+          "start_time": "now-1h"
+        },
+        "confidence": 0.95,
+        "rationale": "The task asks for specific audio transcript content filtered by speaker (John) and keyword (database) within the last hour, which matches search-content with content type and speaker filtering.",
+        "tool_name": "search-content"
+      },
+      "chosen_tools": [
+        "search-content"
+      ],
+      "elapsed_ms": 7045,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "ui button lookup uses elements",
+      "choice": {
+        "arguments": {
+          "app_name": "Chrome",
+          "end_time": "2026-07-01T23:59:59",
+          "q": "submit",
+          "role": "button",
+          "start_time": "2026-07-01T00:00:00"
+        },
+        "confidence": 0.96,
+        "rationale": "The task asks for UI controls\u2014specifically submit buttons\u2014seen in Chrome today, which should use structured UI element search with a button role filter.",
+        "tool_name": "search-elements"
+      },
+      "chosen_tools": [
+        "search-elements"
+      ],
+      "elapsed_ms": 6595,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame detail uses frame context",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1,
+        "rationale": "The task asks for full context for a known frame, including visible text, parsed tree nodes, and URLs; this matches the frame-context tool.",
+        "tool_name": "frame-context"
+      },
+      "chosen_tools": [
+        "frame-context"
+      ],
+      "elapsed_ms": 2785,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: failed"
+      ],
+      "case": "create recurring automation uses pipe",
+      "choice": {
+        "arguments": {
+          "name": "Daily 6pm Work Summary Notification",
+          "prompt": "Every day at 6pm, summarize today's work activity from Screenpipe recordings and send me a notification with the key accomplishments, meetings, tasks, and any notable follow-ups.",
+          "run_now": false,
+          "schedule": "0 18 * * *"
+        },
+        "confidence": 0.98,
+        "rationale": "The task is to create a scheduled automation, so the correct next Screenpipe MCP tool is create-pipe. A daily 6pm schedule is represented with the cron expression '0 18 * * *'.",
+        "tool_name": "create-pipe"
+      },
+      "chosen_tools": [
+        "create-pipe"
+      ],
+      "elapsed_ms": 6972,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "verify pipe output uses logs",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 0.99,
+        "rationale": "The user wants the recent output and errors from a just-run pipe, which is exactly what the pipe-logs tool retrieves for a named pipe.",
+        "tool_name": "pipe-logs"
+      },
+      "chosen_tools": [
+        "pipe-logs"
+      ],
+      "elapsed_ms": 4392,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "output_path: passed",
+        "start_time: passed"
+      ],
+      "case": "export video uses video export",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T09:15:00Z",
+          "output_path": "/tmp/demo.mp4",
+          "start_time": "2026-06-30T09:00:00Z"
+        },
+        "confidence": 1,
+        "rationale": "The task requests exporting a screen recording video for a specific time range to a file path, which matches the export-video tool.",
+        "tool_name": "export-video"
+      },
+      "chosen_tools": [
+        "export-video"
+      ],
+      "elapsed_ms": 2824,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "meeting inventory uses list meetings",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "q": "John",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to list meetings within a time range and filter for John, which is a meeting inventory query best handled by list-meetings.",
+        "tool_name": "list-meetings"
+      },
+      "chosen_tools": [
+        "list-meetings"
+      ],
+      "elapsed_ms": 2669,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame elements use element tree",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1,
+        "rationale": "The task asks for only the UI element tree for a known frame_id, which is exactly what get-frame-elements provides.",
+        "tool_name": "get-frame-elements"
+      },
+      "chosen_tools": [
+        "get-frame-elements"
+      ],
+      "elapsed_ms": 2408,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "manual pipe run uses run pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 1,
+        "rationale": "The task is to run an existing pipe once immediately, which matches the run-pipe tool.",
+        "tool_name": "run-pipe"
+      },
+      "chosen_tools": [
+        "run-pipe"
+      ],
+      "elapsed_ms": 2884,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "start_time: passed"
+      ],
+      "case": "broad morning recap starts summary",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 0.95,
+        "rationale": "This is a broad bounded time-range question asking what the user was doing across apps and meetings, so the first tool should be activity-summary for an overview of app usage, windows/tabs, key text, and audio/transcriptions.",
+        "tool_name": "activity-summary"
+      },
+      "chosen_tools": [
+        "activity-summary"
+      ],
+      "elapsed_ms": 3396,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "exact keyword uses keyword search",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-07-01T00:00:00",
+          "limit": 100,
+          "q": "\"Stripe webhook\"",
+          "start_time": "2026-06-30T00:00:00"
+        },
+        "confidence": 0.9,
+        "rationale": "The user is asking for an exact phrase lookup across screens and transcripts for a bounded time range, which matches keyword-search. Quoting the phrase enforces exact phrase matching; yesterday is bounded from 2026-06-30 to 2026-07-01.",
+        "tool_name": "keyword-search"
+      },
+      "chosen_tools": [
+        "keyword-search"
+      ],
+      "elapsed_ms": 7335,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "speaker_name: passed"
+      ],
+      "case": "speaker transcript uses content search",
+      "choice": {
+        "arguments": {
+          "content_type": "audio",
+          "end_time": "now",
+          "limit": 5,
+          "max_content_length": 1000,
+          "q": "database",
+          "speaker_name": "John",
+          "start_time": "now-1h"
+        },
+        "confidence": 0.94,
+        "rationale": "The task asks for what a specific speaker said in audio transcripts about a topic within a bounded recent time range, which requires transcript content and speaker filtering; search-content is the appropriate tool.",
+        "tool_name": "search-content"
+      },
+      "chosen_tools": [
+        "search-content"
+      ],
+      "elapsed_ms": 5422,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "ui button lookup uses elements",
+      "choice": {
+        "arguments": {
+          "app_name": "Chrome",
+          "end_time": "2026-07-02T00:00:00",
+          "limit": 20,
+          "q": "submit",
+          "role": "button",
+          "source": "accessibility",
+          "start_time": "2026-07-01T00:00:00"
+        },
+        "confidence": 0.95,
+        "rationale": "The user is looking for a specific UI control type, submit buttons, in Chrome during today, so search-elements is the appropriate tool with accessibility/button filtering and a bounded time range.",
+        "tool_name": "search-elements"
+      },
+      "chosen_tools": [
+        "search-elements"
+      ],
+      "elapsed_ms": 5555,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame detail uses frame context",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1,
+        "rationale": "The task requests full context for a known frame ID, including visible text, parsed tree nodes, and URLs, which is exactly what frame-context provides.",
+        "tool_name": "frame-context"
+      },
+      "chosen_tools": [
+        "frame-context"
+      ],
+      "elapsed_ms": 2618,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "create recurring automation uses pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-work-summary-notification",
+          "prompt": "Summarize today's work from 00:00 local time through the current run time. Include the main tasks worked on, key apps/sites used, meetings or calls, decisions, blockers, and suggested next steps. Keep the summary concise and actionable. Send the finished summary to me as a desktop notification.",
+          "run_now": false,
+          "schedule": "0 18 * * *"
+        },
+        "confidence": 0.94,
+        "rationale": "The user wants to create a recurring scheduled automation, so the next Screenpipe MCP tool should be create-pipe. The schedule is daily at 6pm, expressed as a cron string.",
+        "tool_name": "create-pipe"
+      },
+      "chosen_tools": [
+        "create-pipe"
+      ],
+      "elapsed_ms": 7821,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "verify pipe output uses logs",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 0.99,
+        "rationale": "The user wants recent output and errors for an existing pipe that was just run, so the next step is to inspect that pipe's logs.",
+        "tool_name": "pipe-logs"
+      },
+      "chosen_tools": [
+        "pipe-logs"
+      ],
+      "elapsed_ms": 2596,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "output_path: passed",
+        "start_time: passed"
+      ],
+      "case": "export video uses video export",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T09:15:00Z",
+          "output_path": "/tmp/demo.mp4",
+          "start_time": "2026-06-30T09:00:00Z"
+        },
+        "confidence": 1,
+        "rationale": "The user explicitly asks to export a bounded screen recording clip to a specified file path, which matches export-video.",
+        "tool_name": "export-video"
+      },
+      "chosen_tools": [
+        "export-video"
+      ],
+      "elapsed_ms": 3131,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "meeting inventory uses list meetings",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "q": "John",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 0.99,
+        "rationale": "The user wants an inventory of meetings in a bounded time range filtered by attendee/title substring 'John', which matches list-meetings.",
+        "tool_name": "list-meetings"
+      },
+      "chosen_tools": [
+        "list-meetings"
+      ],
+      "elapsed_ms": 3900,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame elements use element tree",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 0.99,
+        "rationale": "The user has a known frame_id and asks for only the UI element tree, which is the purpose of get-frame-elements.",
+        "tool_name": "get-frame-elements"
+      },
+      "chosen_tools": [
+        "get-frame-elements"
+      ],
+      "elapsed_ms": 2114,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "manual pipe run uses run pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 1,
+        "rationale": "The user asks to run an existing pipe once immediately, which matches run-pipe.",
+        "tool_name": "run-pipe"
+      },
+      "chosen_tools": [
+        "run-pipe"
+      ],
+      "elapsed_ms": 2668,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "start_time: passed"
+      ],
+      "case": "broad morning recap starts summary",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is asking for a broad overview of their activities across apps and meetings within a specific time range. The activity-summary tool is designed to provide a lightweight compressed activity overview for a time range.",
+        "tool_name": "activity-summary"
+      },
+      "chosen_tools": [
+        "activity-summary"
+      ],
+      "elapsed_ms": 4194,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "exact keyword uses keyword search",
+      "choice": {
+        "arguments": {
+          "end_time": "today",
+          "q": "Stripe webhook",
+          "start_time": "yesterday"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for an exact phrase ('Stripe webhook') seen or typed yesterday. The keyword-search tool is specifically designed for fast keyword searches across OCR and audio.",
+        "tool_name": "keyword-search"
+      },
+      "chosen_tools": [
+        "keyword-search"
+      ],
+      "elapsed_ms": 4240,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "speaker_name: passed"
+      ],
+      "case": "speaker transcript uses content search",
+      "choice": {
+        "arguments": {
+          "content_type": "audio",
+          "q": "database",
+          "speaker_name": "John",
+          "start_time": "-1h"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for specific text ('database') spoken by a specific speaker ('John') in audio transcripts within a specific time frame (last hour). The search-content tool supports filtering by query, speaker name, content type, and start time.",
+        "tool_name": "search-content"
+      },
+      "chosen_tools": [
+        "search-content"
+      ],
+      "elapsed_ms": 7336,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "ui button lookup uses elements",
+      "choice": {
+        "arguments": {
+          "app_name": "Chrome",
+          "q": "submit",
+          "role": "button"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for specific UI elements (buttons) with the text 'submit' in a specific application (Chrome). The search-elements tool is designed exactly for finding UI controls, buttons, and page structure.",
+        "tool_name": "search-elements"
+      },
+      "chosen_tools": [
+        "search-elements"
+      ],
+      "elapsed_ms": 9935,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame detail uses frame context",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested the full context for a known frame (frame_id 91234), including visible text, parsed tree nodes, and URLs. The frame-context tool is designed exactly for this purpose.",
+        "tool_name": "frame-context"
+      },
+      "chosen_tools": [
+        "frame-context"
+      ],
+      "elapsed_ms": 2985,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "create recurring automation uses pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-work-summary",
+          "prompt": "Summarize today's work and send a notification.",
+          "run_now": false,
+          "schedule": "0 18 * * *"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to create a scheduled automation that runs daily at 6pm to summarize their work and send a notification. The create-pipe tool is specifically designed for creating scheduled AI automations.",
+        "tool_name": "create-pipe"
+      },
+      "chosen_tools": [
+        "create-pipe"
+      ],
+      "elapsed_ms": 4300,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "verify pipe output uses logs",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to see the recent output and errors for a specific pipe ('daily-time-report') that was just executed. The 'pipe-logs' tool is designed to retrieve a pipe's recent execution logs or output.",
+        "tool_name": "pipe-logs"
+      },
+      "chosen_tools": [
+        "pipe-logs"
+      ],
+      "elapsed_ms": 3056,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "output_path: passed",
+        "start_time: passed"
+      ],
+      "case": "export video uses video export",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T09:15:00Z",
+          "output_path": "/tmp/demo.mp4",
+          "start_time": "2026-06-30T09:00:00Z"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to export a screen recording video for a specific time range and save it to a specific file path. The export-video tool is designed exactly for this purpose.",
+        "tool_name": "export-video"
+      },
+      "chosen_tools": [
+        "export-video"
+      ],
+      "elapsed_ms": 4040,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "meeting inventory uses list meetings",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "q": "John",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to list meetings with a specific person ('John') within a given time range. The 'list-meetings' tool is designed to list detected meetings and accepts start_time, end_time, and a query string 'q' to filter by attendees or other meeting details.",
+        "tool_name": "list-meetings"
+      },
+      "chosen_tools": [
+        "list-meetings"
+      ],
+      "elapsed_ms": 4594,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame elements use element tree",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested the UI element tree for a known frame ID, which maps directly to the get-frame-elements tool.",
+        "tool_name": "get-frame-elements"
+      },
+      "chosen_tools": [
+        "get-frame-elements"
+      ],
+      "elapsed_ms": 3550,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "manual pipe run uses run pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to run an existing pipe named 'daily-time-report' immediately. The 'run-pipe' tool is designed exactly for this purpose.",
+        "tool_name": "run-pipe"
+      },
+      "chosen_tools": [
+        "run-pipe"
+      ],
+      "elapsed_ms": 2723,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "start_time: passed"
+      ],
+      "case": "broad morning recap starts summary",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is asking a broad question about what they were doing over a specific time range, which perfectly matches the purpose of the activity-summary tool.",
+        "tool_name": "activity-summary"
+      },
+      "chosen_tools": [
+        "activity-summary"
+      ],
+      "elapsed_ms": 4676,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "exact keyword uses keyword search",
+      "choice": {
+        "arguments": {
+          "end_time": "today",
+          "q": "\"Stripe webhook\"",
+          "start_time": "yesterday"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for an exact phrase ('Stripe webhook') seen or typed yesterday. The keyword-search tool is the best choice for fast, exact phrase lookups across OCR and audio.",
+        "tool_name": "keyword-search"
+      },
+      "chosen_tools": [
+        "keyword-search"
+      ],
+      "elapsed_ms": 7235,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "speaker_name: passed"
+      ],
+      "case": "speaker transcript uses content search",
+      "choice": {
+        "arguments": {
+          "content_type": "audio",
+          "q": "database",
+          "speaker_name": "John",
+          "start_time": "-1h"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for specific spoken text ('database') by a specific speaker ('John') in audio transcripts from the last hour. The search-content tool supports filtering by speaker_name and content_type='audio'.",
+        "tool_name": "search-content"
+      },
+      "chosen_tools": [
+        "search-content"
+      ],
+      "elapsed_ms": 7181,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "ui button lookup uses elements",
+      "choice": {
+        "arguments": {
+          "app_name": "Chrome",
+          "q": "submit",
+          "role": "button"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for specific UI controls (submit buttons) within a specific application (Chrome). The search-elements tool is specifically designed to search for UI elements like buttons, links, and text fields.",
+        "tool_name": "search-elements"
+      },
+      "chosen_tools": [
+        "search-elements"
+      ],
+      "elapsed_ms": 8032,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame detail uses frame context",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested the full context, including visible text, parsed tree nodes, and URLs, for a known frame ID (91234). The frame-context tool is designed exactly for this purpose.",
+        "tool_name": "frame-context"
+      },
+      "chosen_tools": [
+        "frame-context"
+      ],
+      "elapsed_ms": 3922,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "create recurring automation uses pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-work-summary",
+          "prompt": "Summarize today's work and send a notification.",
+          "run_now": false,
+          "schedule": "0 18 * * *"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to create a scheduled automation that runs daily at 6pm to summarize their work and send a notification. The `create-pipe` tool is designed exactly for this purpose, allowing us to set a cron schedule and a prompt for the automation.",
+        "tool_name": "create-pipe"
+      },
+      "chosen_tools": [
+        "create-pipe"
+      ],
+      "elapsed_ms": 4567,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "verify pipe output uses logs",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": "High",
+        "rationale": "The user wants to see the recent output and errors for the 'daily-time-report' pipe, which is exactly what the pipe-logs tool provides.",
+        "tool_name": "pipe-logs"
+      },
+      "chosen_tools": [
+        "pipe-logs"
+      ],
+      "elapsed_ms": 3614,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "output_path: passed",
+        "start_time: passed"
+      ],
+      "case": "export video uses video export",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T09:15:00Z",
+          "output_path": "/tmp/demo.mp4",
+          "start_time": "2026-06-30T09:00:00Z"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to export a screen recording video for a specific time range and provided an output path, which perfectly matches the purpose and inputs of the export-video tool.",
+        "tool_name": "export-video"
+      },
+      "chosen_tools": [
+        "export-video"
+      ],
+      "elapsed_ms": 3470,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "q: passed"
+      ],
+      "case": "meeting inventory uses list meetings",
+      "choice": {
+        "arguments": {
+          "end_time": "2026-06-30T12:00:00Z",
+          "q": "John",
+          "start_time": "2026-06-30T08:00:00Z"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is asking to find meetings with a specific attendee ('John') within a bounded time range. The 'list-meetings' tool is designed to list detected meetings and supports substring filtering via the 'q' parameter for attendees or titles.",
+        "tool_name": "list-meetings"
+      },
+      "chosen_tools": [
+        "list-meetings"
+      ],
+      "elapsed_ms": 4154,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "frame_id: passed"
+      ],
+      "case": "known frame elements use element tree",
+      "choice": {
+        "arguments": {
+          "frame_id": 91234
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested the UI element tree for a known frame ID (91234), which perfectly matches the purpose of the get-frame-elements tool.",
+        "tool_name": "get-frame-elements"
+      },
+      "chosen_tools": [
+        "get-frame-elements"
+      ],
+      "elapsed_ms": 5185,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    },
+    {
+      "arg_details": [
+        "name: passed"
+      ],
+      "case": "manual pipe run uses run pipe",
+      "choice": {
+        "arguments": {
+          "name": "daily-time-report"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to run an existing pipe named 'daily-time-report' immediately, which matches the purpose of the run-pipe tool.",
+        "tool_name": "run-pipe"
+      },
+      "chosen_tools": [
+        "run-pipe"
+      ],
+      "elapsed_ms": 4558,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "screenpipe_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_screenpipe_mcp"
+    }
+  ],
+  "source": {
+    "commit": "2de07ff501a63d3d3f0f39a9a602640a833d151f",
+    "package": "screenpipe-mcp",
+    "package_version": "0.18.14",
+    "repo": "https://github.com/screenpipe/screenpipe",
+    "slice": "local screen/audio search, UI element lookup, meeting workflows, and scheduled pipes",
+    "yc": "Screenpipe, YC S26"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 1,
+    "passed_cases": 43,
+    "planned": 44,
+    "score": 0.977,
+    "skipped": 0,
+    "total": 44
+  }
+}

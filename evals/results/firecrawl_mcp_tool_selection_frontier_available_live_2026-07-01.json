@@ -1,0 +1,2646 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "single_page_scrape",
+      "expected_args_contains": {
+        "url": "example.com/product/123"
+      },
+      "expected_tools": [
+        "firecrawl_scrape"
+      ],
+      "forbidden_tools": [
+        "firecrawl_extract",
+        "firecrawl_batch_scrape",
+        "firecrawl_interact",
+        "firecrawl_monitor_create"
+      ],
+      "name": "single known page structured fields",
+      "task": "Use Firecrawl on this exact product page and return only structured JSON fields name, price, and availability: https://example.com/product/123"
+    },
+    {
+      "check_family": "batch_scrape",
+      "expected_args_contains": {
+        "urls": "example.com/blog/a"
+      },
+      "expected_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_crawl",
+        "firecrawl_extract"
+      ],
+      "name": "several known pages",
+      "task": "Get the readable markdown for these three exact URLs: https://example.com/blog/a, https://example.com/blog/b, and https://example.com/blog/c."
+    },
+    {
+      "check_family": "status_polling",
+      "expected_args_contains": {
+        "id": "batch_123"
+      },
+      "expected_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "forbidden_tools": [
+        "firecrawl_check_crawl_status",
+        "firecrawl_agent_status"
+      ],
+      "name": "batch status",
+      "task": "Check whether Firecrawl batch scrape job batch_123 has completed."
+    },
+    {
+      "check_family": "url_mapping",
+      "expected_args_contains": {
+        "search": "webhook",
+        "url": "docs.example.com"
+      },
+      "expected_tools": [
+        "firecrawl_map"
+      ],
+      "forbidden_tools": [
+        "firecrawl_search",
+        "firecrawl_crawl",
+        "firecrawl_scrape"
+      ],
+      "name": "discover matching urls on known site",
+      "task": "On https://docs.example.com, find URLs related to webhook events. I only need candidate URLs right now, not page content."
+    },
+    {
+      "check_family": "web_search",
+      "expected_args_contains": {
+        "query": "latest React Server Components"
+      },
+      "expected_tools": [
+        "firecrawl_search"
+      ],
+      "forbidden_tools": [
+        "firecrawl_map",
+        "firecrawl_crawl",
+        "firecrawl_scrape",
+        "firecrawl_interact",
+        "firecrawl_monitor_create"
+      ],
+      "name": "unknown source web search",
+      "task": "Find current sources about the latest React Server Components updates. I do not know which site has the answer."
+    },
+    {
+      "check_family": "site_crawl",
+      "expected_args_contains": {
+        "url": "example.com/blog"
+      },
+      "expected_tools": [
+        "firecrawl_crawl"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_map",
+        "firecrawl_batch_scrape"
+      ],
+      "name": "comprehensive section crawl",
+      "task": "Extract content from all posts in the first two levels under https://example.com/blog/ so I can analyze the whole section."
+    },
+    {
+      "check_family": "status_polling",
+      "expected_args_contains": {
+        "id": "crawl_456"
+      },
+      "expected_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "forbidden_tools": [
+        "firecrawl_check_batch_status",
+        "firecrawl_agent_status"
+      ],
+      "name": "crawl status",
+      "task": "Poll crawl job crawl_456 and return its status."
+    },
+    {
+      "check_family": "structured_extraction",
+      "expected_args_contains": {
+        "prompt": "price",
+        "urls": "example.com/p1"
+      },
+      "expected_tools": [
+        "firecrawl_extract"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_batch_scrape",
+        "firecrawl_agent"
+      ],
+      "name": "multi page structured extraction",
+      "task": "Extract name, price, and description from these product pages as a structured dataset: https://example.com/p1, https://example.com/p2, https://example.com/p3."
+    },
+    {
+      "check_family": "agent_research",
+      "expected_args_contains": {
+        "prompt": "competitor"
+      },
+      "expected_tools": [
+        "firecrawl_agent"
+      ],
+      "forbidden_tools": [
+        "firecrawl_search",
+        "firecrawl_extract",
+        "firecrawl_scrape"
+      ],
+      "name": "complex autonomous research",
+      "task": "Start a Firecrawl autonomous agent job to find the top five AI infrastructure startups founded in 2025, gather funding amounts from multiple sources, and return a structured table. I do not know the URLs."
+    },
+    {
+      "check_family": "status_polling",
+      "expected_args_contains": {
+        "id": "agent_789"
+      },
+      "expected_tools": [
+        "firecrawl_agent_status"
+      ],
+      "forbidden_tools": [
+        "firecrawl_check_crawl_status",
+        "firecrawl_check_batch_status"
+      ],
+      "name": "agent status",
+      "task": "Check whether Firecrawl agent job agent_789 is complete and retrieve results if ready."
+    },
+    {
+      "check_family": "page_interaction",
+      "expected_args_contains": {
+        "prompt": "search",
+        "url": "example.com/app"
+      },
+      "expected_tools": [
+        "firecrawl_interact"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_extract",
+        "firecrawl_search"
+      ],
+      "name": "interactive page operation",
+      "task": "Open https://example.com/app, type 'wireless keyboard' into the site search box, submit the search, and extract the visible results."
+    },
+    {
+      "check_family": "monitor_create",
+      "expected_args_contains": {
+        "goal": "pricing",
+        "page": "example.com/pricing"
+      },
+      "expected_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_crawl",
+        "firecrawl_search"
+      ],
+      "name": "create pricing monitor",
+      "task": "Monitor https://example.com/pricing every day and alert when pricing, packaging, or launch messaging changes materially."
+    },
+    {
+      "check_family": "output_budget",
+      "expected_args_contains": {
+        "formats": "json",
+        "url": "example.com/product/123"
+      },
+      "expected_tools": [
+        "firecrawl_scrape"
+      ],
+      "forbidden_tools": [
+        "firecrawl_extract",
+        "firecrawl_crawl",
+        "firecrawl_batch_scrape"
+      ],
+      "name": "single page concise json avoids markdown",
+      "task": "Use Firecrawl on this exact URL and return only concise JSON fields title, price, and availability. Do not return markdown or full page text: https://example.com/product/123"
+    },
+    {
+      "check_family": "error_recovery",
+      "expected_args_contains": {
+        "prompt": "click",
+        "url": "example.com/app"
+      },
+      "expected_tools": [
+        "firecrawl_interact"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_extract",
+        "firecrawl_search"
+      ],
+      "name": "scrape js error recovers with interact",
+      "task": "The previous Firecrawl scrape of https://example.com/app failed with error: page requires JavaScript interaction before content is visible. Next, open the page, click the Sign in button, and extract the visible account panel."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "search": "api reference",
+        "url": "docs.example.com"
+      },
+      "expected_tools": [
+        "firecrawl_map"
+      ],
+      "forbidden_tools": [
+        "firecrawl_scrape",
+        "firecrawl_crawl",
+        "firecrawl_extract"
+      ],
+      "name": "url index before content fetch",
+      "task": "Use Firecrawl to find which URLs under https://docs.example.com contain API reference pages. I only need the URL candidates right now, not page content."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 4,
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "passed": 11,
+      "provider": "gemini",
+      "score": 0.733,
+      "skipped": 0,
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "passed": 14,
+      "provider": "gemini",
+      "score": 0.933,
+      "skipped": 0,
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 3,
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "passed": 12,
+      "provider": "openai",
+      "score": 0.8,
+      "skipped": 0,
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 1,
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "passed": 14,
+      "provider": "openai",
+      "score": 0.933,
+      "skipped": 0,
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    }
+  ],
+  "description": "Compare legacy and tuned Firecrawl MCP tool descriptions for scrape, batch scrape, map, search, crawl, extract, agent, interact, status, feedback, and monitor workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "firecrawl mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/firecrawl_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "url: failed"
+      ],
+      "case": "single known page structured fields",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract only the product's name, price, and availability from this product page. Return null for any field not found.",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "availability": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "price": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "price",
+              "availability"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/product/123"
+          ]
+        },
+        "confidence": 0.97,
+        "rationale": "The task requires structured fields from a known single product page, so firecrawl_extract is the smallest practical tool for extracting name, price, and availability directly as JSON.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 6132,
+      "forbidden_used": [
+        "firecrawl_extract"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [
+        "firecrawl_scrape"
+      ],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "urls: passed"
+      ],
+      "case": "several known pages",
+      "choice": {
+        "arguments": {
+          "options": {
+            "formats": [
+              "markdown"
+            ]
+          },
+          "urls": [
+            "https://example.com/blog/a",
+            "https://example.com/blog/b",
+            "https://example.com/blog/c"
+          ]
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires readable markdown from three known exact URLs, so a batch scrape is the smallest practical single tool call for multiple specified pages.",
+        "tool_name": "firecrawl_batch_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "elapsed_ms": 4502,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "batch status",
+      "choice": {
+        "arguments": {
+          "id": "batch_123"
+        },
+        "confidence": 1,
+        "rationale": "The task is specifically to check completion status of an existing Firecrawl batch scrape job, which is exactly what the batch status tool is for.",
+        "tool_name": "firecrawl_check_batch_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "elapsed_ms": 3168,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "discover matching urls on known site",
+      "choice": {
+        "arguments": {
+          "limit": 25,
+          "search": "webhook events",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.93,
+        "rationale": "The task only needs candidate URLs on a known site, not page content. firecrawl_map is the smallest-scope tool for discovering indexed URLs and can filter for webhook event-related paths.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 4529,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "unknown source web search",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "query": "latest React Server Components updates official React blog React 19 Server Components",
+          "scrapeOptions": {
+            "formats": [
+              "markdown"
+            ]
+          }
+        },
+        "confidence": 0.93,
+        "rationale": "The relevant site is unknown, so a web search is needed. firecrawl_search is the smallest practical scope for finding current sources across the web and can optionally scrape the top results for evidence.",
+        "tool_name": "firecrawl_search"
+      },
+      "chosen_tools": [
+        "firecrawl_search"
+      ],
+      "elapsed_ms": 6688,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "comprehensive section crawl",
+      "choice": {
+        "arguments": {
+          "maxDiscoveryDepth": 2,
+          "url": "https://example.com/blog/"
+        },
+        "confidence": 0.92,
+        "rationale": "The task requires extracting content from multiple related pages under a known blog section, limited to the first two levels. A crawl starting at the blog URL with maxDiscoveryDepth 2 is the smallest practical scope that can discover and extract those posts' content.",
+        "tool_name": "firecrawl_crawl"
+      },
+      "chosen_tools": [
+        "firecrawl_crawl"
+      ],
+      "elapsed_ms": 5446,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "crawl status",
+      "choice": {
+        "arguments": {
+          "id": "crawl_456"
+        },
+        "confidence": 1,
+        "rationale": "The task is to poll an existing crawl job and return its status, which is exactly what firecrawl_check_crawl_status is for.",
+        "tool_name": "firecrawl_check_crawl_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "elapsed_ms": 3905,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "urls: passed"
+      ],
+      "case": "multi page structured extraction",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and description from each provided product page. Return a structured dataset with one item per URL, including the source URL.",
+          "schema": {
+            "properties": {
+              "products": {
+                "items": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "name",
+                    "price",
+                    "description"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/p1",
+            "https://example.com/p2",
+            "https://example.com/p3"
+          ]
+        },
+        "confidence": 0.98,
+        "rationale": "The task asks for specific structured fields from multiple known product URLs, so the structured extraction tool is the smallest appropriate scope.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 5841,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: failed"
+      ],
+      "case": "complex autonomous research",
+      "choice": {
+        "arguments": {
+          "prompt": "Find the top five AI infrastructure startups founded in 2025. Because URLs are unknown, search the web broadly and use multiple credible sources where possible. For each startup, gather: company name, founding year, headquarters/location, concise description of AI infrastructure focus, total funding amount raised, latest/major funding round details, investors if available, and at least two source URLs supporting the funding amount when possible. Rank the startups by total funding amount raised, highest first. Return the result as a structured table and include notes on source conflicts or uncertainty.",
+          "schema": {
+            "properties": {
+              "startups": {
+                "items": {
+                  "properties": {
+                    "ai_infrastructure_focus": {
+                      "type": "string"
+                    },
+                    "company_name": {
+                      "type": "string"
+                    },
+                    "founded_year": {
+                      "type": "integer"
+                    },
+                    "funding_round_details": {
+                      "type": "string"
+                    },
+                    "headquarters": {
+                      "type": "string"
+                    },
+                    "investors": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "rank": {
+                      "type": "integer"
+                    },
+                    "source_notes": {
+                      "type": "string"
+                    },
+                    "source_urls": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "total_funding_amount": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "rank",
+                    "company_name",
+                    "founded_year",
+                    "ai_infrastructure_focus",
+                    "total_funding_amount",
+                    "source_urls"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "startups"
+            ],
+            "type": "object"
+          }
+        },
+        "confidence": 0.98,
+        "rationale": "The user explicitly asks to start an autonomous agent job, does not know the URLs, and needs multi-source web research plus structured output. firecrawl_agent is the smallest practical single tool for autonomous discovery, browsing, and structured extraction.",
+        "tool_name": "firecrawl_agent"
+      },
+      "chosen_tools": [
+        "firecrawl_agent"
+      ],
+      "elapsed_ms": 6245,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "agent status",
+      "choice": {
+        "arguments": {
+          "id": "agent_789"
+        },
+        "confidence": 1,
+        "rationale": "The task is to check the status of an existing Firecrawl agent job and retrieve results if it is complete, which is exactly what firecrawl_agent_status is for.",
+        "tool_name": "firecrawl_agent_status"
+      },
+      "chosen_tools": [
+        "firecrawl_agent_status"
+      ],
+      "elapsed_ms": 2604,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "interactive page operation",
+      "choice": {
+        "arguments": {
+          "prompt": "Open the page, locate the site search box, type 'wireless keyboard', submit the search, and extract the visible search results shown after submission.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.98,
+        "rationale": "The task requires browser interaction with a dynamic page UI\u2014typing into a search box and submitting\u2014then extracting the resulting visible content, which is exactly what firecrawl_interact is designed for. It has the smallest practical scope because only one known page needs interaction.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 3723,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "goal: passed",
+        "page: passed"
+      ],
+      "case": "create pricing monitor",
+      "choice": {
+        "arguments": {
+          "goal": "Monitor this pricing page every day and alert when pricing, packaging, or launch messaging changes materially.",
+          "page": "https://example.com/pricing"
+        },
+        "confidence": 0.99,
+        "rationale": "The task is to create an ongoing recurring monitor for a specific page and detect material changes, which is exactly what firecrawl_monitor_create is designed for. It has the smallest practical scope because only one known URL needs monitoring.",
+        "tool_name": "firecrawl_monitor_create"
+      },
+      "chosen_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "elapsed_ms": 4029,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "formats: failed",
+        "url: failed"
+      ],
+      "case": "single page concise json avoids markdown",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract only the product title, price, and availability from this page. Return concise JSON with exactly these fields: title, price, availability.",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "availability": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "price",
+              "availability"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/product/123"
+          ]
+        },
+        "confidence": 0.96,
+        "rationale": "The task asks for specific structured fields from one known URL, so firecrawl_extract provides the requested concise JSON with the smallest practical scope.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 4223,
+      "forbidden_used": [
+        "firecrawl_extract"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [
+        "firecrawl_scrape"
+      ],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "scrape js error recovers with interact",
+      "choice": {
+        "arguments": {
+          "prompt": "Open the page, click the Sign in button, wait until the account panel is visible, and extract the visible contents of the account panel.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.98,
+        "rationale": "The page requires JavaScript interaction before content is visible, and the next step specifically involves clicking a Sign in button and extracting content revealed by the interaction. firecrawl_interact is the smallest practical Firecrawl tool for operating dynamic page UI and retrieving the resulting visible content.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 4821,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "url index before content fetch",
+      "choice": {
+        "arguments": {
+          "limit": 100,
+          "search": "API reference",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.93,
+        "rationale": "The task only needs candidate URLs under a known site, not page content. firecrawl_map is the smallest-scope tool for discovering/filtering URLs on a website before scraping.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 5007,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "single known page structured fields",
+      "choice": {
+        "arguments": {
+          "formats": [
+            "json"
+          ],
+          "url": "https://example.com/product/123"
+        },
+        "confidence": 0.93,
+        "rationale": "The task targets one exact known product page and asks for specific structured fields, so a single-page scrape with JSON output is the smallest practical Firecrawl scope.",
+        "tool_name": "firecrawl_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_scrape"
+      ],
+      "elapsed_ms": 8306,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "urls: passed"
+      ],
+      "case": "several known pages",
+      "choice": {
+        "arguments": {
+          "options": {
+            "formats": [
+              "markdown"
+            ],
+            "onlyMainContent": true
+          },
+          "urls": [
+            "https://example.com/blog/a",
+            "https://example.com/blog/b",
+            "https://example.com/blog/c"
+          ]
+        },
+        "confidence": 0.99,
+        "rationale": "The task provides three exact URLs and asks for readable markdown from all of them, so a batch scrape with markdown output is the smallest practical single Firecrawl call.",
+        "tool_name": "firecrawl_batch_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "elapsed_ms": 4074,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "batch status",
+      "choice": {
+        "arguments": {
+          "id": "batch_123"
+        },
+        "confidence": 1,
+        "rationale": "The user provided a batch scrape job ID and asks whether it has completed, which requires polling the batch scrape status tool.",
+        "tool_name": "firecrawl_check_batch_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "elapsed_ms": 2514,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "discover matching urls on known site",
+      "choice": {
+        "arguments": {
+          "limit": 20,
+          "search": "webhook events",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.98,
+        "rationale": "The user needs candidate URLs on a known site and explicitly does not need page content, so URL discovery with a focused search is the smallest practical scope.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 3408,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "unknown source web search",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "query": "latest React Server Components updates official React blog Next.js release notes React Server Components"
+        },
+        "confidence": 0.97,
+        "rationale": "The user does not know which site has the answer and wants current sources, so an open-web search is the smallest practical next step to discover relevant URLs before scraping any specific pages.",
+        "tool_name": "firecrawl_search"
+      },
+      "chosen_tools": [
+        "firecrawl_search"
+      ],
+      "elapsed_ms": 6068,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "comprehensive section crawl",
+      "choice": {
+        "arguments": {
+          "maxDepth": 2,
+          "url": "https://example.com/blog/"
+        },
+        "confidence": 0.93,
+        "rationale": "The task requires extracting content from many related pages under a known blog section, limited to the first two levels. A crawl scoped to the blog URL with maxDepth 2 is the smallest practical tool that can collect content across the section without needing prior URL discovery.",
+        "tool_name": "firecrawl_crawl"
+      },
+      "chosen_tools": [
+        "firecrawl_crawl"
+      ],
+      "elapsed_ms": 8732,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "crawl status",
+      "choice": {
+        "arguments": {
+          "id": "crawl_456"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to poll an existing crawl job and return its status; this tool is specifically for checking crawl job status by crawl ID.",
+        "tool_name": "firecrawl_check_crawl_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "elapsed_ms": 2570,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "urls: passed"
+      ],
+      "case": "multi page structured extraction",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and description from each product page. Return one record per URL, preserving the source URL.",
+          "schema": {
+            "properties": {
+              "products": {
+                "items": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "name",
+                    "price",
+                    "description"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "products"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/p1",
+            "https://example.com/p2",
+            "https://example.com/p3"
+          ]
+        },
+        "confidence": 0.98,
+        "rationale": "The task requests structured extraction of specific fields across multiple known product page URLs, which matches firecrawl_extract better than single-page scrape or batch scraping raw content.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 5275,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: failed"
+      ],
+      "case": "complex autonomous research",
+      "choice": {
+        "arguments": {
+          "prompt": "Find the top five AI infrastructure startups founded in 2025, ranked by total disclosed funding amount. Because the URLs are unknown, perform open-ended multi-source web research. For each startup, verify that it is an AI infrastructure company and that it was founded in 2025. Gather funding amounts from multiple credible sources where available, reconcile discrepancies, and return a structured table with citations/source URLs for each key claim.",
+          "schema": {
+            "properties": {
+              "startups": {
+                "items": {
+                  "properties": {
+                    "ai_infrastructure_focus": {
+                      "type": "string"
+                    },
+                    "company_name": {
+                      "type": "string"
+                    },
+                    "founded_year": {
+                      "type": "integer"
+                    },
+                    "funding_summary": {
+                      "type": "string"
+                    },
+                    "key_investors": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "notes_on_discrepancies": {
+                      "type": "string"
+                    },
+                    "rank": {
+                      "type": "integer"
+                    },
+                    "sources": {
+                      "items": {
+                        "properties": {
+                          "claims_supported": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "source_name": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "source_name",
+                          "claims_supported"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "total_disclosed_funding_usd": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "rank",
+                    "company_name",
+                    "founded_year",
+                    "ai_infrastructure_focus",
+                    "total_disclosed_funding_usd",
+                    "funding_summary",
+                    "sources"
+                  ],
+                  "type": "object"
+                },
+                "maxItems": 5,
+                "minItems": 5,
+                "type": "array"
+              }
+            },
+            "required": [
+              "startups"
+            ],
+            "type": "object"
+          }
+        },
+        "confidence": 0.98,
+        "rationale": "The task explicitly requires starting an autonomous research job, the URLs are unknown, and the work is complex multi-source research with structured output. firecrawl_agent is the smallest appropriate Firecrawl tool for open-ended, multi-hop research beyond simple search or scraping.",
+        "tool_name": "firecrawl_agent"
+      },
+      "chosen_tools": [
+        "firecrawl_agent"
+      ],
+      "elapsed_ms": 16406,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": false,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "agent status",
+      "choice": {
+        "arguments": {
+          "id": "agent_789"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to check completion status and retrieve results for an existing Firecrawl agent job ID, which is exactly what firecrawl_agent_status is for.",
+        "tool_name": "firecrawl_agent_status"
+      },
+      "chosen_tools": [
+        "firecrawl_agent_status"
+      ],
+      "elapsed_ms": 2380,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "interactive page operation",
+      "choice": {
+        "arguments": {
+          "prompt": "Open the page, type 'wireless keyboard' into the site search box, submit the search, wait for results to load, and extract the visible search results including titles, prices/snippets if shown, and result links if available.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.98,
+        "rationale": "The task requires interacting with a dynamic page by typing into a search box and submitting before extracting visible results, which is specifically handled by firecrawl_interact.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 3736,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "goal: passed",
+        "page: passed"
+      ],
+      "case": "create pricing monitor",
+      "choice": {
+        "arguments": {
+          "goal": "Monitor daily for material changes to pricing, packaging, or launch messaging and alert when such changes occur.",
+          "page": "https://example.com/pricing"
+        },
+        "confidence": 0.99,
+        "rationale": "The user is asking to set up recurring monitoring and alerts for meaningful changes on a specific page, which matches firecrawl_monitor_create with the smallest scope: one page and a concise change goal.",
+        "tool_name": "firecrawl_monitor_create"
+      },
+      "chosen_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "elapsed_ms": 5348,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "formats: passed",
+        "url: passed"
+      ],
+      "case": "single page concise json avoids markdown",
+      "choice": {
+        "arguments": {
+          "formats": [
+            "json"
+          ],
+          "url": "https://example.com/product/123"
+        },
+        "confidence": 0.94,
+        "rationale": "The exact single product URL is known and only specific structured fields are needed, so a focused single-page scrape with JSON output is the smallest practical scope.",
+        "tool_name": "firecrawl_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_scrape"
+      ],
+      "elapsed_ms": 9386,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "scrape js error recovers with interact",
+      "choice": {
+        "arguments": {
+          "prompt": "Open the page, click the \"Sign in\" button, wait for the account panel to become visible, and extract the visible contents of that account panel.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 0.98,
+        "rationale": "The page requires JavaScript interaction before the desired content is visible, and the task specifically requires clicking a Sign in button before extraction. firecrawl_interact is the smallest-scope tool designed for click/wait/extract workflows on dynamic pages.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 5580,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "url index before content fetch",
+      "choice": {
+        "arguments": {
+          "limit": 50,
+          "search": "API reference",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 0.96,
+        "rationale": "The task is URL discovery within a known site and only needs candidate URLs, not page content. firecrawl_map is designed to list matching URLs on one site with minimal scope, and the search term focuses discovery on API reference pages.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 3316,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "url: failed"
+      ],
+      "case": "single known page structured fields",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and availability.",
+          "schema": {
+            "properties": {
+              "availability": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "price",
+              "availability"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/product/123"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires extracting specific structured data (name, price, and availability) from a single known product URL. The firecrawl_extract tool is specifically designed for extracting structured JSON data from web pages using LLM capabilities, making it the perfect fit with the smallest practical scope.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 8462,
+      "forbidden_used": [
+        "firecrawl_extract"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [
+        "firecrawl_scrape"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "urls: passed"
+      ],
+      "case": "several known pages",
+      "choice": {
+        "arguments": {
+          "options": {
+            "formats": [
+              "markdown"
+            ]
+          },
+          "urls": [
+            "https://example.com/blog/a",
+            "https://example.com/blog/b",
+            "https://example.com/blog/c"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided exactly three specific URLs to scrape. The firecrawl_batch_scrape tool is the most efficient way to retrieve content from multiple known URLs simultaneously.",
+        "tool_name": "firecrawl_batch_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "elapsed_ms": 5656,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "batch status",
+      "choice": {
+        "arguments": {
+          "id": "batch_123"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to check the status of a batch scrape job with the ID 'batch_123'. The firecrawl_check_batch_status tool is designed exactly for this purpose.",
+        "tool_name": "firecrawl_check_batch_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "elapsed_ms": 5616,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "discover matching urls on known site",
+      "choice": {
+        "arguments": {
+          "search": "webhook events",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to discover candidate URLs related to webhook events on a specific website without extracting the page content. The firecrawl_map tool is designed exactly for URL discovery on a given site and supports a search parameter to filter the results.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 6066,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "unknown source web search",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "query": "latest React Server Components updates"
+        },
+        "confidence": 1.0,
+        "rationale": "Since the specific website containing the information is unknown, the firecrawl_search tool is the best choice. It allows us to search the web for the latest updates on React Server Components and extract relevant content from the top search results.",
+        "tool_name": "firecrawl_search"
+      },
+      "chosen_tools": [
+        "firecrawl_search"
+      ],
+      "elapsed_ms": 8965,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "comprehensive section crawl",
+      "choice": {
+        "arguments": {
+          "maxDiscoveryDepth": 2,
+          "url": "https://example.com/blog/"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to extract content from all posts within a specific section of a website up to a depth of two levels. The firecrawl_crawl tool is designed exactly for this purpose, allowing a starting URL and a maxDiscoveryDepth parameter to control how deep the crawler goes while extracting content.",
+        "tool_name": "firecrawl_crawl"
+      },
+      "chosen_tools": [
+        "firecrawl_crawl"
+      ],
+      "elapsed_ms": 7521,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "crawl status",
+      "choice": {
+        "arguments": {
+          "id": "crawl_456"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to poll the status of a crawl job with the ID 'crawl_456'. The firecrawl_check_crawl_status tool is specifically designed to check the status of an existing crawl job using its ID.",
+        "tool_name": "firecrawl_check_crawl_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "elapsed_ms": 5650,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "urls: passed"
+      ],
+      "case": "multi page structured extraction",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and description from the product page.",
+          "schema": {
+            "properties": {
+              "description": {
+                "description": "The description of the product",
+                "type": "string"
+              },
+              "name": {
+                "description": "The name of the product",
+                "type": "string"
+              },
+              "price": {
+                "description": "The price of the product",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "price",
+              "description"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/p1",
+            "https://example.com/p2",
+            "https://example.com/p3"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires extracting specific structured data (name, price, and description) from a known list of URLs. The firecrawl_extract tool is specifically designed for this exact use case, allowing us to pass multiple URLs and a JSON schema to reliably extract the requested fields.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 11526,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: failed"
+      ],
+      "case": "complex autonomous research",
+      "choice": {
+        "arguments": {
+          "prompt": "Find the top five AI infrastructure startups founded in 2025, gather funding amounts from multiple sources, and return a structured table.",
+          "schema": {
+            "properties": {
+              "startups": {
+                "items": {
+                  "properties": {
+                    "funding_amount": {
+                      "description": "Total funding amount gathered",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Name of the startup",
+                      "type": "string"
+                    },
+                    "sources": {
+                      "description": "URLs or names of the sources where the funding information was found",
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "funding_amount",
+                    "sources"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "startups"
+            ],
+            "type": "object"
+          }
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to start an autonomous agent job to research specific information (top five AI infrastructure startups founded in 2025 and their funding amounts) across multiple unknown sources and return it in a structured format. The `firecrawl_agent` tool is designed exactly for this purpose, as it can independently search, browse, and extract structured data based on a natural-language prompt and a provided JSON schema.",
+        "tool_name": "firecrawl_agent"
+      },
+      "chosen_tools": [
+        "firecrawl_agent"
+      ],
+      "elapsed_ms": 7969,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "agent status",
+      "choice": {
+        "arguments": {
+          "id": "agent_789"
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested to check the status and retrieve the results of a Firecrawl agent job with the ID 'agent_789'. The 'firecrawl_agent_status' tool is designed exactly for this purpose.",
+        "tool_name": "firecrawl_agent_status"
+      },
+      "chosen_tools": [
+        "firecrawl_agent_status"
+      ],
+      "elapsed_ms": 5761,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "interactive page operation",
+      "choice": {
+        "arguments": {
+          "prompt": "type 'wireless keyboard' into the site search box, submit the search, and extract the visible results",
+          "url": "https://example.com/app"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires interacting with a specific web page by typing into a search box and submitting the search to extract dynamic results. The firecrawl_interact tool is specifically designed for operating dynamic page UI, clicking, and typing.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 4378,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "goal: passed",
+        "page: passed"
+      ],
+      "case": "create pricing monitor",
+      "choice": {
+        "arguments": {
+          "goal": "Alert when pricing, packaging, or launch messaging changes materially.",
+          "page": "https://example.com/pricing"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires monitoring a specific URL daily for material changes in pricing, packaging, or launch messaging. The `firecrawl_monitor_create` tool is specifically designed to create recurring page monitors that diff results and send alerts based on a plain-language goal.",
+        "tool_name": "firecrawl_monitor_create"
+      },
+      "chosen_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "elapsed_ms": 4124,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "formats: failed",
+        "url: failed"
+      ],
+      "case": "single page concise json avoids markdown",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product title, price, and availability.",
+          "schema": {
+            "properties": {
+              "availability": {
+                "description": "The availability status of the product, e.g., In Stock, Out of Stock",
+                "type": "string"
+              },
+              "price": {
+                "description": "The price of the product",
+                "type": "string"
+              },
+              "title": {
+                "description": "The title or name of the product",
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "price",
+              "availability"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/product/123"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested structured data (title, price, and availability) from a single known URL, explicitly asking to exclude markdown or full page text. The firecrawl_extract tool is the perfect fit as it uses LLM capabilities to extract only the requested fields based on a provided JSON schema.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 9585,
+      "forbidden_used": [
+        "firecrawl_extract"
+      ],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [
+        "firecrawl_scrape"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "scrape js error recovers with interact",
+      "choice": {
+        "arguments": {
+          "prompt": "click the Sign in button, and extract the visible account panel",
+          "url": "https://example.com/app"
+        },
+        "confidence": "High",
+        "rationale": "The task explicitly requires interacting with the page by clicking a 'Sign in' button to make the content visible, which is exactly what the firecrawl_interact tool is designed for.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 4777,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "search: failed",
+        "url: passed"
+      ],
+      "case": "url index before content fetch",
+      "choice": {
+        "arguments": {
+          "search": "api",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 1.0,
+        "rationale": "The firecrawl_map tool is specifically designed to discover and list URLs on a website without extracting the actual page content. By providing the base URL and a search term like 'api', it will efficiently return the URL candidates for the API reference pages.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 7013,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "legacy_firecrawl_mcp"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "single known page structured fields",
+      "choice": {
+        "arguments": {
+          "formats": [
+            "json"
+          ],
+          "url": "https://example.com/product/123"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a single known URL and requested specific structured fields. The guidelines explicitly state to use firecrawl_scrape with a JSON format rather than firecrawl_extract for a single known page.",
+        "tool_name": "firecrawl_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_scrape"
+      ],
+      "elapsed_ms": 9469,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "urls: passed"
+      ],
+      "case": "several known pages",
+      "choice": {
+        "arguments": {
+          "options": {
+            "formats": [
+              "markdown"
+            ]
+          },
+          "urls": [
+            "https://example.com/blog/a",
+            "https://example.com/blog/b",
+            "https://example.com/blog/c"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided multiple exact URLs and requested their readable markdown content. The firecrawl_batch_scrape tool is designed specifically for scraping multiple known URLs in a single batch.",
+        "tool_name": "firecrawl_batch_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_batch_scrape"
+      ],
+      "elapsed_ms": 5616,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "batch status",
+      "choice": {
+        "arguments": {
+          "id": "batch_123"
+        },
+        "confidence": "1.0",
+        "rationale": "The user explicitly requested to check the status of a batch scrape job with the ID 'batch_123'. The firecrawl_check_batch_status tool is specifically designed to poll queued batch scrape operations using their ID.",
+        "tool_name": "firecrawl_check_batch_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_batch_status"
+      ],
+      "elapsed_ms": 6677,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "discover matching urls on known site",
+      "choice": {
+        "arguments": {
+          "search": "webhook events",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to discover candidate URLs on a specific site (https://docs.example.com) related to a specific topic ('webhook events') without fetching the full page content. The firecrawl_map tool is designed exactly for this purpose, and its 'search' parameter allows filtering the discovered URLs by topic.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 6438,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "query: passed"
+      ],
+      "case": "unknown source web search",
+      "choice": {
+        "arguments": {
+          "query": "latest React Server Components updates"
+        },
+        "confidence": 1.0,
+        "rationale": "The user is looking for current information on a specific topic but does not know the exact URL or site to check. The firecrawl_search tool is designed for open-web search and cross-site discovery when the target URL is unknown.",
+        "tool_name": "firecrawl_search"
+      },
+      "chosen_tools": [
+        "firecrawl_search"
+      ],
+      "elapsed_ms": 3821,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "url: passed"
+      ],
+      "case": "comprehensive section crawl",
+      "choice": {
+        "arguments": {
+          "maxDepth": 2,
+          "url": "https://example.com/blog/"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to extract content from all posts within a specific section of a site up to a certain depth (first two levels). The firecrawl_crawl tool is designed for asynchronous multi-page extraction jobs on a site or section and supports a maxDepth parameter.",
+        "tool_name": "firecrawl_crawl"
+      },
+      "chosen_tools": [
+        "firecrawl_crawl"
+      ],
+      "elapsed_ms": 4814,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "crawl status",
+      "choice": {
+        "arguments": {
+          "id": "crawl_456"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to poll the status of a crawl job with the ID 'crawl_456'. The firecrawl_check_crawl_status tool is specifically designed to check the status and retrieve results of asynchronous crawl jobs using their ID.",
+        "tool_name": "firecrawl_check_crawl_status"
+      },
+      "chosen_tools": [
+        "firecrawl_check_crawl_status"
+      ],
+      "elapsed_ms": 5762,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "urls: passed"
+      ],
+      "case": "multi page structured extraction",
+      "choice": {
+        "arguments": {
+          "prompt": "Extract the product name, price, and description from the product pages.",
+          "schema": {
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "price",
+              "description"
+            ],
+            "type": "object"
+          },
+          "urls": [
+            "https://example.com/p1",
+            "https://example.com/p2",
+            "https://example.com/p3"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided multiple exact URLs and requested specific structured fields (name, price, description) from them. The firecrawl_extract tool is specifically designed for extracting structured data from multiple pages using an LLM extraction layer.",
+        "tool_name": "firecrawl_extract"
+      },
+      "chosen_tools": [
+        "firecrawl_extract"
+      ],
+      "elapsed_ms": 8318,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: failed"
+      ],
+      "case": "complex autonomous research",
+      "choice": {
+        "arguments": {
+          "prompt": "Find the top five AI infrastructure startups founded in 2025, gather their funding amounts from multiple sources, and return a structured table.",
+          "schema": {
+            "properties": {
+              "startups": {
+                "items": {
+                  "properties": {
+                    "funding_amount": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "sources": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "funding_amount",
+                    "sources"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "startups"
+            ],
+            "type": "object"
+          }
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires open-ended, multi-hop research across multiple unknown sources to find specific startups and their funding amounts, which perfectly matches the purpose of the firecrawl_agent tool.",
+        "tool_name": "firecrawl_agent"
+      },
+      "chosen_tools": [
+        "firecrawl_agent"
+      ],
+      "elapsed_ms": 7521,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "id: passed"
+      ],
+      "case": "agent status",
+      "choice": {
+        "arguments": {
+          "id": "agent_789"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to check the status of a Firecrawl agent job with the ID 'agent_789'. The 'firecrawl_agent_status' tool is specifically designed to poll an autonomous Firecrawl agent job using its ID.",
+        "tool_name": "firecrawl_agent_status"
+      },
+      "chosen_tools": [
+        "firecrawl_agent_status"
+      ],
+      "elapsed_ms": 4011,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "interactive page operation",
+      "choice": {
+        "arguments": {
+          "prompt": "Type 'wireless keyboard' into the site search box, submit the search, and extract the visible results.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires interacting with the page UI by typing into a search box and submitting the search before extracting the results. The firecrawl_interact tool is specifically designed for dynamic page interactions like clicking, typing, and navigating.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 4460,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "goal: passed",
+        "page: passed"
+      ],
+      "case": "create pricing monitor",
+      "choice": {
+        "arguments": {
+          "goal": "Alert when pricing, packaging, or launch messaging changes materially.",
+          "page": "https://example.com/pricing"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to monitor a specific URL for material changes in pricing, packaging, or launch messaging, which perfectly matches the purpose of the firecrawl_monitor_create tool.",
+        "tool_name": "firecrawl_monitor_create"
+      },
+      "chosen_tools": [
+        "firecrawl_monitor_create"
+      ],
+      "elapsed_ms": 5001,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "formats: passed",
+        "url: passed"
+      ],
+      "case": "single page concise json avoids markdown",
+      "choice": {
+        "arguments": {
+          "formats": [
+            "json"
+          ],
+          "json": {
+            "prompt": "Extract title, price, and availability"
+          },
+          "url": "https://example.com/product/123"
+        },
+        "confidence": 0.95,
+        "rationale": "The user requested specific structured fields (title, price, availability) from a single known URL. The tool guidelines explicitly state to use `firecrawl_scrape` with JSON format rather than `firecrawl_extract` for a single known page when specific fields are needed.",
+        "tool_name": "firecrawl_scrape"
+      },
+      "chosen_tools": [
+        "firecrawl_scrape"
+      ],
+      "elapsed_ms": 29751,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "prompt: passed",
+        "url: passed"
+      ],
+      "case": "scrape js error recovers with interact",
+      "choice": {
+        "arguments": {
+          "prompt": "Click the Sign in button, and extract the visible account panel.",
+          "url": "https://example.com/app"
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly requires JavaScript interaction to click a 'Sign in' button before extracting the account panel, which is the exact purpose of the firecrawl_interact tool.",
+        "tool_name": "firecrawl_interact"
+      },
+      "chosen_tools": [
+        "firecrawl_interact"
+      ],
+      "elapsed_ms": 6278,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "search: passed",
+        "url: passed"
+      ],
+      "case": "url index before content fetch",
+      "choice": {
+        "arguments": {
+          "search": "API reference",
+          "url": "https://docs.example.com"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to discover URL candidates on a specific site (https://docs.example.com) that match a specific topic (API reference) without fetching the full page content. The firecrawl_map tool is designed exactly for URL discovery on a known site and supports a search parameter to filter the results.",
+        "tool_name": "firecrawl_map"
+      },
+      "chosen_tools": [
+        "firecrawl_map"
+      ],
+      "elapsed_ms": 6982,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "firecrawl_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_firecrawl_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "commit": "e744bba494c0e77086d66af838d7a64fab52f138",
+    "current_descriptions": "src/index.ts",
+    "docs": "README.md#how-to-choose-a-tool",
+    "legacy_descriptions": "src/legacy/index.md",
+    "package": "firecrawl-mcp",
+    "repo": "https://github.com/firecrawl/firecrawl-mcp-server",
+    "version": "3.22.0"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 9,
+    "passed_cases": 51,
+    "planned": 60,
+    "score": 0.85,
+    "skipped": 0,
+    "total": 60
+  }
+}

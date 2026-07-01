@@ -30,10 +30,10 @@ Suggested title: Tighten gstack browser and safety routing with live evals
 
 ## Current Frontier Coverage
 
-- This packet's 720-cell result is historical compatibility evidence, not a complete current frontier/latest sweep.
-- Do not present older-model wins as the upstream headline if the same ambiguity no longer reproduces on current latest model and harness versions.
-- The generated gstack matrix now includes `anthropic-fable-frontier`, `openai-gpt55-frontier`, and `gemini-31-pro-customtools-frontier`; use those cells for a stronger upstream-facing claim.
-- Keep the older `claude-sonnet-4-5`, `gpt-4.1`, and `gemini-2.5-pro` cells as regression evidence.
+- The packet now includes a current available-frontier sweep: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md).
+- The available-frontier sweep completed 496 current available-frontier cells, 484 passed, 8 failed, 4 errors across OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools`.
+- The older `claude-sonnet-4-5`, `gpt-4.1`, and `gemini-2.5-pro` cells remain regression evidence, while the 2026-07-01 receipt is the current hill-descending surface.
+- Anthropic frontier is still blocked in this workspace because the configured key returns a low-credit API error and `/home/cfregly/dev/anthropic` is not present.
 
 ## Downside If Not Changed
 
@@ -157,3 +157,5 @@ python -m claude_agent_harness_opt model-matrix evals/targets/gstack/gstack_skil
 - Result artifact: [gstack_skill_matrix_live_2026-06-25.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_live_2026-06-25.json)
 
 </details>
+- Current frontier stress receipt: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md)
+- Current frontier JSON receipt: [gstack_skill_matrix_frontier_available_live_2026-07-01.json](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.json)

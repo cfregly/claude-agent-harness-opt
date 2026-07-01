@@ -1,6 +1,6 @@
 # gstack Skill Routing Audit
 
-Checked on 2026-06-25.
+Checked through 2026-07-01.
 
 > [!NOTE]
 > This page starts with the human summary. Detailed eval, command, and machine-readable material is preserved below.
@@ -19,6 +19,17 @@ This audit treats the generated `gstack` Codex-compatible skills as a skills-as-
 | Surface hash | `68d60eeefdde254818b03ee310bf1c4c9aaf0efee8d6db35141fe9cb7da8ae12` |
 | Target surface dirty | `false` |
 | Worktree dirty | `true`, from unrelated local files outside the evaluated generated skill surface |
+
+## Human Summary
+
+The pinned gstack packet still has a confirmed baseline-to-tuned improvement on the original
+720-cell sweep. It now also has a current available-frontier stress receipt for OpenAI `gpt-5.5`
+and Gemini `gemini-3.1-pro-preview-customtools`: [gstack_skill_matrix_frontier_available_live_2026-07-01.md](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md).
+
+That current receipt completed 496 live cells with 484 passed, 8 failed, and 4 errors. Treat it as
+hill-descending evidence for the next tuning pass. Anthropic frontier is blocked in this workspace
+because the configured key returns a low-credit API error, and `/home/cfregly/dev/anthropic` is not
+present here.
 
 <details>
 <summary>LLM / Machine-readable details</summary>
@@ -49,15 +60,16 @@ python -m claude_agent_harness_opt model-matrix \
 python -m claude_agent_harness_opt model-matrix \
   evals/targets/gstack/gstack_skill_selection_matrix.json \
   --env-file .env --live --require-live \
-  --providers anthropic-fable-frontier,anthropic-opus-high,openai-gpt55-frontier,openai-gpt54-high,gemini-31-pro-customtools-frontier,gemini-25-pro-high \
+  --providers openai-gpt55-frontier,gemini-31-pro-customtools-frontier \
+  --variants gstack_stock_skill_descriptions,gstack_boundary_tuned_skill_descriptions \
+  --harnesses native_tools,prompt_json \
   --concurrency 8 \
-  --out /tmp/gstack-skill-matrix-live-frontier-high.json
+  --out evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.json
 ```
 
 Gemini was rerun after increasing its matrix `max_tokens` to `4096`. The first full run showed
 Gemini truncating prompt-JSON responses because internal thinking consumed the default output budget.
-The frontier and high command is the recommended next run before making claims about current
-top-tier models.
+The current available-frontier command above is retained as the 2026-07-01 stress receipt.
 
 High-profile smoke run:
 
@@ -95,10 +107,9 @@ python -m claude_agent_harness_opt model-matrix \
 
 ## Results
 
-This live result is a historical three-profile sweep. It covered one Anthropic profile, one OpenAI
-profile, and one Gemini profile. It should not be presented as a complete frontier-model sweep.
-The current generated matrix now includes separate frontier, high, and balanced profiles so a new
-run can test stronger models explicitly.
+The original live result is a historical three-profile sweep. It covered one Anthropic profile, one
+OpenAI profile, and one Gemini profile. The current available-frontier receipt below is the stronger
+2026-07-01 stress surface for OpenAI and Gemini frontier profiles.
 
 Deterministic checks:
 
@@ -138,6 +149,16 @@ Native high-profile smoke matrix:
 | Errors | 0 |
 | Score | 1.000 |
 
+Current available-frontier matrix:
+
+| Metric | Value |
+|---|---:|
+| Total live cells | 496 |
+| Passed | 484 |
+| Failed | 8 |
+| Errors | 4 |
+| Score | 0.976 |
+
 Variant comparison from the generated PR packet:
 
 | Variant | Score |
@@ -155,7 +176,8 @@ What we learned:
 - The generated gstack skill catalog is mostly well routed across the tested harnesses.
 - Boundary tuning still adds measurable value on the pinned surface.
 - The useful failures are adjacent-skill confusion, not broad quality failure.
-- The next stronger claim requires rerunning the expanded frontier and high-profile matrix.
+- The current available-frontier run is retained as the next hill-descending surface.
+- Anthropic frontier still requires a funded key before it can be claimed as complete.
 
 Browser alias boundary:
 

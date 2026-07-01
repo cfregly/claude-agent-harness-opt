@@ -1,0 +1,895 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "bridge_status",
+      "expected_tools": [
+        "ui_status"
+      ],
+      "forbidden_tools": [
+        "ui_snapshot",
+        "ui_list_actions",
+        "ui_execute_action"
+      ],
+      "name": "bridge check uses status",
+      "task": "I am not sure whether OpenWork is running. Check whether the desktop bridge is reachable."
+    },
+    {
+      "check_family": "ui_snapshot",
+      "expected_tools": [
+        "ui_snapshot"
+      ],
+      "forbidden_tools": [
+        "ui_status",
+        "ui_list_actions",
+        "ui_execute_action"
+      ],
+      "name": "unknown current screen uses snapshot",
+      "task": "Before doing anything in OpenWork, tell me what screen I am on and which visible actions are available."
+    },
+    {
+      "check_family": "action_discovery",
+      "expected_tools": [
+        "ui_list_actions"
+      ],
+      "forbidden_tools": [
+        "ui_status",
+        "ui_snapshot",
+        "ui_execute_action"
+      ],
+      "name": "action discovery uses list actions",
+      "task": "List every OpenWork UI action id I can execute and show the arguments each one needs."
+    },
+    {
+      "check_family": "action_execute",
+      "expected_args_contains": {
+        "actionId": "composer.submit"
+      },
+      "expected_tools": [
+        "ui_execute_action"
+      ],
+      "forbidden_tools": [
+        "ui_status",
+        "ui_snapshot",
+        "ui_list_actions"
+      ],
+      "name": "known action id executes action",
+      "task": "Execute the known OpenWork UI action composer.submit with args {\"confirm\": true}."
+    },
+    {
+      "check_family": "action_discovery",
+      "expected_tools": [
+        "ui_list_actions"
+      ],
+      "forbidden_tools": [
+        "ui_status",
+        "ui_execute_action"
+      ],
+      "name": "unknown action id lists actions first",
+      "task": "Type the text 'Draft the customer note' into the OpenWork composer, but I do not know the action id or argument shape."
+    },
+    {
+      "allow_no_tool": true,
+      "check_family": "no_tool_safety",
+      "expected_tools": [],
+      "forbidden_tools": [
+        "ui_status",
+        "ui_snapshot",
+        "ui_list_actions",
+        "ui_execute_action"
+      ],
+      "name": "coordinate click avoids semantic bridge",
+      "task": "Click pixel coordinate 400,300 in OpenWork. Do not use a semantic action id."
+    },
+    {
+      "check_family": "bridge_status",
+      "expected_tools": [
+        "ui_status"
+      ],
+      "forbidden_tools": [
+        "ui_snapshot",
+        "ui_list_actions",
+        "ui_execute_action"
+      ],
+      "name": "app maybe closed checks status before action",
+      "task": "OpenWork may have quit, but if it is running I want to send the current composer. Check the bridge before doing anything else."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "passed": 7,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "errors": 1,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "passed": 6,
+      "provider": "gemini",
+      "score": 0.857,
+      "skipped": 0,
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "passed": 7,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "passed": 7,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    }
+  ],
+  "description": "Compare docs-level and source-level descriptions for OpenWork UI-control MCP routing.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "openwork ui mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/openwork_ui_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [],
+      "case": "bridge check uses status",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.99,
+        "rationale": "The user wants to check whether OpenWork is running and whether the desktop bridge is reachable; ui_status is specifically designed to return connection status and app info.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 4499,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown current screen uses snapshot",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user asks to identify the current screen and visible actions before performing any OpenWork action. ui_snapshot is specifically designed to return the current UI state, including route, narration, visible actions, and status, without executing any UI action.",
+        "tool_name": "ui_snapshot"
+      },
+      "chosen_tools": [
+        "ui_snapshot"
+      ],
+      "elapsed_ms": 4481,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "action discovery uses list actions",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.98,
+        "rationale": "The task asks to list every executable OpenWork UI action id and the arguments each requires; ui_list_actions is the dedicated tool for enumerating available UI control actions and their callable ids.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 5138,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [
+        "actionId: passed"
+      ],
+      "case": "known action id executes action",
+      "choice": {
+        "arguments": {
+          "actionId": "composer.submit",
+          "args": {
+            "confirm": true
+          }
+        },
+        "confidence": 1,
+        "rationale": "The task explicitly requests executing the known OpenWork UI action composer.submit with the provided confirmation argument, which is performed via ui_execute_action.",
+        "tool_name": "ui_execute_action"
+      },
+      "chosen_tools": [
+        "ui_execute_action"
+      ],
+      "elapsed_ms": 4456,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown action id lists actions first",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.93,
+        "rationale": "The next step is to discover the available OpenWork UI action IDs and expected argument shapes before attempting to type into the composer.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 6915,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "coordinate click avoids semantic bridge",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "No available OpenWork UI-control tool supports raw pixel-coordinate clicking. The only execution tool requires a semantic actionId, which the task explicitly forbids, so no tool can safely perform this request.",
+        "tool_name": "NO_TOOL"
+      },
+      "chosen_tools": [
+        "NO_TOOL"
+      ],
+      "elapsed_ms": 4696,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "app maybe closed checks status before action",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user explicitly asked to check the bridge before doing anything else, and ui_status is the tool for verifying whether OpenWork is running and reachable.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 3401,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "bridge check uses status",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The task is a connectivity/reachability check for the OpenWork desktop app and local UI-control bridge, which is exactly what ui_status is for.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 4634,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown current screen uses snapshot",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user asks for the current screen and visible actions before any OpenWork action is taken; ui_snapshot is the tool designed to read the current route, narration, visible actions, busy status, and on-screen state.",
+        "tool_name": "ui_snapshot"
+      },
+      "chosen_tools": [
+        "ui_snapshot"
+      ],
+      "elapsed_ms": 4009,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "action discovery uses list actions",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user wants the available executable OpenWork UI action ids and their required arguments, which is exactly what ui_list_actions provides.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 6601,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [
+        "actionId: passed"
+      ],
+      "case": "known action id executes action",
+      "choice": {
+        "arguments": {
+          "actionId": "composer.submit",
+          "args": {
+            "confirm": true
+          }
+        },
+        "confidence": 0.99,
+        "rationale": "The task provides a known semantic OpenWork action id and the required arguments, so the next appropriate tool is ui_execute_action.",
+        "tool_name": "ui_execute_action"
+      },
+      "chosen_tools": [
+        "ui_execute_action"
+      ],
+      "elapsed_ms": 4632,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown action id lists actions first",
+      "choice": {
+        "arguments": {},
+        "confidence": 0.86,
+        "rationale": "The user wants to enter text but explicitly does not know the semantic action id or required argument shape. The next safe step is to list available OpenWork UI actions and their argument schemas before executing anything.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 7380,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "coordinate click avoids semantic bridge",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The available OpenWork UI tools only support semantic actions through the local bridge and explicitly avoid coordinate clicks. The task requests a pixel-coordinate click and forbids using a semantic action id, so no provided tool can safely perform it.",
+        "tool_name": "NO_TOOL"
+      },
+      "chosen_tools": [
+        "NO_TOOL"
+      ],
+      "elapsed_ms": 4803,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "app maybe closed checks status before action",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user explicitly says OpenWork may have quit and asks to check the bridge before doing anything else, so the next safe step is a connectivity/status check rather than reading or executing UI actions.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 4563,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "bridge check uses status",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user wants to check if OpenWork is running and reachable, which is exactly the purpose of the ui_status tool.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 3034,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown current screen uses snapshot",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The ui_snapshot tool retrieves the current UI state, which includes the current route (screen) and the visible actions available, directly fulfilling the user's request.",
+        "tool_name": "ui_snapshot"
+      },
+      "chosen_tools": [
+        "ui_snapshot"
+      ],
+      "elapsed_ms": 3769,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "action discovery uses list actions",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user wants to list all available OpenWork UI actions and their required arguments. The ui_list_actions tool is specifically designed to return this information.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 4115,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [
+        "actionId: passed"
+      ],
+      "case": "known action id executes action",
+      "choice": {
+        "arguments": {
+          "actionId": "composer.submit",
+          "args": {
+            "confirm": true
+          }
+        },
+        "confidence": 1.0,
+        "rationale": "The task explicitly requests to execute the known OpenWork UI action 'composer.submit' with the argument 'confirm' set to true. The 'ui_execute_action' tool is designed to execute actions by their ID with optional arguments.",
+        "tool_name": "ui_execute_action"
+      },
+      "chosen_tools": [
+        "ui_execute_action"
+      ],
+      "elapsed_ms": 4650,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown action id lists actions first",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "To find the correct action id and argument shape for typing text into the OpenWork composer, we first need to list all available UI actions.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 3332,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "coordinate click avoids semantic bridge",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The provided tools only support executing semantic UI actions via an actionId. There is no tool available to click arbitrary pixel coordinates.",
+        "tool_name": "NO_TOOL"
+      },
+      "chosen_tools": [
+        "NO_TOOL"
+      ],
+      "elapsed_ms": 3548,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "app maybe closed checks status before action",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to check if OpenWork is running and reachable via the bridge before taking any other actions. The ui_status tool is designed exactly for this purpose.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 3156,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "docs_openwork_ui_mcp"
+    },
+    {
+      "case": "bridge check uses status",
+      "error": "HTTP 503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"The service is currently unavailable.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n",
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "model": "gemini-3.1-pro-preview-customtools",
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "error",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown current screen uses snapshot",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to know what screen they are currently on and what visible actions are available. The ui_snapshot tool provides the current route (screen) and visible actions.",
+        "tool_name": "ui_snapshot"
+      },
+      "chosen_tools": [
+        "ui_snapshot"
+      ],
+      "elapsed_ms": 3458,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "action discovery uses list actions",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to list every OpenWork UI action id and the arguments each one needs, which perfectly matches the purpose of the ui_list_actions tool.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 3104,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [
+        "actionId: passed"
+      ],
+      "case": "known action id executes action",
+      "choice": {
+        "arguments": {
+          "actionId": "composer.submit",
+          "args": {
+            "confirm": true
+          }
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided the exact action ID ('composer.submit') and arguments ({'confirm': true}) to execute, so we can directly use the ui_execute_action tool.",
+        "tool_name": "ui_execute_action"
+      },
+      "chosen_tools": [
+        "ui_execute_action"
+      ],
+      "elapsed_ms": 3712,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "unknown action id lists actions first",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user needs to execute an action but does not know the action ID or the required arguments. The ui_list_actions tool will provide the list of executable semantic actions along with their IDs and required arguments.",
+        "tool_name": "ui_list_actions"
+      },
+      "chosen_tools": [
+        "ui_list_actions"
+      ],
+      "elapsed_ms": 5591,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "coordinate click avoids semantic bridge",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user requested a coordinate click, but the available tools only support semantic UI actions by action ID. Coordinate clicks are explicitly unsupported by the provided tools.",
+        "tool_name": "NO_TOOL"
+      },
+      "chosen_tools": [
+        "NO_TOOL"
+      ],
+      "elapsed_ms": 3350,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "app maybe closed checks status before action",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to check if the bridge is reachable and if OpenWork is running before taking any other actions.",
+        "tool_name": "ui_status"
+      },
+      "chosen_tools": [
+        "ui_status"
+      ],
+      "elapsed_ms": 3448,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "openwork_ui_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "source_tuned_openwork_ui_mcp"
+    }
+  ],
+  "source": {
+    "commit": "3c06ab620f8f867b0cf08e88617131bcfe24fa53",
+    "package": "openwork-ui-mcp",
+    "package_version": "0.1.0",
+    "repo": "https://github.com/different-ai/openwork",
+    "slice": "UI status, snapshot, available actions, semantic action execution, and no-tool boundaries",
+    "yc": "OpenWork, YC P2026"
+  },
+  "summary": {
+    "errors": 1,
+    "failed_cases": 0,
+    "passed_cases": 27,
+    "planned": 28,
+    "score": 0.964,
+    "skipped": 0,
+    "total": 28
+  }
+}

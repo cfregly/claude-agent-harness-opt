@@ -1,0 +1,1256 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "schema_discovery",
+      "expected_tools": [
+        "list_schemas"
+      ],
+      "forbidden_tools": [
+        "list_objects",
+        "execute_sql"
+      ],
+      "name": "discover schemas",
+      "task": "I just connected this Postgres MCP server. What schemas are available?"
+    },
+    {
+      "check_family": "object_listing",
+      "expected_args_contains": {
+        "schema_name": "analytics"
+      },
+      "expected_tools": [
+        "list_objects"
+      ],
+      "forbidden_tools": [
+        "list_schemas",
+        "get_object_details",
+        "execute_sql"
+      ],
+      "name": "list schema objects",
+      "task": "Show me the tables, views, sequences, and extensions inside the analytics schema."
+    },
+    {
+      "check_family": "object_details",
+      "expected_args_contains": {
+        "object_name": "orders",
+        "schema_name": "public"
+      },
+      "expected_tools": [
+        "get_object_details"
+      ],
+      "forbidden_tools": [
+        "list_objects",
+        "execute_sql",
+        "explain_query"
+      ],
+      "name": "inspect table structure",
+      "task": "Before writing SQL, inspect public.orders so we know its columns, constraints, and indexes."
+    },
+    {
+      "check_family": "sql_execution",
+      "expected_args_contains": {
+        "sql": "count"
+      },
+      "expected_tools": [
+        "execute_sql"
+      ],
+      "forbidden_tools": [
+        "explain_query",
+        "analyze_query_indexes"
+      ],
+      "name": "run ready read query",
+      "task": "Run this ready query now: SELECT count(*) FROM public.orders WHERE status = 'failed';"
+    },
+    {
+      "check_family": "query_plan",
+      "expected_args_contains": {
+        "sql": "orders"
+      },
+      "expected_tools": [
+        "explain_query"
+      ],
+      "forbidden_tools": [
+        "execute_sql",
+        "analyze_query_indexes"
+      ],
+      "name": "get query plan",
+      "task": "Do not run the query for rows. Show the PostgreSQL execution plan and planner cost for SELECT * FROM orders WHERE customer_id = 42;"
+    },
+    {
+      "check_family": "workload_ranking",
+      "expected_args_contains": {
+        "limit": "5"
+      },
+      "expected_tools": [
+        "get_top_queries"
+      ],
+      "forbidden_tools": [
+        "analyze_workload_indexes",
+        "analyze_query_indexes",
+        "analyze_db_health"
+      ],
+      "name": "rank slow workload queries",
+      "task": "Rank the top 5 slow workload queries by total execution time."
+    },
+    {
+      "check_family": "index_tuning",
+      "expected_args_contains": {
+        "max_index_count": "3"
+      },
+      "expected_tools": [
+        "analyze_workload_indexes"
+      ],
+      "forbidden_tools": [
+        "get_top_queries",
+        "analyze_query_indexes",
+        "analyze_db_health"
+      ],
+      "name": "workload index tuning",
+      "task": "Analyze workload indexes with at most 3 candidate indexes."
+    },
+    {
+      "check_family": "index_tuning",
+      "expected_args_contains": {
+        "queries": "orders"
+      },
+      "expected_tools": [
+        "analyze_query_indexes"
+      ],
+      "forbidden_tools": [
+        "explain_query",
+        "analyze_workload_indexes",
+        "get_top_queries"
+      ],
+      "name": "specific query index tuning",
+      "task": "Suggest the best indexes for this specific SQL: SELECT * FROM orders JOIN customers ON orders.customer_id = customers.id WHERE orders.created_at > '2026-01-01';"
+    },
+    {
+      "check_family": "health_check",
+      "expected_tools": [
+        "analyze_db_health"
+      ],
+      "forbidden_tools": [
+        "get_top_queries",
+        "analyze_workload_indexes",
+        "execute_sql"
+      ],
+      "name": "database health check",
+      "task": "Run a database-wide operational health review covering connections, vacuum, invalid constraints, duplicate or unused indexes, sequences, and buffer cache."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "passed": 9,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "passed": 9,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "passed": 9,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "passed": 9,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for Postgres MCP Pro schema, SQL execution, explain, workload, index tuning, and health workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "postgres mcp pro tool-selection matrix",
+  "matrix_path": "evals/model_matrix/postgres_mcp_pro_tool_selection.json",
+  "max_cases": null,
+  "passed": true,
+  "results": [
+    {
+      "arg_details": [],
+      "case": "discover schemas",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user wants to know which schemas are available in the connected PostgreSQL instance, so the next action should be to list schemas.",
+        "tool_name": "list_schemas"
+      },
+      "chosen_tools": [
+        "list_schemas"
+      ],
+      "elapsed_ms": 2853,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "schema_name: passed"
+      ],
+      "case": "list schema objects",
+      "choice": {
+        "arguments": {
+          "schema_name": "analytics"
+        },
+        "confidence": 1,
+        "rationale": "The user wants to list tables, views, sequences, and extensions within a specific schema, which is exactly what list_objects provides.",
+        "tool_name": "list_objects"
+      },
+      "chosen_tools": [
+        "list_objects"
+      ],
+      "elapsed_ms": 2872,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "object_name: passed",
+        "schema_name: passed"
+      ],
+      "case": "inspect table structure",
+      "choice": {
+        "arguments": {
+          "object_name": "orders",
+          "object_type": "table",
+          "schema_name": "public"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to inspect the public.orders table for columns, constraints, and indexes before writing SQL; get_object_details is the schema/introspection tool designed for this.",
+        "tool_name": "get_object_details"
+      },
+      "chosen_tools": [
+        "get_object_details"
+      ],
+      "elapsed_ms": 3339,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "run ready read query",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT count(*) FROM public.orders WHERE status = 'failed';"
+        },
+        "confidence": 1,
+        "rationale": "The user provided a ready-to-run SQL query and asked to run it now, so the immediate next action is to execute the SQL.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 2795,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "get query plan",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT * FROM orders WHERE customer_id = 42;"
+        },
+        "confidence": 1,
+        "rationale": "The user wants the PostgreSQL execution plan and planner cost without running the query for rows, which is exactly what explain_query provides.",
+        "tool_name": "explain_query"
+      },
+      "chosen_tools": [
+        "explain_query"
+      ],
+      "elapsed_ms": 3348,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "rank slow workload queries",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "order_by": "total_time"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to rank the top 5 slow workload queries by total execution time, which is exactly what get_top_queries provides using pg_stat_statements with limit 5 and order_by total_time.",
+        "tool_name": "get_top_queries"
+      },
+      "chosen_tools": [
+        "get_top_queries"
+      ],
+      "elapsed_ms": 3420,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "max_index_count: passed"
+      ],
+      "case": "workload index tuning",
+      "choice": {
+        "arguments": {
+          "max_index_count": 3
+        },
+        "confidence": 1,
+        "rationale": "The task requests workload-based index analysis with a cap of 3 candidate indexes, which directly matches analyze_workload_indexes with max_index_count set to 3.",
+        "tool_name": "analyze_workload_indexes"
+      },
+      "chosen_tools": [
+        "analyze_workload_indexes"
+      ],
+      "elapsed_ms": 2924,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "queries: passed"
+      ],
+      "case": "specific query index tuning",
+      "choice": {
+        "arguments": {
+          "queries": [
+            "SELECT * FROM orders JOIN customers ON orders.customer_id = customers.id WHERE orders.created_at > '2026-01-01';"
+          ]
+        },
+        "confidence": 0.99,
+        "rationale": "The user provided a specific SQL query and asked for index recommendations, so the next appropriate tool is analyze_query_indexes rather than schema introspection or execution-plan tools.",
+        "tool_name": "analyze_query_indexes"
+      },
+      "chosen_tools": [
+        "analyze_query_indexes"
+      ],
+      "elapsed_ms": 2993,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [],
+      "case": "database health check",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The task requests a database-wide operational health review covering connections, vacuum, invalid constraints, duplicate or unused indexes, sequences, and buffer cache, which matches the comprehensive checks performed by analyze_db_health.",
+        "tool_name": "analyze_db_health"
+      },
+      "chosen_tools": [
+        "analyze_db_health"
+      ],
+      "elapsed_ms": 2675,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [],
+      "case": "discover schemas",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The user asks which schemas are available in the connected Postgres database, so the appropriate next step is schema discovery.",
+        "tool_name": "list_schemas"
+      },
+      "chosen_tools": [
+        "list_schemas"
+      ],
+      "elapsed_ms": 2307,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "schema_name: passed"
+      ],
+      "case": "list schema objects",
+      "choice": {
+        "arguments": {
+          "schema_name": "analytics"
+        },
+        "confidence": 1,
+        "rationale": "The user asks for an inventory of tables, views, sequences, and extensions inside the named analytics schema, which matches list_objects.",
+        "tool_name": "list_objects"
+      },
+      "chosen_tools": [
+        "list_objects"
+      ],
+      "elapsed_ms": 3348,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "object_name: passed",
+        "schema_name: passed"
+      ],
+      "case": "inspect table structure",
+      "choice": {
+        "arguments": {
+          "object_name": "orders",
+          "object_type": "table",
+          "schema_name": "public"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to inspect a specific table's columns, constraints, and indexes before writing SQL, which is exactly what get_object_details is for.",
+        "tool_name": "get_object_details"
+      },
+      "chosen_tools": [
+        "get_object_details"
+      ],
+      "elapsed_ms": 2386,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "run ready read query",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT count(*) FROM public.orders WHERE status = 'failed';"
+        },
+        "confidence": 1,
+        "rationale": "The user provided a ready-to-run SELECT query and asked to run it now, so the immediate next action is SQL execution.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 2682,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "get query plan",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT * FROM orders WHERE customer_id = 42;"
+        },
+        "confidence": 1,
+        "rationale": "The user explicitly asks not to run the query for rows and wants the PostgreSQL execution plan and planner cost for a supplied SQL statement, which is exactly the purpose of explain_query.",
+        "tool_name": "explain_query"
+      },
+      "chosen_tools": [
+        "explain_query"
+      ],
+      "elapsed_ms": 2903,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "rank slow workload queries",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "order_by": "total_time"
+        },
+        "confidence": 0.99,
+        "rationale": "The task asks to rank observed workload queries by total execution time, which is exactly what get_top_queries provides via pg_stat_statements. No SQL execution, schema introspection, or index recommendation is requested.",
+        "tool_name": "get_top_queries"
+      },
+      "chosen_tools": [
+        "get_top_queries"
+      ],
+      "elapsed_ms": 3231,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "max_index_count: passed"
+      ],
+      "case": "workload index tuning",
+      "choice": {
+        "arguments": {
+          "max_index_count": 3
+        },
+        "confidence": 0.99,
+        "rationale": "The task requests workload-wide index analysis and limits recommendations to at most 3 candidate indexes, which matches analyze_workload_indexes with max_index_count set to 3.",
+        "tool_name": "analyze_workload_indexes"
+      },
+      "chosen_tools": [
+        "analyze_workload_indexes"
+      ],
+      "elapsed_ms": 3015,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "queries: passed"
+      ],
+      "case": "specific query index tuning",
+      "choice": {
+        "arguments": {
+          "queries": [
+            "SELECT * FROM orders JOIN customers ON orders.customer_id = customers.id WHERE orders.created_at > '2026-01-01';"
+          ]
+        },
+        "confidence": 0.99,
+        "rationale": "The user supplied a specific SQL query and asked for the best indexes, so the next tool should analyze index recommendations for that provided query.",
+        "tool_name": "analyze_query_indexes"
+      },
+      "chosen_tools": [
+        "analyze_query_indexes"
+      ],
+      "elapsed_ms": 2957,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [],
+      "case": "database health check",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The task requests a database-wide operational health review covering connections, vacuum, constraints, index health, sequences, and buffer cache, which matches the purpose and coverage of analyze_db_health.",
+        "tool_name": "analyze_db_health"
+      },
+      "chosen_tools": [
+        "analyze_db_health"
+      ],
+      "elapsed_ms": 3088,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [],
+      "case": "discover schemas",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user is asking for the available schemas in the newly connected database. The list_schemas tool is specifically designed to return this information.",
+        "tool_name": "list_schemas"
+      },
+      "chosen_tools": [
+        "list_schemas"
+      ],
+      "elapsed_ms": 4033,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "schema_name: passed"
+      ],
+      "case": "list schema objects",
+      "choice": {
+        "arguments": {
+          "schema_name": "analytics"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to see the tables, views, sequences, and extensions within the 'analytics' schema, which perfectly matches the purpose of the list_objects tool.",
+        "tool_name": "list_objects"
+      },
+      "chosen_tools": [
+        "list_objects"
+      ],
+      "elapsed_ms": 3221,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "object_name: passed",
+        "schema_name: passed"
+      ],
+      "case": "inspect table structure",
+      "choice": {
+        "arguments": {
+          "object_name": "orders",
+          "object_type": "table",
+          "schema_name": "public"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to inspect the 'public.orders' table to understand its columns, constraints, and indexes. The 'get_object_details' tool is specifically designed for this purpose.",
+        "tool_name": "get_object_details"
+      },
+      "chosen_tools": [
+        "get_object_details"
+      ],
+      "elapsed_ms": 3504,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "run ready read query",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT count(*) FROM public.orders WHERE status = 'failed';"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a specific SQL query and requested to run it immediately.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 3263,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "get query plan",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT * FROM orders WHERE customer_id = 42;"
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested the execution plan and planner cost for the provided query without executing it to retrieve rows. The explain_query tool is designed to return the query planner's execution plan and cost model.",
+        "tool_name": "explain_query"
+      },
+      "chosen_tools": [
+        "explain_query"
+      ],
+      "elapsed_ms": 3232,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "rank slow workload queries",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "order_by": "total_time"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to rank the top 5 slow workload queries by total execution time. The get_top_queries tool is designed to report the slowest SQL queries based on pg_stat_statements data, and we can specify the limit as 5 and order_by as 'total_time'.",
+        "tool_name": "get_top_queries"
+      },
+      "chosen_tools": [
+        "get_top_queries"
+      ],
+      "elapsed_ms": 4533,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "max_index_count: passed"
+      ],
+      "case": "workload index tuning",
+      "choice": {
+        "arguments": {
+          "max_index_count": 3
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to analyze workload indexes and limit the recommendations to at most 3 candidate indexes. The `analyze_workload_indexes` tool with the `max_index_count` parameter set to 3 perfectly matches this request.",
+        "tool_name": "analyze_workload_indexes"
+      },
+      "chosen_tools": [
+        "analyze_workload_indexes"
+      ],
+      "elapsed_ms": 4246,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [
+        "queries: passed"
+      ],
+      "case": "specific query index tuning",
+      "choice": {
+        "arguments": {
+          "queries": [
+            "SELECT * FROM orders JOIN customers ON orders.customer_id = customers.id WHERE orders.created_at > '2026-01-01';"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a specific SQL query and asked for index recommendations. The analyze_query_indexes tool is specifically designed to analyze provided SQL queries and recommend optimal indexes.",
+        "tool_name": "analyze_query_indexes"
+      },
+      "chosen_tools": [
+        "analyze_query_indexes"
+      ],
+      "elapsed_ms": 3667,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [],
+      "case": "database health check",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The analyze_db_health tool is specifically designed to perform comprehensive health checks on the database, covering all the requested areas such as connections, vacuum, constraints, indexes, sequences, and buffer cache.",
+        "tool_name": "analyze_db_health"
+      },
+      "chosen_tools": [
+        "analyze_db_health"
+      ],
+      "elapsed_ms": 3431,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_postgres_mcp_pro"
+    },
+    {
+      "arg_details": [],
+      "case": "discover schemas",
+      "choice": {
+        "arguments": {},
+        "confidence": "High",
+        "rationale": "The user explicitly asked to see what schemas are available in the newly connected database, which perfectly matches the purpose of the list_schemas tool.",
+        "tool_name": "list_schemas"
+      },
+      "chosen_tools": [
+        "list_schemas"
+      ],
+      "elapsed_ms": 5271,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "schema_name: passed"
+      ],
+      "case": "list schema objects",
+      "choice": {
+        "arguments": {
+          "schema_name": "analytics"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly asked to list objects (tables, views, sequences, extensions) inside a specific schema ('analytics'). The list_objects tool is designed exactly for this purpose.",
+        "tool_name": "list_objects"
+      },
+      "chosen_tools": [
+        "list_objects"
+      ],
+      "elapsed_ms": 3100,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "object_name: passed",
+        "schema_name: passed"
+      ],
+      "case": "inspect table structure",
+      "choice": {
+        "arguments": {
+          "object_name": "orders",
+          "object_type": "table",
+          "schema_name": "public"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to inspect the 'orders' table in the 'public' schema to understand its columns, constraints, and indexes before writing SQL. The get_object_details tool is designed exactly for this purpose.",
+        "tool_name": "get_object_details"
+      },
+      "chosen_tools": [
+        "get_object_details"
+      ],
+      "elapsed_ms": 3559,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "run ready read query",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT count(*) FROM public.orders WHERE status = 'failed';"
+        },
+        "confidence": "High",
+        "rationale": "The user provided a concrete SQL statement and explicitly asked to run it now. The execute_sql tool is designed for executing ready SQL statements against the database.",
+        "tool_name": "execute_sql"
+      },
+      "chosen_tools": [
+        "execute_sql"
+      ],
+      "elapsed_ms": 3331,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "sql: passed"
+      ],
+      "case": "get query plan",
+      "choice": {
+        "arguments": {
+          "sql": "SELECT * FROM orders WHERE customer_id = 42;"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested the execution plan and planner cost for a specific SQL query without executing it for results. The explain_query tool is designed exactly for this purpose.",
+        "tool_name": "explain_query"
+      },
+      "chosen_tools": [
+        "explain_query"
+      ],
+      "elapsed_ms": 3157,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "limit: passed"
+      ],
+      "case": "rank slow workload queries",
+      "choice": {
+        "arguments": {
+          "limit": 5,
+          "order_by": "total_time"
+        },
+        "confidence": 1.0,
+        "rationale": "The user asked to rank the top 5 slow workload queries by total execution time. The get_top_queries tool is designed to rank observed SQL statements by execution metrics like total_time.",
+        "tool_name": "get_top_queries"
+      },
+      "chosen_tools": [
+        "get_top_queries"
+      ],
+      "elapsed_ms": 3927,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "max_index_count: passed"
+      ],
+      "case": "workload index tuning",
+      "choice": {
+        "arguments": {
+          "max_index_count": 3
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to analyze workload indexes and limit the recommendations to at most 3 candidate indexes. The `analyze_workload_indexes` tool is designed for this exact purpose and accepts a `max_index_count` parameter.",
+        "tool_name": "analyze_workload_indexes"
+      },
+      "chosen_tools": [
+        "analyze_workload_indexes"
+      ],
+      "elapsed_ms": 3348,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [
+        "queries: passed"
+      ],
+      "case": "specific query index tuning",
+      "choice": {
+        "arguments": {
+          "queries": [
+            "SELECT * FROM orders JOIN customers ON orders.customer_id = customers.id WHERE orders.created_at > '2026-01-01';"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a specific SQL query and asked for index recommendations to optimize it. The analyze_query_indexes tool is designed exactly for this purpose.",
+        "tool_name": "analyze_query_indexes"
+      },
+      "chosen_tools": [
+        "analyze_query_indexes"
+      ],
+      "elapsed_ms": 3472,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    },
+    {
+      "arg_details": [],
+      "case": "database health check",
+      "choice": {
+        "arguments": {},
+        "confidence": "High",
+        "rationale": "The user explicitly requested a database-wide operational health review covering connections, vacuum, constraints, indexes, sequences, and buffer cache, which exactly matches the purpose and coverage of the analyze_db_health tool.",
+        "tool_name": "analyze_db_health"
+      },
+      "chosen_tools": [
+        "analyze_db_health"
+      ],
+      "elapsed_ms": 3272,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "postgres_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_postgres_mcp_pro_boundaries"
+    }
+  ],
+  "source": {
+    "docs": "README.md#postgres-mcp-pro-tools",
+    "repo": "https://github.com/crystaldba/postgres-mcp",
+    "tool_reference": "https://github.com/crystaldba/postgres-mcp#postgres-mcp-pro-tools"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 0,
+    "passed_cases": 36,
+    "planned": 36,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 36
+  }
+}

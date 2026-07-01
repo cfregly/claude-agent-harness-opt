@@ -1,0 +1,1647 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "file_read",
+      "expected_args_contains": {
+        "path": "/project/README.md"
+      },
+      "expected_tools": [
+        "read_file"
+      ],
+      "forbidden_tools": [
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "read one known file",
+      "task": "Read the contents of /project/README.md."
+    },
+    {
+      "check_family": "multi_file_read",
+      "expected_args_contains": {
+        "paths": "README.md"
+      },
+      "expected_tools": [
+        "read_multiple_files"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "read several known files",
+      "task": "Read /project/README.md, /project/package.json, and /project/CHANGELOG.md so I can compare them."
+    },
+    {
+      "check_family": "file_write",
+      "expected_args_contains": {
+        "path": "/project/notes/new-plan.md"
+      },
+      "expected_tools": [
+        "write_file"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "create new file with full content",
+      "task": "Create /project/notes/new-plan.md with the full content I provided."
+    },
+    {
+      "check_family": "file_edit",
+      "expected_args_contains": {
+        "path": "/project/config.yaml"
+      },
+      "expected_tools": [
+        "edit_file"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "targeted line edit",
+      "task": "In /project/config.yaml, replace the line timeout: 30 with timeout: 60 without rewriting the whole file."
+    },
+    {
+      "check_family": "directory_create",
+      "expected_args_contains": {
+        "path": "/project/reports/2026/june"
+      },
+      "expected_tools": [
+        "create_directory"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "create nested directory",
+      "task": "Create the nested directory /project/reports/2026/june."
+    },
+    {
+      "check_family": "directory_listing",
+      "expected_args_contains": {
+        "path": "/project/src"
+      },
+      "expected_tools": [
+        "list_directory"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "list immediate directory children",
+      "task": "List the immediate files and folders directly inside /project/src. Do not recurse."
+    },
+    {
+      "check_family": "tree_listing",
+      "expected_args_contains": {
+        "path": "/project/src"
+      },
+      "expected_tools": [
+        "directory_tree"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "search_files",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "recursive tree view",
+      "task": "Show a recursive tree view of /project/src."
+    },
+    {
+      "check_family": "file_search",
+      "expected_args_contains": {
+        "path": "/project",
+        "pattern": "*.test.ts"
+      },
+      "expected_tools": [
+        "search_files"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "get_file_info",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "recursive filename search",
+      "task": "Find all files matching *.test.ts somewhere under /project."
+    },
+    {
+      "check_family": "file_metadata",
+      "expected_args_contains": {
+        "path": "/project/build/output.zip"
+      },
+      "expected_tools": [
+        "get_file_info"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "move_file",
+        "list_allowed_directories"
+      ],
+      "name": "get file metadata",
+      "task": "Get the size and last modified time for /project/build/output.zip without reading its contents."
+    },
+    {
+      "check_family": "file_move",
+      "expected_args_contains": {
+        "destination": "/project/archive/old.txt",
+        "source": "/project/tmp/old.txt"
+      },
+      "expected_tools": [
+        "move_file"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "list_allowed_directories"
+      ],
+      "name": "move file to archive",
+      "task": "Move /project/tmp/old.txt to /project/archive/old.txt."
+    },
+    {
+      "check_family": "root_discovery",
+      "expected_tools": [
+        "list_allowed_directories"
+      ],
+      "forbidden_tools": [
+        "read_file",
+        "read_multiple_files",
+        "write_file",
+        "edit_file",
+        "create_directory",
+        "list_directory",
+        "directory_tree",
+        "search_files",
+        "get_file_info",
+        "move_file"
+      ],
+      "name": "list accessible roots",
+      "task": "What filesystem directories is this MCP server allowed to access?"
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "passed": 11,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 2,
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "passed": 9,
+      "provider": "gemini",
+      "score": 0.818,
+      "skipped": 0,
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "passed": 11,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "passed": 11,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    }
+  ],
+  "description": "Compare stock and tuned tool descriptions for common Filesystem MCP read, write, edit, list, tree, search, metadata, and move workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "filesystem mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/filesystem_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": false,
+  "results": [
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "read one known file",
+      "choice": {
+        "arguments": {
+          "path": "/project/README.md"
+        },
+        "confidence": 1,
+        "rationale": "The task is to read the complete contents of a single specified file, so the appropriate filesystem tool is read_file.",
+        "tool_name": "read_file"
+      },
+      "chosen_tools": [
+        "read_file"
+      ],
+      "elapsed_ms": 2628,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "paths: passed"
+      ],
+      "case": "read several known files",
+      "choice": {
+        "arguments": {
+          "paths": [
+            "/project/README.md",
+            "/project/package.json",
+            "/project/CHANGELOG.md"
+          ]
+        },
+        "confidence": 1,
+        "rationale": "The task requires reading three specific files for comparison, so reading them simultaneously is the most efficient single filesystem tool choice.",
+        "tool_name": "read_multiple_files"
+      },
+      "chosen_tools": [
+        "read_multiple_files"
+      ],
+      "elapsed_ms": 2959,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create new file with full content",
+      "choice": {
+        "arguments": {
+          "content": "<full content provided by user>",
+          "path": "/project/notes/new-plan.md"
+        },
+        "confidence": 0.79,
+        "rationale": "The task is to create a new file with complete provided contents, which calls for write_file rather than an edit or read/list operation. The actual content is not present in the prompt, so it is represented as the provided full content placeholder.",
+        "tool_name": "write_file"
+      },
+      "chosen_tools": [
+        "write_file"
+      ],
+      "elapsed_ms": 10322,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "targeted line edit",
+      "choice": {
+        "arguments": {
+          "edits": [
+            {
+              "newText": "timeout: 60",
+              "oldText": "timeout: 30"
+            }
+          ],
+          "path": "/project/config.yaml"
+        },
+        "confidence": 0.98,
+        "rationale": "This is a small targeted change to an existing file, so the line-based edit tool should be used instead of rewriting the whole file.",
+        "tool_name": "edit_file"
+      },
+      "chosen_tools": [
+        "edit_file"
+      ],
+      "elapsed_ms": 5094,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create nested directory",
+      "choice": {
+        "arguments": {
+          "path": "/project/reports/2026/june"
+        },
+        "confidence": 1,
+        "rationale": "The task is to create a nested directory path, and create_directory can create multiple nested directories in one operation or ensure the directory exists.",
+        "tool_name": "create_directory"
+      },
+      "chosen_tools": [
+        "create_directory"
+      ],
+      "elapsed_ms": 2569,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "list immediate directory children",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for the immediate files and folders directly inside /project/src without recursion, which matches the non-recursive list_directory tool.",
+        "tool_name": "list_directory"
+      },
+      "chosen_tools": [
+        "list_directory"
+      ],
+      "elapsed_ms": 2915,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "recursive tree view",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for a recursive tree view of a directory, which is exactly what directory_tree provides.",
+        "tool_name": "directory_tree"
+      },
+      "chosen_tools": [
+        "directory_tree"
+      ],
+      "elapsed_ms": 3049,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed",
+        "pattern: passed"
+      ],
+      "case": "recursive filename search",
+      "choice": {
+        "arguments": {
+          "path": "/project",
+          "pattern": "*.test.ts"
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires finding files matching a glob pattern somewhere under /project, so a recursive filename search is the appropriate single tool.",
+        "tool_name": "search_files"
+      },
+      "chosen_tools": [
+        "search_files"
+      ],
+      "elapsed_ms": 4550,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "get file metadata",
+      "choice": {
+        "arguments": {
+          "path": "/project/build/output.zip"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for metadata (size and last modified time) without reading file contents, which is exactly what get_file_info provides.",
+        "tool_name": "get_file_info"
+      },
+      "chosen_tools": [
+        "get_file_info"
+      ],
+      "elapsed_ms": 2765,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "destination: passed",
+        "source: passed"
+      ],
+      "case": "move file to archive",
+      "choice": {
+        "arguments": {
+          "destination": "/project/archive/old.txt",
+          "source": "/project/tmp/old.txt"
+        },
+        "confidence": 1,
+        "rationale": "The task is to move a file from one path to another, which is exactly what move_file is for.",
+        "tool_name": "move_file"
+      },
+      "chosen_tools": [
+        "move_file"
+      ],
+      "elapsed_ms": 4061,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "list accessible roots",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The task asks which filesystem directories the MCP server is allowed to access; the dedicated tool for returning that list is list_allowed_directories.",
+        "tool_name": "list_allowed_directories"
+      },
+      "chosen_tools": [
+        "list_allowed_directories"
+      ],
+      "elapsed_ms": 3196,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "read one known file",
+      "choice": {
+        "arguments": {
+          "path": "/project/README.md"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to read the contents of a single known file path, so the appropriate filesystem tool is read_file.",
+        "tool_name": "read_file"
+      },
+      "chosen_tools": [
+        "read_file"
+      ],
+      "elapsed_ms": 2163,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "paths: passed"
+      ],
+      "case": "read several known files",
+      "choice": {
+        "arguments": {
+          "paths": [
+            "/project/README.md",
+            "/project/package.json",
+            "/project/CHANGELOG.md"
+          ]
+        },
+        "confidence": 1,
+        "rationale": "The task requires reading the contents of three known files together for comparison, which matches read_multiple_files.",
+        "tool_name": "read_multiple_files"
+      },
+      "chosen_tools": [
+        "read_multiple_files"
+      ],
+      "elapsed_ms": 2293,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create new file with full content",
+      "choice": {
+        "arguments": {
+          "content": "<full content provided by user>",
+          "path": "/project/notes/new-plan.md"
+        },
+        "confidence": 0.78,
+        "rationale": "The task is to create a new file at a known path using complete file content, which matches write_file. The actual content is not present in the provided task text, so it is represented as the user-provided full content placeholder rather than inventing content.",
+        "tool_name": "write_file"
+      },
+      "chosen_tools": [
+        "write_file"
+      ],
+      "elapsed_ms": 7810,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "targeted line edit",
+      "choice": {
+        "arguments": {
+          "dryRun": false,
+          "edits": [
+            {
+              "newText": "timeout: 60",
+              "oldText": "timeout: 30"
+            }
+          ],
+          "path": "/project/config.yaml"
+        },
+        "confidence": 0.96,
+        "rationale": "This is a small targeted change to an existing text file, replacing one known line without rewriting the whole file, so edit_file is the appropriate tool.",
+        "tool_name": "edit_file"
+      },
+      "chosen_tools": [
+        "edit_file"
+      ],
+      "elapsed_ms": 3763,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create nested directory",
+      "choice": {
+        "arguments": {
+          "path": "/project/reports/2026/june"
+        },
+        "confidence": 1,
+        "rationale": "The task is to create or ensure a nested directory exists, which matches create_directory.",
+        "tool_name": "create_directory"
+      },
+      "chosen_tools": [
+        "create_directory"
+      ],
+      "elapsed_ms": 1885,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "list immediate directory children",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for the immediate files and folders directly inside a known directory and explicitly says not to recurse, so a non-recursive directory listing is appropriate.",
+        "tool_name": "list_directory"
+      },
+      "chosen_tools": [
+        "list_directory"
+      ],
+      "elapsed_ms": 2091,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "recursive tree view",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1,
+        "rationale": "The task explicitly asks for a recursive tree view of a specific directory, which matches directory_tree.",
+        "tool_name": "directory_tree"
+      },
+      "chosen_tools": [
+        "directory_tree"
+      ],
+      "elapsed_ms": 3683,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed",
+        "pattern: passed"
+      ],
+      "case": "recursive filename search",
+      "choice": {
+        "arguments": {
+          "path": "/project",
+          "pattern": "*.test.ts"
+        },
+        "confidence": 0.99,
+        "rationale": "The task requires recursively finding files by name pattern under /project, and the exact locations are unknown.",
+        "tool_name": "search_files"
+      },
+      "chosen_tools": [
+        "search_files"
+      ],
+      "elapsed_ms": 3523,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "get file metadata",
+      "choice": {
+        "arguments": {
+          "path": "/project/build/output.zip"
+        },
+        "confidence": 1,
+        "rationale": "The task asks for metadata (size and last modified time) for a known file path without reading its contents, which matches get_file_info.",
+        "tool_name": "get_file_info"
+      },
+      "chosen_tools": [
+        "get_file_info"
+      ],
+      "elapsed_ms": 2336,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "destination: passed",
+        "source: passed"
+      ],
+      "case": "move file to archive",
+      "choice": {
+        "arguments": {
+          "destination": "/project/archive/old.txt",
+          "source": "/project/tmp/old.txt"
+        },
+        "confidence": 1,
+        "rationale": "The task asks to move a single file from one exact path to another, which matches the move_file tool.",
+        "tool_name": "move_file"
+      },
+      "chosen_tools": [
+        "move_file"
+      ],
+      "elapsed_ms": 2450,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [],
+      "case": "list accessible roots",
+      "choice": {
+        "arguments": {},
+        "confidence": 1,
+        "rationale": "The task asks which filesystem directories the MCP server is allowed to access, which is exactly the purpose of list_allowed_directories.",
+        "tool_name": "list_allowed_directories"
+      },
+      "chosen_tools": [
+        "list_allowed_directories"
+      ],
+      "elapsed_ms": 2856,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "read one known file",
+      "choice": {
+        "arguments": {
+          "path": "/project/README.md"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires reading the contents of a single file, which perfectly matches the purpose of the read_file tool.",
+        "tool_name": "read_file"
+      },
+      "chosen_tools": [
+        "read_file"
+      ],
+      "elapsed_ms": 3033,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "paths: passed"
+      ],
+      "case": "read several known files",
+      "choice": {
+        "arguments": {
+          "paths": [
+            "/project/README.md",
+            "/project/package.json",
+            "/project/CHANGELOG.md"
+          ]
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to read three specific files to compare them. The read_multiple_files tool is the most efficient way to retrieve the contents of all three files simultaneously.",
+        "tool_name": "read_multiple_files"
+      },
+      "chosen_tools": [
+        "read_multiple_files"
+      ],
+      "elapsed_ms": 3515,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create new file with full content",
+      "choice": {
+        "arguments": {
+          "content": "the full content I provided.",
+          "path": "/project/notes/new-plan.md"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires creating a new file with specific content. The write_file tool is the correct choice for creating a new file or completely overwriting an existing one.",
+        "tool_name": "write_file"
+      },
+      "chosen_tools": [
+        "write_file"
+      ],
+      "elapsed_ms": 4472,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "targeted line edit",
+      "choice": {
+        "arguments": {
+          "edits": [
+            {
+              "newText": "timeout: 60",
+              "oldText": "timeout: 30"
+            }
+          ],
+          "path": "/project/config.yaml"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested to replace a specific line in an existing file without rewriting the entire file. The edit_file tool is designed for making targeted, line-based edits.",
+        "tool_name": "edit_file"
+      },
+      "chosen_tools": [
+        "edit_file"
+      ],
+      "elapsed_ms": 5789,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create nested directory",
+      "choice": {
+        "arguments": {
+          "path": "/project/reports/2026/june"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires creating a nested directory structure. The create_directory tool is specifically designed for this purpose and can create multiple nested directories in one operation.",
+        "tool_name": "create_directory"
+      },
+      "chosen_tools": [
+        "create_directory"
+      ],
+      "elapsed_ms": 3362,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "list immediate directory children",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1.0,
+        "rationale": "The task specifically requests listing the immediate files and folders inside '/project/src' without recursing. The 'list_directory' tool is the perfect fit as it provides a non-recursive, detailed listing of a specified path.",
+        "tool_name": "list_directory"
+      },
+      "chosen_tools": [
+        "list_directory"
+      ],
+      "elapsed_ms": 6084,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "recursive tree view",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1.0,
+        "rationale": "The user requested a recursive tree view of the /project/src directory, which perfectly matches the purpose of the directory_tree tool.",
+        "tool_name": "directory_tree"
+      },
+      "chosen_tools": [
+        "directory_tree"
+      ],
+      "elapsed_ms": 3128,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed",
+        "pattern: passed"
+      ],
+      "case": "recursive filename search",
+      "choice": {
+        "arguments": {
+          "path": "/project",
+          "pattern": "*.test.ts"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to find all files matching a specific pattern (*.test.ts) recursively under a specific directory (/project). The search_files tool is designed for this exact purpose.",
+        "tool_name": "search_files"
+      },
+      "chosen_tools": [
+        "search_files"
+      ],
+      "elapsed_ms": 4542,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "get file metadata",
+      "choice": {
+        "arguments": {
+          "path": "/project/build/output.zip"
+        },
+        "confidence": 1.0,
+        "rationale": "The get_file_info tool retrieves metadata such as size and last modified time for a specific file without reading its contents, which perfectly matches the task requirements.",
+        "tool_name": "get_file_info"
+      },
+      "chosen_tools": [
+        "get_file_info"
+      ],
+      "elapsed_ms": 3664,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "destination: passed",
+        "source: passed"
+      ],
+      "case": "move file to archive",
+      "choice": {
+        "arguments": {
+          "destination": "/project/archive/old.txt",
+          "source": "/project/tmp/old.txt"
+        },
+        "confidence": 1.0,
+        "rationale": "The task requires moving a file from one location to another, which perfectly matches the purpose of the move_file tool.",
+        "tool_name": "move_file"
+      },
+      "chosen_tools": [
+        "move_file"
+      ],
+      "elapsed_ms": 2591,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [],
+      "case": "list accessible roots",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The task explicitly asks for the filesystem directories the MCP server is allowed to access, which perfectly matches the purpose of the list_allowed_directories tool.",
+        "tool_name": "list_allowed_directories"
+      },
+      "chosen_tools": [
+        "list_allowed_directories"
+      ],
+      "elapsed_ms": 5810,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "stock_filesystem_mcp"
+    },
+    {
+      "arg_details": [
+        "path: failed"
+      ],
+      "case": "read one known file",
+      "choice": {
+        "path": "/project/README.md"
+      },
+      "chosen_tools": [],
+      "elapsed_ms": 2868,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [
+        "read_file"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "paths: passed"
+      ],
+      "case": "read several known files",
+      "choice": {
+        "arguments": {
+          "paths": [
+            "/project/README.md",
+            "/project/package.json",
+            "/project/CHANGELOG.md"
+          ]
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to read three specific files to compare them. The read_multiple_files tool is designed to read several known files in one call.",
+        "tool_name": "read_multiple_files"
+      },
+      "chosen_tools": [
+        "read_multiple_files"
+      ],
+      "elapsed_ms": 3860,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create new file with full content",
+      "choice": {
+        "arguments": {
+          "content": "the full content I provided.",
+          "path": "/project/notes/new-plan.md"
+        },
+        "confidence": "High",
+        "rationale": "The user explicitly requested to create a new file with full content, which perfectly matches the purpose of the write_file tool.",
+        "tool_name": "write_file"
+      },
+      "chosen_tools": [
+        "write_file"
+      ],
+      "elapsed_ms": 5622,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "targeted line edit",
+      "choice": {
+        "arguments": {
+          "edits": [
+            {
+              "newText": "timeout: 60",
+              "oldText": "timeout: 30"
+            }
+          ],
+          "path": "/project/config.yaml"
+        },
+        "confidence": "High",
+        "rationale": "The user requested a targeted line replacement in an existing file without rewriting the entire file, which perfectly matches the purpose of the edit_file tool.",
+        "tool_name": "edit_file"
+      },
+      "chosen_tools": [
+        "edit_file"
+      ],
+      "elapsed_ms": 6295,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "create nested directory",
+      "choice": {
+        "arguments": {
+          "path": "/project/reports/2026/june"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked to create a nested directory. The create_directory tool is designed to create directories, including nested ones.",
+        "tool_name": "create_directory"
+      },
+      "chosen_tools": [
+        "create_directory"
+      ],
+      "elapsed_ms": 2963,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: failed"
+      ],
+      "case": "list immediate directory children",
+      "choice": {
+        "path": "/project/src"
+      },
+      "chosen_tools": [],
+      "elapsed_ms": 3435,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [
+        "list_directory"
+      ],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": false,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "failed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "recursive tree view",
+      "choice": {
+        "arguments": {
+          "path": "/project/src"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked for a recursive tree view of the '/project/src' directory, which matches the exact purpose of the directory_tree tool.",
+        "tool_name": "directory_tree"
+      },
+      "chosen_tools": [
+        "directory_tree"
+      ],
+      "elapsed_ms": 4464,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed",
+        "pattern: passed"
+      ],
+      "case": "recursive filename search",
+      "choice": {
+        "arguments": {
+          "path": "/project",
+          "pattern": "*.test.ts"
+        },
+        "confidence": 1.0,
+        "rationale": "The user wants to find files matching a specific pattern recursively under a directory, which perfectly matches the purpose of the search_files tool.",
+        "tool_name": "search_files"
+      },
+      "chosen_tools": [
+        "search_files"
+      ],
+      "elapsed_ms": 3857,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "path: passed"
+      ],
+      "case": "get file metadata",
+      "choice": {
+        "arguments": {
+          "path": "/project/build/output.zip"
+        },
+        "confidence": 1.0,
+        "rationale": "The user specifically requested metadata (size and last modified time) for a file without reading its contents, which perfectly matches the purpose of the get_file_info tool.",
+        "tool_name": "get_file_info"
+      },
+      "chosen_tools": [
+        "get_file_info"
+      ],
+      "elapsed_ms": 3106,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "destination: passed",
+        "source: passed"
+      ],
+      "case": "move file to archive",
+      "choice": {
+        "arguments": {
+          "destination": "/project/archive/old.txt",
+          "source": "/project/tmp/old.txt"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly requested to move a file from one path to another, which matches the purpose of the move_file tool.",
+        "tool_name": "move_file"
+      },
+      "chosen_tools": [
+        "move_file"
+      ],
+      "elapsed_ms": 3082,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    },
+    {
+      "arg_details": [],
+      "case": "list accessible roots",
+      "choice": {
+        "arguments": {},
+        "confidence": 1.0,
+        "rationale": "The user explicitly asked for the directories the MCP server is allowed to access, which directly corresponds to the purpose of the list_allowed_directories tool.",
+        "tool_name": "list_allowed_directories"
+      },
+      "chosen_tools": [
+        "list_allowed_directories"
+      ],
+      "elapsed_ms": 5246,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "filesystem_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_filesystem_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "registry": "https://mcpservers.org/servers/modelcontextprotocol/filesystem",
+    "repo": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+    "tool_reference": "https://hub.docker.com/r/mcp/filesystem"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 2,
+    "passed_cases": 42,
+    "planned": 44,
+    "score": 0.955,
+    "skipped": 0,
+    "total": 44
+  }
+}

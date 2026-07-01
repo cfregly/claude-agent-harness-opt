@@ -22,7 +22,9 @@ What is working:
 - Most mature public MCP catalogs passed the current slices outright. GitHub, Playwright, Slack,
   Filesystem, Postgres MCP Pro, Context7, and ClickHouse are useful guardrails, not current
   description rewrites.
-- gstack also looks strong. The historical full run passed 708 of 720 live cells with zero errors.
+- gstack also looks strong. The original full run passed 708 of 720 live cells with zero errors, and
+  the current available-frontier stress receipt completed 496 cells with 484 passed, 8 failed, and 4
+  errors.
 - The useful feedback is narrow. The wins came from adjacent-boundary confusion, not broad tool
   catalog failure.
 
@@ -35,10 +37,10 @@ What produced confirmed value:
   hot-trace drilldown arguments.
 - Screenpipe needed exact keyword lookup to route to `keyword-search`, not broader content search.
 - InsForge needed relative deployment paths to stop before `create-deployment`.
-- gstack needed browser-alias and safety-mode routing tightened. The historical 720-cell run is
-  compatibility evidence, and later high-profile smoke checks covered sensitive cases. A stronger
-  upstream-facing claim should rerun the full matrix on current frontier/latest profiles before those
-  results are used as the headline.
+- gstack needed browser-alias and safety-mode routing tightened. The historical 720-cell run remains
+  compatibility evidence, and the 2026-07-01 available-frontier receipt is the current
+  hill-descending surface for OpenAI `gpt-5.5` and Gemini
+  `gemini-3.1-pro-preview-customtools`.
 
 How usefulness is proven:
 
@@ -51,6 +53,8 @@ How usefulness is proven:
   attempt and label it plainly instead of implying complete coverage.
   Historical, high, balanced, or older-model cells are still useful regression coverage, but they
   should be labeled that way.
+- Current available-frontier receipts across MCP matrices and gstack are indexed in
+  [Frontier Stress Receipts](https://github.com/cfregly/claude-agent-harness-opt/blob/main/docs/frontier-stress-2026-07-01.md).
 - The packet includes source pins, exact cases, reproduction commands, and result artifacts so an
   upstream maintainer can rerun or challenge the claim.
 
@@ -84,6 +88,7 @@ Downside of ignoring confirmed suggestions:
 | Firecrawl MCP | `firecrawl-mcp` 3.22.0, `firecrawl/firecrawl-mcp-server` commit `e744bba494c0e77086d66af838d7a64fab52f138` | `legacy_firecrawl_mcp` | `tuned_firecrawl_mcp_boundaries` | Anthropic full run moved from 11/12 to 12/12. The adversarial single-page structured-fields case failed on legacy and passed on tuned across Anthropic, OpenAI, Gemini, native tools, and prompt JSON. | [Firecrawl packet](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/firecrawl_mcp_tool_tuning_2026-06-25): for one exact URL plus specific fields, use `firecrawl_scrape` with JSON format. Reserve `firecrawl_extract` for multi-page or broader extraction jobs. |
 | Supabase MCP database tools | `@supabase/mcp-server-supabase` 0.8.2, `supabase/mcp` commit `100565f26d7eec6d314a08597ded22da63045923` | `terse_supabase_database_mcp` | `tuned_supabase_database_boundaries` | Anthropic full run moved from 6/9 to 9/9. Cross-provider DDL/RLS cells moved failing native and prompt-JSON cells to 3/3, with no regression in the OpenAI prompt-JSON cell that already passed. | [Supabase packet](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/supabase_mcp_database_tool_tuning_2026-06-25): route schema-changing SQL to `apply_migration`. Use `execute_sql` only for regular non-schema SQL. |
 | Zymtrace MCP | `zymtrace-mcp` 26.6.1 endpoint inspection, Zymtrace skills plugin 26.6.0, local GPU-enabled profiler verification on 2026-06-30, and frontier stress run on 2026-07-01 | `stock_zymtrace_mcp` + `zymtrace_host_and_skill_rules` | `tuned_zymtrace_mcp_boundaries` + `zymtrace_host_and_skill_rules` | Expanded held-out prompt-JSON run moved from 4/8 to 8/8 on Anthropic, 5/8 to 8/8 on OpenAI, and 5/8 to 8/8 on Gemini. Stock missed default project UUIDs, metric-discovery arguments, bounded full-trace drilldown arguments, and one resource fallback. Tuned passed all held-out tool/skill boundary cases. The current frontier stress receipt on OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools` completed 272 cells with 233 passed, 27 failed, and 12 errors. Anthropic frontier was blocked by model access and credit exhaustion. | [Zymtrace packet](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/zymtrace_mcp_tool_tuning_2026-06-30): prefer resource-first fallbacks, default project `00000000-0000-0000-0000-000000000000`, metrics-first GPU/inference workflows, rank-first CPU workflows, and bounded `hot_traces` drilldown with `prefix_hash`, `meta_only=false`, and `limit=1`. Frontier stress receipt: [2026-07-01](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/zymtrace_mcp_frontier_available_matrix_live_2026-07-01.md). |
+| gstack skills | `gstack` 0.13.3.0, `garrytan/gstack` commit `cd66fc2f890982351e3178925be563681d0ab2c5`, generated skill surface hash `68d60eeefdde254818b03ee310bf1c4c9aaf0efee8d6db35141fe9cb7da8ae12` | `gstack_stock_skill_descriptions` | `gstack_boundary_tuned_skill_descriptions` | Original full run moved from 0.975 to 0.992 across 720 live cells. The current available-frontier stress receipt on OpenAI `gpt-5.5` and Gemini `gemini-3.1-pro-preview-customtools` completed 496 cells with 484 passed, 8 failed, and 4 errors. Anthropic frontier is blocked by account credit state in this workspace. | [gstack packet](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/gstack_skill_routing_2026-06-25): tighten browser alias and safety-mode skill boundaries. Frontier stress receipt: [2026-07-01](https://github.com/cfregly/claude-agent-harness-opt/blob/main/evals/results/gstack_skill_matrix_frontier_available_live_2026-07-01.md). |
 | Screenpipe MCP | `screenpipe-mcp` 0.18.14, `screenpipe/screenpipe` commit `2de07ff501a63d3d3f0f39a9a602640a833d151f` | `readme_screenpipe_mcp` | `source_tuned_screenpipe_mcp` | Anthropic prompt-JSON run moved from 6/7 to 7/7. README-level descriptions routed exact keyword lookup to `search-content`. Source-level tuned descriptions routed it to `keyword-search`. | [Screenpipe packet](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/screenpipe_mcp_tool_tuning_2026-06-28): route literal keyword or exact phrase lookup to `keyword-search`. Reserve `search-content` for broader content search. |
 | InsForge MCP | `@insforge/mcp` 1.2.10, `InsForge/insforge-mcp` commit `dad794d445d05e7df2efcb8280dba59682b97a87` | `readme_insforge_mcp` | `source_tuned_insforge_mcp` | Anthropic prompt-JSON run moved from 15/16 to 16/16. README-level descriptions routed a relative source-directory deployment request to `create-deployment`. Source-level tuned descriptions routed it to `NO_TOOL`. | [InsForge packet](https://github.com/cfregly/claude-agent-harness-opt/tree/main/evals/pr_packets/insforge_mcp_tool_tuning_2026-06-28): require an absolute `sourceDirectory` before calling `create-deployment`. Reject relative deploy paths before tool call. |
 

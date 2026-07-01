@@ -1,0 +1,1339 @@
+{
+  "case_definitions": [
+    {
+      "check_family": "id_resolution",
+      "expected_args_contains": {
+        "libraryName": "Next.js",
+        "query": "middleware"
+      },
+      "expected_tools": [
+        "resolve-library-id"
+      ],
+      "forbidden_tools": [
+        "query-docs"
+      ],
+      "name": "generic library needs resolution",
+      "task": "Use Context7 to answer: How do I configure middleware matchers in Next.js?"
+    },
+    {
+      "check_family": "id_resolution",
+      "expected_args_contains": {
+        "libraryName": "React",
+        "query": "useEffect"
+      },
+      "expected_tools": [
+        "resolve-library-id"
+      ],
+      "forbidden_tools": [
+        "query-docs"
+      ],
+      "name": "well known framework still resolves",
+      "task": "Use Context7 to fetch current docs for React useEffect cleanup behavior."
+    },
+    {
+      "check_family": "direct_docs_query",
+      "expected_args_contains": {
+        "libraryId": "/vercel/next.js",
+        "query": "middleware"
+      },
+      "expected_tools": [
+        "query-docs"
+      ],
+      "forbidden_tools": [
+        "resolve-library-id"
+      ],
+      "name": "exact id bypasses resolution",
+      "task": "Use Context7 docs for /vercel/next.js to answer: how do middleware matchers work?"
+    },
+    {
+      "check_family": "direct_docs_query",
+      "expected_args_contains": {
+        "libraryId": "/vercel/next.js/v14.3.0-canary.87",
+        "query": "app router"
+      },
+      "expected_tools": [
+        "query-docs"
+      ],
+      "forbidden_tools": [
+        "resolve-library-id"
+      ],
+      "name": "versioned exact id bypasses resolution",
+      "task": "Use Context7 docs for /vercel/next.js/v14.3.0-canary.87 and show app router route segment config examples."
+    },
+    {
+      "check_family": "id_resolution",
+      "expected_args_contains": {
+        "libraryName": "Prisma",
+        "query": "transaction"
+      },
+      "expected_tools": [
+        "resolve-library-id"
+      ],
+      "forbidden_tools": [
+        "query-docs"
+      ],
+      "name": "package name with topic resolves first",
+      "task": "Use Context7 for Prisma transaction isolation examples."
+    },
+    {
+      "check_family": "direct_docs_query",
+      "expected_args_contains": {
+        "libraryId": "/supabase/supabase",
+        "query": "auth"
+      },
+      "expected_tools": [
+        "query-docs"
+      ],
+      "forbidden_tools": [
+        "resolve-library-id"
+      ],
+      "name": "previously resolved id queries directly",
+      "task": "I already resolved Supabase to /supabase/supabase. Use Context7 to fetch auth sign-in with OAuth docs."
+    },
+    {
+      "check_family": "error_recovery",
+      "expected_args_contains": {
+        "libraryName": "Next.js",
+        "query": "middleware"
+      },
+      "expected_tools": [
+        "resolve-library-id"
+      ],
+      "forbidden_tools": [
+        "query-docs"
+      ],
+      "name": "invalid id error resolves library",
+      "task": "A previous Context7 query-docs call failed because libraryId nextjs was not a valid /org/project ID. Recover by resolving the correct Context7 library ID for Next.js middleware matcher docs."
+    },
+    {
+      "check_family": "output_budget",
+      "expected_args_contains": {
+        "libraryId": "/vercel/next.js",
+        "query": "middleware matcher examples"
+      },
+      "expected_tools": [
+        "query-docs"
+      ],
+      "forbidden_tools": [
+        "resolve-library-id"
+      ],
+      "name": "exact id focused docs query",
+      "task": "Use Context7 docs for /vercel/next.js. Fetch only middleware matcher examples, not a broad routing overview."
+    },
+    {
+      "check_family": "resource_vs_tool",
+      "expected_args_contains": {
+        "libraryId": "/reactjs/react.dev",
+        "query": "useEffect cleanup"
+      },
+      "expected_tools": [
+        "query-docs"
+      ],
+      "forbidden_tools": [
+        "resolve-library-id"
+      ],
+      "name": "selected docs id bypasses resolver",
+      "task": "The Context7 resolver already selected /reactjs/react.dev. Query that exact docs ID for useEffect cleanup examples."
+    }
+  ],
+  "cells": [
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "passed": 9,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "passed": 9,
+      "provider": "gemini",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "passed": 9,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "errors": 0,
+      "failed": 0,
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "passed": 9,
+      "provider": "openai",
+      "score": 1.0,
+      "skipped": 0,
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    }
+  ],
+  "description": "Compare README-style and tuned Context7 MCP descriptions for library resolution and documentation query workflows.",
+  "filters": {
+    "cases": null,
+    "harnesses": [
+      "prompt_json"
+    ],
+    "instruction_variants": null,
+    "providers": [
+      "gemini-31-pro-customtools-frontier",
+      "openai-gpt55-frontier"
+    ],
+    "variants": null
+  },
+  "live": true,
+  "matrix": "context7 mcp tool-selection matrix",
+  "matrix_path": "evals/model_matrix/context7_mcp_tool_selection.json",
+  "max_cases": null,
+  "passed": true,
+  "results": [
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "generic library needs resolution",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "How do I configure middleware matchers in Next.js?"
+        },
+        "confidence": 0.98,
+        "rationale": "The task names the framework Next.js but does not provide a Context7-compatible library ID, so the next step is to resolve the library ID before querying documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3225,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "well known framework still resolves",
+      "choice": {
+        "arguments": {
+          "libraryName": "React",
+          "query": "Fetch current docs for React useEffect cleanup behavior."
+        },
+        "confidence": 0.98,
+        "rationale": "The task names the React framework but does not provide a Context7-compatible library ID, so the next step is to resolve the library ID before querying documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3300,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "How do middleware matchers work in Next.js?"
+        },
+        "confidence": 1,
+        "rationale": "The task provides a Context7-compatible library ID (/vercel/next.js), so the next step is to query the documentation directly for middleware matcher behavior.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3226,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "versioned exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js/v14.3.0-canary.87",
+          "query": "Show App Router route segment config examples."
+        },
+        "confidence": 0.98,
+        "rationale": "The task provides a Context7-compatible library ID, so the next step is to query the documentation directly for App Router route segment config examples.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3452,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "package name with topic resolves first",
+      "choice": {
+        "arguments": {
+          "libraryName": "Prisma",
+          "query": "transaction isolation examples"
+        },
+        "confidence": 0.99,
+        "rationale": "The user provided a general library/package name (Prisma) rather than a Context7-compatible library ID, so the next step is to resolve the library ID before querying documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3004,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "previously resolved id queries directly",
+      "choice": {
+        "arguments": {
+          "libraryId": "/supabase/supabase",
+          "query": "Fetch documentation for auth sign-in with OAuth, including how to initiate OAuth sign-in and relevant options or examples."
+        },
+        "confidence": 0.99,
+        "rationale": "The task provides a Context7-compatible library ID (/supabase/supabase), so the next step is to query the docs directly for OAuth sign-in documentation.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3155,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "invalid id error resolves library",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "Find the correct Context7 library ID for Next.js documentation, specifically middleware matcher docs."
+        },
+        "confidence": 0.99,
+        "rationale": "The supplied identifier 'nextjs' is not a valid Context7 /org/project library ID, and the task asks to recover by resolving the correct library ID before querying docs.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3709,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id focused docs query",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "Fetch only middleware matcher examples for Next.js middleware configuration. Focus on matcher patterns and examples; do not include a broad routing overview."
+        },
+        "confidence": 1,
+        "rationale": "The task provides a Context7-compatible library ID (/vercel/next.js), so the next step is to query the docs directly. The query is narrowed to middleware matcher examples as requested.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3567,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "selected docs id bypasses resolver",
+      "choice": {
+        "arguments": {
+          "libraryId": "/reactjs/react.dev",
+          "query": "useEffect cleanup examples"
+        },
+        "confidence": 1,
+        "rationale": "The task provides an exact Context7 library ID (/reactjs/react.dev), so the next step is to query the docs directly for useEffect cleanup examples.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 4633,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "generic library needs resolution",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "How do I configure middleware matchers in Next.js?"
+        },
+        "confidence": 0.99,
+        "rationale": "The task names Next.js but does not provide an exact Context7 library ID in /org/project format, so the library ID should be resolved before querying documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 4013,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "well known framework still resolves",
+      "choice": {
+        "arguments": {
+          "libraryName": "React",
+          "query": "Use Context7 to fetch current docs for React useEffect cleanup behavior."
+        },
+        "confidence": 0.99,
+        "rationale": "The user named React but did not provide an exact Context7 library ID in /org/project format, so the library ID should be resolved before querying documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 2587,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "How do middleware matchers work in Next.js?"
+        },
+        "confidence": 0.99,
+        "rationale": "The task provides an exact Context7 library ID (/vercel/next.js), so the next step is to query the documentation directly rather than resolve a library ID first.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 2372,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "versioned exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js/v14.3.0-canary.87",
+          "query": "Show App Router route segment config examples for Next.js v14.3.0-canary.87."
+        },
+        "confidence": 1,
+        "rationale": "The user provided an exact Context7 library ID in /org/project/version format, so the next step is to query the documentation directly rather than resolving a library ID.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 2941,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "package name with topic resolves first",
+      "choice": {
+        "arguments": {
+          "libraryName": "Prisma",
+          "query": "Use Context7 for Prisma transaction isolation examples."
+        },
+        "confidence": 0.99,
+        "rationale": "The user named Prisma but did not provide a Context7 library ID in /org/project format, so the next step is to resolve the exact library ID before querying documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 2897,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "previously resolved id queries directly",
+      "choice": {
+        "arguments": {
+          "libraryId": "/supabase/supabase",
+          "query": "Fetch Supabase documentation for Auth sign-in with OAuth, including how to use signInWithOAuth and relevant provider/redirect options."
+        },
+        "confidence": 0.99,
+        "rationale": "The user provided an exact Context7 library ID (/supabase/supabase), so the next step is to query the docs directly rather than resolve the library ID.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 5109,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "invalid id error resolves library",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "Resolve the correct Context7 library ID for Next.js middleware matcher documentation after a query-docs call failed because libraryId 'nextjs' was not a valid /org/project ID."
+        },
+        "confidence": 0.98,
+        "rationale": "The previous call used an invalid non-Context7 ID. Since only the product name Next.js is available and no valid /org/project library ID was supplied, the next step is to resolve the official Context7 library ID before querying docs.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3725,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id focused docs query",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "Fetch only middleware matcher examples in Next.js middleware/proxy, including matcher configuration patterns and examples; do not provide a broad routing overview."
+        },
+        "confidence": 0.98,
+        "rationale": "The user supplied an exact Context7 library ID (/vercel/next.js), so the next tool should query the docs directly with a focused question about middleware matcher examples.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3791,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "selected docs id bypasses resolver",
+      "choice": {
+        "arguments": {
+          "libraryId": "/reactjs/react.dev",
+          "query": "useEffect cleanup examples"
+        },
+        "confidence": 1,
+        "rationale": "An exact Context7 library ID (/reactjs/react.dev) has already been selected, so the next step is to query the documentation directly for useEffect cleanup examples.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 2855,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gpt-5.5",
+      "passed": true,
+      "profile": "openai-gpt55-frontier",
+      "provider": "openai",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "generic library needs resolution",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "How do I configure middleware matchers in Next.js?"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a framework name ('Next.js') rather than a specific Context7 library ID (like '/vercel/next.js'). According to the instructions, I must resolve the library ID first.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 4344,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "well known framework still resolves",
+      "choice": {
+        "arguments": {
+          "libraryName": "React",
+          "query": "useEffect cleanup behavior"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a general library name ('React') rather than a Context7-compatible library ID (e.g., /org/project). Therefore, the library ID must be resolved first before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3825,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "how do middleware matchers work?"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a Context7 library ID in the /org/project format (/vercel/next.js), so we can directly query the documentation using the query-docs tool.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3613,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "versioned exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js/v14.3.0-canary.87",
+          "query": "app router route segment config examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a specific Context7 library ID in the /org/project/version format, so we can directly query the documentation using the query-docs tool.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3565,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "package name with topic resolves first",
+      "choice": {
+        "arguments": {
+          "libraryName": "Prisma",
+          "query": "transaction isolation examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a general library name ('Prisma') instead of a Context7-compatible library ID (e.g., /org/project). Therefore, the library ID must be resolved first before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3552,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "previously resolved id queries directly",
+      "choice": {
+        "arguments": {
+          "libraryId": "/supabase/supabase",
+          "query": "auth sign-in with OAuth"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided the exact Context7 library ID (/supabase/supabase), so we can directly query the documentation using the query-docs tool.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3288,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "invalid id error resolves library",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "middleware matcher docs"
+        },
+        "confidence": 1.0,
+        "rationale": "The previous query-docs call failed because 'nextjs' is not a valid /org/project ID. To recover, we must first resolve the general framework name 'Next.js' into a valid Context7 library ID before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3750,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id focused docs query",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "middleware matcher examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a Context7 library ID in the /org/project format (/vercel/next.js), so we can directly query the documentation using the query-docs tool.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3619,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "selected docs id bypasses resolver",
+      "choice": {
+        "arguments": {
+          "libraryId": "/reactjs/react.dev",
+          "query": "useEffect cleanup examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided a specific Context7 library ID (/reactjs/react.dev), so we can directly query the documentation using the query-docs tool.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3588,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "readme_context7_mcp"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "generic library needs resolution",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "How do I configure middleware matchers in Next.js?"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided the library name 'Next.js' but not the exact Context7 library ID in /org/project format. I need to resolve the library ID first before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3489,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "well known framework still resolves",
+      "choice": {
+        "arguments": {
+          "libraryName": "React",
+          "query": "useEffect cleanup behavior"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided the library name 'React' but not the exact Context7 library ID in /org/project format. I need to resolve the ID first before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 4011,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "how do middleware matchers work?"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly provided the Context7 library ID in the `/org/project` format (`/vercel/next.js`), so we can directly query the documentation without needing to resolve the ID first.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 2991,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "versioned exact id bypasses resolution",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js/v14.3.0-canary.87",
+          "query": "app router route segment config examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided an exact Context7 library ID in the /org/project/version format, so we can directly query the documentation without needing to resolve the library ID first.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3998,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "package name with topic resolves first",
+      "choice": {
+        "arguments": {
+          "libraryName": "Prisma",
+          "query": "Use Context7 for Prisma transaction isolation examples."
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided the library name 'Prisma' but not the exact Context7 library ID in /org/project format. I need to resolve the ID first before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 4417,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "previously resolved id queries directly",
+      "choice": {
+        "arguments": {
+          "libraryId": "/supabase/supabase",
+          "query": "auth sign-in with OAuth"
+        },
+        "confidence": 1.0,
+        "rationale": "The user explicitly provided the resolved Context7 library ID '/supabase/supabase' and requested documentation for 'auth sign-in with OAuth'. Therefore, the query-docs tool is the correct choice.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3307,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryName: passed",
+        "query: passed"
+      ],
+      "case": "invalid id error resolves library",
+      "choice": {
+        "arguments": {
+          "libraryName": "Next.js",
+          "query": "Next.js middleware matcher docs"
+        },
+        "confidence": 1.0,
+        "rationale": "The previous query-docs call failed because 'nextjs' is not a valid Context7 library ID. We need to use resolve-library-id to find the correct /org/project ID for Next.js before querying the documentation.",
+        "tool_name": "resolve-library-id"
+      },
+      "chosen_tools": [
+        "resolve-library-id"
+      ],
+      "elapsed_ms": 3645,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "exact id focused docs query",
+      "choice": {
+        "arguments": {
+          "libraryId": "/vercel/next.js",
+          "query": "middleware matcher examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The user provided the exact Context7 library ID in /org/project format (/vercel/next.js), so we can directly query the documentation for middleware matcher examples without needing to resolve the ID first.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3339,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    },
+    {
+      "arg_details": [
+        "libraryId: passed",
+        "query: passed"
+      ],
+      "case": "selected docs id bypasses resolver",
+      "choice": {
+        "arguments": {
+          "libraryId": "/reactjs/react.dev",
+          "query": "useEffect cleanup examples"
+        },
+        "confidence": 1.0,
+        "rationale": "The exact Context7 library ID '/reactjs/react.dev' is already provided, so we can directly query the documentation for 'useEffect cleanup examples' without needing to resolve the ID first.",
+        "tool_name": "query-docs"
+      },
+      "chosen_tools": [
+        "query-docs"
+      ],
+      "elapsed_ms": 3788,
+      "forbidden_used": [],
+      "harness": "prompt_json",
+      "instruction_variant": "context7_host_rules",
+      "missing_expected": [],
+      "model": "gemini-3.1-pro-preview-customtools",
+      "passed": true,
+      "profile": "gemini-31-pro-customtools-frontier",
+      "provider": "gemini",
+      "status": "passed",
+      "tier": "frontier",
+      "tool_variant": "tuned_context7_mcp_boundaries"
+    }
+  ],
+  "source": {
+    "commit": "a914a8693488f1a7b37581de176ad1f19def8e64",
+    "mcp_source": "packages/mcp/src/index.ts",
+    "package": "@upstash/context7",
+    "repo": "https://github.com/upstash/context7",
+    "rules": "rules/context7-mcp.md",
+    "skill": "skills/context7-mcp/SKILL.md",
+    "version": "1.0.0"
+  },
+  "summary": {
+    "errors": 0,
+    "failed_cases": 0,
+    "passed_cases": 36,
+    "planned": 36,
+    "score": 1.0,
+    "skipped": 0,
+    "total": 36
+  }
+}

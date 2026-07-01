@@ -275,7 +275,7 @@ class ModelMatrixTests(unittest.TestCase):
         result = run_model_matrix(
             ROOT / "evals" / "model_matrix" / "github_mcp_tool_selection.json",
             filters=MatrixFilters(
-                providers={"anthropic"},
+                providers={"anthropic-sonnet"},
                 harnesses={"prompt_json"},
                 variants={"stock_github_mcp"},
                 instruction_variants={"github_mcp_host_rules"},
@@ -366,7 +366,7 @@ class ModelMatrixTests(unittest.TestCase):
 
         for filename, variant, instruction_variant in cases:
             with self.subTest(filename=filename):
-                provider_filter = {"anthropic-sonnet"} if filename == "zymtrace_mcp_tool_selection.json" else {"anthropic"}
+                provider_filter = {"anthropic-sonnet"}
                 result = run_model_matrix(
                     ROOT / "evals" / "model_matrix" / filename,
                     filters=MatrixFilters(
