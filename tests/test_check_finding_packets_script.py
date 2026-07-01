@@ -383,6 +383,39 @@ class CheckFindingPacketsScriptTests(unittest.TestCase):
         self.assertIn("Passed cases summary does not match Results table", joined)
         self.assertIn("Failed cases summary does not match Results table", joined)
 
+    def test_optimization_gate_markdown_counts_must_match_results_table(self):
+        path = ROOT / "evals" / "results" / "bad_optimization_gate_report.md"
+        path.write_text(
+            "# Matrix Report\n\n"
+            "## Optimization Gate\n\n"
+            "Passed: yes\n"
+            "Optimized variants: `tuned`, `missing_tuned`\n"
+            "Baseline variant: `stock`\n"
+            "Baseline failures: 0\n"
+            "Optimized failures: 1\n\n"
+            "## Raw Matrix\n\n"
+            "Planned: 2\n"
+            "Passed cases: 1\n"
+            "Failed cases: 1\n"
+            "Errors: 0\n"
+            "Skipped: 0\n\n"
+            "## Results\n\n"
+            "| Provider | Model | Harness | Tool Variant | Instruction Variant | Case | Status | Chosen |\n"
+            "|---|---|---|---|---|---|---|---|\n"
+            "| anthropic | model | prompt_json | stock | rules | first | failed | tool |\n"
+            "| anthropic | model | prompt_json | tuned | rules | first | passed | tool |\n",
+            encoding="utf-8",
+        )
+        try:
+            failures = _check_result_markdown(path)
+        finally:
+            path.unlink()
+
+        joined = "\n".join(failures)
+        self.assertIn("Optimized variant 'missing_tuned' is not present in Results table", joined)
+        self.assertIn("Baseline failures summary does not match Results table", joined)
+        self.assertIn("Optimized failures summary does not match Results table", joined)
+
     def test_matrix_surface_coverage_reports_target_matrix_gaps(self):
         target_dir = ROOT / "evals" / "targets" / "temporary_bad_matrix"
         target_dir.mkdir(parents=True, exist_ok=True)

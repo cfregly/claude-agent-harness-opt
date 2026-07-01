@@ -924,6 +924,8 @@ def _check_result_markdown(path: Path) -> list[str]:
         failures.append(f"{rel}: missing review section")
     if "## Raw Matrix" in text and "## Results" in text:
         failures.extend(_check_raw_matrix_markdown_counts(path, text))
+    if "## Optimization Gate" in text and "## Results" in text:
+        failures.extend(_check_optimization_gate_markdown_counts(path, text))
     if "coverage" in path.stem:
         failures.extend(_check_coverage_markdown_json_pair(path, text))
     return failures
@@ -975,6 +977,65 @@ def _markdown_results_rows(text: str) -> list[list[str]]:
             continue
         rows.append(cells)
     return rows
+
+
+def _check_optimization_gate_markdown_counts(path: Path, text: str) -> list[str]:
+    failures: list[str] = []
+    rel = path.relative_to(ROOT)
+    rows = _markdown_results_rows(text)
+    if not rows:
+        return [f"{rel}: Optimization Gate has no result rows"]
+    variants = {row[3] for row in rows if len(row) > 6}
+    baseline = _single_variant_name(_markdown_summary_value(text, "Baseline variant"))
+    optimized = _variant_names(_markdown_summary_value(text, "Optimized variants"))
+    if not baseline:
+        failures.append(f"{rel}: missing Baseline variant summary")
+    elif baseline not in variants:
+        failures.append(f"{rel}: Baseline variant {baseline!r} is not present in Results table")
+    if not optimized:
+        failures.append(f"{rel}: missing Optimized variants summary")
+    for variant in sorted(optimized - variants):
+        failures.append(f"{rel}: Optimized variant {variant!r} is not present in Results table")
+    expected_counts = {
+        "Baseline failures": _variant_failure_count(rows, {baseline}) if baseline else None,
+        "Optimized failures": _variant_failure_count(rows, optimized) if optimized else None,
+    }
+    for label, expected in expected_counts.items():
+        if expected is None:
+            continue
+        value = _markdown_summary_value(text, label)
+        if not value:
+            failures.append(f"{rel}: missing {label} summary")
+            continue
+        try:
+            parsed = int(value)
+        except ValueError:
+            failures.append(f"{rel}: {label} summary is not an integer")
+            continue
+        if parsed != expected:
+            failures.append(f"{rel}: {label} summary does not match Results table")
+    return failures
+
+
+def _variant_failure_count(rows: list[list[str]], variants: set[str]) -> int:
+    return sum(
+        1
+        for row in rows
+        if len(row) > 6 and row[3] in variants and row[6].casefold() != "passed"
+    )
+
+
+def _single_variant_name(value: str) -> str:
+    names = _variant_names(value)
+    return sorted(names)[0] if len(names) == 1 else ""
+
+
+def _variant_names(value: str) -> set[str]:
+    code_spans = {name.strip() for name in re.findall(r"`([^`]+)`", value) if name.strip()}
+    if code_spans:
+        return code_spans
+    cleaned = value.replace("`", "")
+    return {name.strip() for name in cleaned.split(",") if name.strip()}
 
 
 def _check_coverage_markdown_json_pair(path: Path, text: str) -> list[str]:
