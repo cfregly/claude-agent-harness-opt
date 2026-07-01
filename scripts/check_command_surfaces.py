@@ -6,6 +6,7 @@ from __future__ import annotations
 import ast
 import contextlib
 from dataclasses import dataclass
+from dataclasses import field
 import io
 from pathlib import Path
 import re
@@ -73,6 +74,8 @@ class ScriptContract:
     required_options: frozenset[str]
     required_positionals: int
     value_options: frozenset[str] = frozenset()
+    option_choices: dict[str, frozenset[str]] = field(default_factory=dict)
+    positional_choices: tuple[frozenset[str], ...] = ()
 
 
 def main() -> int:
@@ -179,6 +182,8 @@ def _extract_script_contract(path: Path) -> ScriptContract:
     required_options: set[str] = set()
     required_positionals = 0
     value_options: set[str] = set()
+    option_choices: dict[str, frozenset[str]] = {}
+    positional_choices: list[frozenset[str]] = []
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
             continue
@@ -203,15 +208,26 @@ def _extract_script_contract(path: Path) -> ScriptContract:
                     options.add(arg.value)
         if long_options and _option_consumes_value(node):
             value_options.update(long_options)
+        choices = _keyword_choices(node, "choices")
+        if long_options and choices:
+            for option in long_options:
+                option_choices[option] = choices
         if long_options and _keyword_bool(node, "required"):
             required_options.update(long_options)
-        if not option_strings and _positional_is_required(node):
-            required_positionals += 1
+        if not option_strings:
+            if choices:
+                positional_choices.append(choices)
+            else:
+                positional_choices.append(frozenset())
+            if _positional_is_required(node):
+                required_positionals += 1
     return ScriptContract(
         frozenset(options),
         frozenset(required_options),
         required_positionals,
         frozenset(value_options),
+        option_choices,
+        tuple(positional_choices),
     )
 
 
@@ -247,6 +263,21 @@ def _keyword_value(node: ast.Call, name: str) -> object:
         if keyword.arg == name and isinstance(keyword.value, ast.Constant):
             return keyword.value.value
     return None
+
+
+def _keyword_choices(node: ast.Call, name: str) -> frozenset[str]:
+    for keyword in node.keywords:
+        if keyword.arg != name:
+            continue
+        value = keyword.value
+        if isinstance(value, (ast.List, ast.Set, ast.Tuple)):
+            choices = [
+                item.value
+                for item in value.elts
+                if isinstance(item, ast.Constant) and isinstance(item.value, str)
+            ]
+            return frozenset(choices)
+    return frozenset()
 
 
 def _positional_is_required(node: ast.Call) -> bool:
@@ -477,6 +508,7 @@ def _check_script_invocations(
                 )
             )
             failures.extend(_check_script_required_args(prefix, invocation, contract))
+            failures.extend(_check_script_choices(prefix, invocation, contract))
         failures.extend(_check_invocation_paths(root, invocation, prefix, argument_start=2))
     return failures
 
@@ -507,6 +539,46 @@ def _check_script_required_args(
     return failures
 
 
+def _check_script_choices(
+    prefix: str,
+    invocation: Invocation,
+    contract: ScriptContract,
+) -> list[str]:
+    failures: list[str] = []
+    option_values = _present_option_values(
+        invocation.tokens,
+        argument_start=2,
+        value_options=set(contract.value_options),
+    )
+    for option, choices in contract.option_choices.items():
+        if option not in option_values:
+            continue
+        value = option_values[option]
+        if value not in choices:
+            allowed = ", ".join(sorted(choices))
+            failures.append(
+                f"{prefix}: script {invocation.command!r} option {option!r} "
+                f"has invalid choice {value!r}; expected one of: {allowed}"
+            )
+
+    positionals = _present_positionals(
+        invocation.tokens,
+        argument_start=2,
+        value_options=set(contract.value_options),
+    )
+    for index, choices in enumerate(contract.positional_choices):
+        if not choices or index >= len(positionals):
+            continue
+        value = positionals[index]
+        if value not in choices:
+            allowed = ", ".join(sorted(choices))
+            failures.append(
+                f"{prefix}: script {invocation.command!r} positional {index + 1} "
+                f"has invalid choice {value!r}; expected one of: {allowed}"
+            )
+    return failures
+
+
 def _present_long_options(tokens: tuple[str, ...], *, argument_start: int) -> set[str]:
     options: set[str] = set()
     for token in tokens[argument_start:]:
@@ -515,6 +587,38 @@ def _present_long_options(tokens: tuple[str, ...], *, argument_start: int) -> se
         if token.startswith("--"):
             options.add(token.split("=", 1)[0])
     return options
+
+
+def _present_option_values(
+    tokens: tuple[str, ...],
+    *,
+    argument_start: int,
+    value_options: set[str],
+) -> dict[str, str]:
+    values: dict[str, str] = {}
+    args = list(tokens[argument_start:])
+    index = 0
+    while index < len(args):
+        token = args[index]
+        if token in {">", "1>", "2>", "|", "--"}:
+            break
+        if not token.startswith("--"):
+            index += 1
+            continue
+        option, separator, value = token.partition("=")
+        if option not in value_options:
+            index += 1
+            continue
+        if separator:
+            values[option] = value
+            index += 1
+            continue
+        if index + 1 < len(args):
+            values[option] = args[index + 1]
+            index += 2
+            continue
+        index += 1
+    return values
 
 
 def _present_positionals(

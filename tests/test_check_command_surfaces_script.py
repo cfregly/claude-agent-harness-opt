@@ -8,6 +8,7 @@ from scripts.check_command_surfaces import (
     Invocation,
     ScriptContract,
     _check_cli_parse_contract,
+    _check_script_choices,
     _check_script_required_args,
     _extract_cli_invocations,
     _extract_script_contract,
@@ -180,9 +181,9 @@ class CheckCommandSurfacesScriptTests(unittest.TestCase):
             path.write_text(
                 "import argparse\n"
                 "parser = argparse.ArgumentParser()\n"
-                "parser.add_argument('target')\n"
+                "parser.add_argument('target', choices=('alpha', 'beta'))\n"
                 "parser.add_argument('--required-flag', required=True)\n"
-                "parser.add_argument('--known-flag')\n"
+                "parser.add_argument('--known-flag', choices=('fast', 'slow'))\n"
                 "parser.add_argument('--boolean-flag', action='store_true')\n"
                 "parser.add_argument('-s', '--second-flag')\n",
                 encoding="utf-8",
@@ -201,6 +202,8 @@ class CheckCommandSurfacesScriptTests(unittest.TestCase):
             frozenset({"--known-flag", "--required-flag", "--second-flag"}),
             contract.value_options,
         )
+        self.assertEqual({"--known-flag": frozenset({"fast", "slow"})}, contract.option_choices)
+        self.assertEqual((frozenset({"alpha", "beta"}),), contract.positional_choices)
 
     def test_script_required_args_rejects_missing_positionals_and_options(self):
         invocation = Invocation(
@@ -238,6 +241,29 @@ class CheckCommandSurfacesScriptTests(unittest.TestCase):
         )
 
         self.assertEqual([], _check_script_required_args("README.md:4", invocation, contract))
+
+    def test_script_choices_reject_invalid_documented_values(self):
+        invocation = Invocation(
+            source=Path("README.md"),
+            line=5,
+            raw="python scripts/known_helper.py --mode turbo gamma",
+            command="scripts/known_helper.py",
+            tokens=("python", "scripts/known_helper.py", "--mode", "turbo", "gamma"),
+        )
+        contract = ScriptContract(
+            options=frozenset({"--mode"}),
+            required_options=frozenset(),
+            required_positionals=1,
+            value_options=frozenset({"--mode"}),
+            option_choices={"--mode": frozenset({"fast", "slow"})},
+            positional_choices=(frozenset({"alpha", "beta"}),),
+        )
+
+        failures = _check_script_choices("README.md:5", invocation, contract)
+
+        joined = "\n".join(failures)
+        self.assertIn("option '--mode' has invalid choice 'turbo'", joined)
+        self.assertIn("positional 1 has invalid choice 'gamma'", joined)
 
     def test_extract_cli_invocations_stops_at_inline_code_span(self):
         invocations = _extract_cli_invocations(
